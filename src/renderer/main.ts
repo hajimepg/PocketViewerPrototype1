@@ -1,28 +1,54 @@
 import { ipcRenderer } from "electron";
 import Vue from "vue";
+import Vuex from "vuex";
+
+Vue.use(Vuex);
 
 /* tslint:disable:object-literal-sort-keys */
-const app = new Vue({
-    el: "#app",
-    data: {
-        pocketAccessToken: "",
-        pocketErrorMessage: "",
+const store = new Vuex.Store({
+    state: {
+        accessToken: "",
+        authErrorMessage: "",
     },
-    methods: {
-        pocketAuth() {
-            this.$data.pocketAccessToken = "";
-            this.$data.pocketErrorMessage = "";
-            ipcRenderer.send("pocket-auth");
+    mutations: {
+        initAuth(state) {
+            state.accessToken = "";
+            state.authErrorMessage = "";
+        },
+        setAccessToken(state, accessToken: string) {
+            state.accessToken = accessToken;
+        },
+        setAuthErrorMessage(state, authErrorMessage: string) {
+            state.authErrorMessage = authErrorMessage;
         },
     }
+});
+
+const app = new Vue({
+    el: "#app",
+    store,
+    methods: {
+        pocketAuth() {
+            store.commit("initAuth");
+            ipcRenderer.send("pocket-auth");
+        },
+    },
+    computed: {
+        pocketAccessToken() {
+            return store.state.accessToken;
+        },
+        pocketErrorMessage() {
+            return store.state.authErrorMessage;
+        },
+    },
 });
 /* tslint:enable:object-literal-sort-keys */
 
 ipcRenderer.on("pocket-auth-reply", (event, error, accessToken) => {
     if (error !== null) {
-        app.$data.pocketErrorMessage = error;
+        store.commit("setAuthErrorMessage", error);
     }
     else {
-        app.$data.pocketAccessToken = accessToken;
+        store.commit("setAccessToken", accessToken);
     }
 });
