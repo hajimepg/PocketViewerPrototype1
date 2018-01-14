@@ -1,6 +1,7 @@
 import { ipcRenderer } from "electron";
 import Vue from "vue";
 import Vuex from "vuex";
+import { mapState } from "vuex";
 
 Vue.use(Vuex);
 
@@ -33,14 +34,10 @@ const app = new Vue({
             ipcRenderer.send("pocket-auth");
         },
     },
-    computed: {
-        pocketAccessToken() {
-            return store.state.accessToken;
-        },
-        pocketErrorMessage() {
-            return store.state.authErrorMessage;
-        },
-    },
+    computed: mapState({
+        pocketAccessToken: "accessToken",
+        pocketErrorMessage: "authErrorMessage",
+    }),
 });
 /* tslint:enable:object-literal-sort-keys */
 
