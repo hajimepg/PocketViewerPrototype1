@@ -5,7 +5,9 @@
   "license": "MIT",
   "dependencies": {
     "@types/node": "^8.5.7",
+    "axios": "^0.17.1",
     "electron": "^1.7.10",
+    "koa": "^2.4.1",
     "ts-loader": "^3.2.0",
     "tslint": "^5.8.0",
     "typescript": "^2.6.2",
