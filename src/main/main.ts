@@ -25,6 +25,8 @@ function createWindow() {
 }
 
 app.on("ready", () => {
+    BrowserWindow.addDevToolsExtension(path.join(__dirname, "../../node_modules/vue-devtools/vender"));
+
     createWindow();
 });
 
