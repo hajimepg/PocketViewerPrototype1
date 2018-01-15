@@ -9,6 +9,7 @@
     grid-row: 1 / 4;
     grid-column: 1;
     background-color: aqua;
+    line-height: 28px;
 }
 
 #articles {
@@ -33,4 +34,32 @@
     grid-row: 2 / 4;
     grid-column: 3;
     background-color: khaki;
+}
+
+.viewGroup {
+    padding-left: 20px;
+    padding-right: 10px;
+}
+
+.viewGroup .viewName {
+    font-weight: bold;
+}
+
+.viewSubGroup {
+    padding-left: 40px;
+    padding-right: 10px;
+}
+
+.unreadCount {
+    font-size: 10px;
+    font-family: sans-serif;
+    text-align: right;
+    float: right;
+    width: 36px;
+}
+
+.viewName {
+    font-size: 13px;
+    font-family: sans-serif;
+    max-width: 200px;
 }
