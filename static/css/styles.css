@@ -8,7 +8,7 @@
 #views {
     grid-row: 1 / 4;
     grid-column: 1;
-    background-color: aqua;
+    background-color: rgb(232, 232, 232);
     line-height: 28px;
     padding-top: 10px;
 }
@@ -38,7 +38,7 @@
 }
 
 .viewGroup {
-    padding-left: 20px;
+    padding-left: 15px;
     padding-right: 10px;
 }
 
@@ -68,4 +68,12 @@
 .viewName i {
     display: inline-block;
     width: 20px;
+}
+
+.viewGroup:hover, .viewSubGroup:hover {
+    background-color: rgb(201, 201, 201);
+}
+
+.viewGroup.active, .viewSubGroup.active {
+    background-color: rgb(211, 211, 211);
 }
