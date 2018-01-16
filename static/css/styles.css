@@ -16,7 +16,7 @@
 #articles {
     grid-row: 1 / 3;
     grid-column: 2;
-    background-color: aquamarine;
+    background-color: rgb(255, 255, 255);
 }
 
 #search {
@@ -76,4 +76,25 @@
 
 .viewGroup.active, .viewSubGroup.active {
     background-color: rgb(211, 211, 211);
+}
+
+.article {
+    box-sizing: border-box;
+    height: 80px;
+    border-bottom: 2px solid rgb(211, 211, 211);
+    padding: 10px;
+}
+
+.article .title {
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.article .host {
+    margin-top: 5px;
+    font-size: 13px;
 }
