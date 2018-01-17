@@ -34,6 +34,9 @@
     grid-row: 1;
     grid-column: 3;
     background-color: tomato;
+    padding: 10px 5px;
+    display: flex;
+    justify-content: space-between;
 }
 
 #content {
@@ -135,4 +138,21 @@
     position: absolute;
     top: 12px;
     left: 12px;
+}
+
+.leftToolbar, .centerToolbar, .rightToolbar {
+    height: 30px;
+    width: 150px;
+}
+
+.leftToolbar {
+    background-color: aqua;
+}
+
+.centerToolbar {
+    background-color: greenyellow;
+}
+
+.rightToolbar {
+    background-color: pink;
 }
