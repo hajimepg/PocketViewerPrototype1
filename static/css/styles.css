@@ -2,7 +2,7 @@
     display: grid;
     min-height: 100vh;
     max-height: 100vh;
-    grid-template-rows: 50px 1fr 30px;
+    grid-template-rows: 50px 1fr 40px;
     grid-template-columns: 250px 330px 1fr;
 }
 
@@ -25,7 +25,9 @@
 #search {
     grid-row: 3;
     grid-column: 2;
-    background-color: blueviolet;
+    padding: 5px;
+    font-size: 13px;
+    position: relative;
 }
 
 #toolbar {
@@ -117,4 +119,20 @@
 .article .host {
     margin-top: 5px;
     font-size: 13px;
+}
+
+#search input {
+    box-sizing: border-box;
+    padding: 5px 5px 5px 30px;
+    width: 320px;
+    border-style: solid;
+    border-radius: 3px;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+#search i {
+    position: absolute;
+    top: 12px;
+    left: 12px;
 }
