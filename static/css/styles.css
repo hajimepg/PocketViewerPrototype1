@@ -33,7 +33,8 @@
 #toolbar {
     grid-row: 1;
     grid-column: 3;
-    background-color: tomato;
+    background-color: rgb(232, 232, 232);
+    border-bottom: 2px solid rgb(211, 211, 211);
     padding: 10px 5px;
     display: flex;
     justify-content: space-between;
@@ -141,18 +142,39 @@
 }
 
 .leftToolbar, .centerToolbar, .rightToolbar {
+    display: inline-flex;
     height: 30px;
     width: 150px;
 }
 
 .leftToolbar {
-    background-color: aqua;
+    justify-content: flex-start;
 }
 
 .centerToolbar {
-    background-color: greenyellow;
+    justify-content: center;
 }
 
 .rightToolbar {
-    background-color: pink;
+    justify-content: flex-end;
+}
+
+#toolbar button {
+    box-sizing: border-box;
+    width: 30px;
+    height: 30px;
+    border-color: transparent;
+    border-radius: 3px;
+}
+
+#toolbar button:not(:last-child) {
+    margin-right: 5px;
+}
+
+#toolbar button:focus {
+    outline: 0;
+}
+
+#toolbar button:hover {
+    background-color: rgb(201, 201, 201);
 }
