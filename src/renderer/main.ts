@@ -12,6 +12,35 @@ const store = new Vuex.Store({
         // TODO: アクセストークンを使用する段階になったら空文字に戻すこと
         accessToken: "dummyToken",
         authErrorMessage: "",
+        views: {
+            unread: {
+                count: 456,
+            },
+            hosts: [
+                {
+                    name: "twitter.com",
+                    count: 10,
+                },
+                {
+                    name: "pixiv.net",
+                    count: 20,
+                },
+                {
+                    name: "Other",
+                    count: 30,
+                },
+            ],
+            tags: [
+                {
+                    name: "Programming",
+                    count: 40,
+                },
+                {
+                    name: "Game",
+                    count: 40,
+                },
+            ]
+        },
     },
     mutations: {
         initAuth(state) {
@@ -39,6 +68,7 @@ const app = new Vue({
     computed: mapState({
         pocketAccessToken: "accessToken",
         pocketErrorMessage: "authErrorMessage",
+        views: "views",
     }),
 });
 /* tslint:enable:object-literal-sort-keys */

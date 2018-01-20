@@ -21,7 +21,7 @@
             <div v-else id="container">
                 <div id="views">
                     <div class="viewGroup active">
-                        <div class="unreadCount">123</div>
+                        <div class="unreadCount">{{ views.unread.count }}</div>
                         <div class="viewName"><i class="fas fa-bars"></i>Unread</div>
                     </div>
                     <div class="viewGroup">
@@ -33,104 +33,16 @@
                     <div class="viewGroup">
                         <div class="viewName"><i class="fas fa-cloud"></i>Host</div>
                     </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">10</div>
-                        <div class="viewName">twitter.com</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">5</div>
-                        <div class="viewName">pixiv.net</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">24</div>
-                        <div class="viewName">Other</div>
+                    <div v-for="host in views.hosts" class="viewSubGroup">
+                        <div class="unreadCount">{{ host.count }}</div>
+                        <div class="viewName">{{ host.name }}</div>
                     </div>
                     <div class="viewGroup">
                         <div class="viewName"><i class="fas fa-tag"></i>Tag</div>
                     </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">3</div>
-                        <div class="viewName">Programming</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">5</div>
-                        <div class="viewName">Game</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
-                    </div>
-                    <div class="viewSubGroup">
-                        <div class="unreadCount">1</div>
-                        <div class="viewName">TagX</div>
+                    <div v-for="tag in views.tags" class="viewSubGroup">
+                        <div class="unreadCount">{{ tag.count }}</div>
+                        <div class="viewName">{{ tag.name }}</div>
                     </div>
                 </div>
                 <div id="articles">
