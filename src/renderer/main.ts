@@ -8,7 +8,9 @@ Vue.use(Vuex);
 /* tslint:disable:object-literal-sort-keys */
 const store = new Vuex.Store({
     state: {
-        accessToken: "",
+        // 開発テンポを良くするため、一時的にダミーを設定
+        // TODO: アクセストークンを使用する段階になったら空文字に戻すこと
+        accessToken: "dummyToken",
         authErrorMessage: "",
     },
     mutations: {
