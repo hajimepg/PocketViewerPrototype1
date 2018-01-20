@@ -9,7 +9,13 @@
 
     <body>
         <div id="app">
-            <div id="container">
+            <div v-if="pocketAccessToken === ''">
+                <input type="button" v-on:click="pocketAuth" value="Pocket Auth">
+                 <p v-if="pocketErrorMessage !== ''">
+                    Error: {{ pocketErrorMessage }}
+                </p>
+            </div>
+            <div v-else id="container">
                 <div id="views">
                     <div class="viewGroup active">
                         <div class="unreadCount">123</div>
