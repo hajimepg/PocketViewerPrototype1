@@ -41,6 +41,28 @@ const store = new Vuex.Store({
                 },
             ]
         },
+        articles: [
+            {
+                title: "article1",
+                host: "twitter.com",
+                thumb: "images/dummy_image.png",
+            },
+            {
+                title: "article2",
+                host: "pixiv.net",
+                thumb: "images/dummy_image.png",
+            },
+            {
+                title: "article3",
+                host: "hatena.ne.jp",
+                thumb: "images/dummy_image.png",
+            },
+            {
+                title: "長いタイトルあああああああああああああああああああああああああああああああああ",
+                host: "twitter.com",
+                thumb: "images/dummy_image.png",
+            },
+        ],
     },
     mutations: {
         initAuth(state) {
@@ -69,6 +91,7 @@ const app = new Vue({
         pocketAccessToken: "accessToken",
         pocketErrorMessage: "authErrorMessage",
         views: "views",
+        articles: "articles",
     }),
 });
 /* tslint:enable:object-literal-sort-keys */

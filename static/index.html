@@ -46,94 +46,13 @@
                     </div>
                 </div>
                 <div id="articles">
-                    <div class="article">
+                    <div v-for="article in articles" class="article">
                         <div class="thumb">
-                            <img src="images/dummy_image.png">
+                            <img v-bind:src="article.thumb">
                         </div>
                         <div class="info">
-                            <div class="title">article1</div>
-                            <div class="host">twitter.com</div>
-                        </div>
-                    </div>
-                    <div class="article">
-                        <div class="thumb">
-                            <img src="images/dummy_image.png">
-                        </div>
-                        <div class="info">
-                            <div class="title">article2</div>
-                            <div class="host">pixiv.net</div>
-                        </div>
-                    </div>
-                    <div class="article">
-                        <div class="thumb">
-                            <img src="images/dummy_image.png">
-                        </div>
-                        <div class="info">
-                            <div class="title">article3</div>
-                            <div class="host">hatena.ne.jp</div>
-                        </div>
-                    </div>
-                    <div class="article">
-                        <div class="thumb">
-                            <img src="images/dummy_image.png">
-                        </div>
-                        <div class="info">
-                            <div class="title">長いタイトルあああああああああああああああああああああああああああああああああ</div>
-                            <div class="host">twitter.com</div>
-                        </div>
-                    </div>
-                    <div class="article">
-                        <div class="thumb">
-                            <img src="images/dummy_image.png">
-                        </div>
-                        <div class="info">
-                            <div class="title">articleXXX</div>
-                            <div class="host">hostname</div>
-                        </div>
-                    </div>
-                    <div class="article">
-                        <div class="thumb">
-                            <img src="images/dummy_image.png">
-                        </div>
-                        <div class="info">
-                            <div class="title">articleXXX</div>
-                            <div class="host">hostname</div>
-                        </div>
-                    </div>
-                    <div class="article">
-                        <div class="thumb">
-                            <img src="images/dummy_image.png">
-                        </div>
-                        <div class="info">
-                            <div class="title">articleXXX</div>
-                            <div class="host">hostname</div>
-                        </div>
-                    </div>
-                    <div class="article">
-                        <div class="thumb">
-                            <img src="images/dummy_image.png">
-                        </div>
-                        <div class="info">
-                            <div class="title">articleXXX</div>
-                            <div class="host">hostname</div>
-                        </div>
-                    </div>
-                    <div class="article">
-                        <div class="thumb">
-                            <img src="images/dummy_image.png">
-                        </div>
-                        <div class="info">
-                            <div class="title">articleXXX</div>
-                            <div class="host">hostname</div>
-                        </div>
-                    </div>
-                    <div class="article">
-                        <div class="thumb">
-                            <img src="images/dummy_image.png">
-                        </div>
-                        <div class="info">
-                            <div class="title">articleXXX</div>
-                            <div class="host">hostname</div>
+                            <div class="title">{{ article.title }}</div>
+                            <div class="host">{{ article.host }}</div>
                         </div>
                     </div>
                 </div>
