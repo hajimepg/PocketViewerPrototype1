@@ -87,6 +87,45 @@ const store = new Vuex.Store({
         setAuthErrorMessage(state, authErrorMessage: string) {
             state.authErrorMessage = authErrorMessage;
         },
+        selectUnreadView(state) {
+            state.views.unread.isActive = false;
+            state.views.favorite.isActive = false;
+            state.views.archive.isActive = false;
+            for (const host of state.views.hosts) {
+                host.isActive = false;
+            }
+            for (const tag of state.views.tags) {
+                tag.isActive = false;
+            }
+
+            state.views.unread.isActive = true;
+        },
+        selectFavoriteView(state) {
+            state.views.unread.isActive = false;
+            state.views.favorite.isActive = false;
+            state.views.archive.isActive = false;
+            for (const host of state.views.hosts) {
+                host.isActive = false;
+            }
+            for (const tag of state.views.tags) {
+                tag.isActive = false;
+            }
+
+            state.views.favorite.isActive = true;
+        },
+        selectArchiveView(state) {
+            state.views.unread.isActive = false;
+            state.views.favorite.isActive = false;
+            state.views.archive.isActive = false;
+            for (const host of state.views.hosts) {
+                host.isActive = false;
+            }
+            for (const tag of state.views.tags) {
+                tag.isActive = false;
+            }
+
+            state.views.archive.isActive = true;
+        },
     }
 });
 
@@ -97,6 +136,15 @@ const app = new Vue({
         pocketAuth() {
             store.commit("initAuth");
             ipcRenderer.send("pocket-auth");
+        },
+        selectUnreadView() {
+            store.commit("selectUnreadView");
+        },
+        selectFavoriteView() {
+            store.commit("selectFavoriteView");
+        },
+        selectArchiveView() {
+            store.commit("selectArchiveView");
         },
     },
     computed: mapState({
