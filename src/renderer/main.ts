@@ -88,72 +88,39 @@ const store = new Vuex.Store({
             state.authErrorMessage = authErrorMessage;
         },
         selectUnreadView(state) {
-            state.views.unread.isActive = false;
-            state.views.favorite.isActive = false;
-            state.views.archive.isActive = false;
-            for (const host of state.views.hosts) {
-                host.isActive = false;
-            }
-            for (const tag of state.views.tags) {
-                tag.isActive = false;
-            }
-
+            deselectViews(state);
             state.views.unread.isActive = true;
         },
         selectFavoriteView(state) {
-            state.views.unread.isActive = false;
-            state.views.favorite.isActive = false;
-            state.views.archive.isActive = false;
-            for (const host of state.views.hosts) {
-                host.isActive = false;
-            }
-            for (const tag of state.views.tags) {
-                tag.isActive = false;
-            }
-
+            deselectViews(state);
             state.views.favorite.isActive = true;
         },
         selectArchiveView(state) {
-            state.views.unread.isActive = false;
-            state.views.favorite.isActive = false;
-            state.views.archive.isActive = false;
-            for (const host of state.views.hosts) {
-                host.isActive = false;
-            }
-            for (const tag of state.views.tags) {
-                tag.isActive = false;
-            }
-
+            deselectViews(state);
             state.views.archive.isActive = true;
         },
         selectHostsView(state, index: number) {
-            state.views.unread.isActive = false;
-            state.views.favorite.isActive = false;
-            state.views.archive.isActive = false;
-            for (const host of state.views.hosts) {
-                host.isActive = false;
-            }
-            for (const tag of state.views.tags) {
-                tag.isActive = false;
-            }
-
+            deselectViews(state);
             state.views.hosts[index].isActive = true;
         },
         selectTagsView(state, index: number) {
-            state.views.unread.isActive = false;
-            state.views.favorite.isActive = false;
-            state.views.archive.isActive = false;
-            for (const host of state.views.hosts) {
-                host.isActive = false;
-            }
-            for (const tag of state.views.tags) {
-                tag.isActive = false;
-            }
-
+            deselectViews(state);
             state.views.tags[index].isActive = true;
         },
-    }
+    },
 });
+
+function deselectViews(state) {
+    state.views.unread.isActive = false;
+    state.views.favorite.isActive = false;
+    state.views.archive.isActive = false;
+    for (const host of state.views.hosts) {
+        host.isActive = false;
+    }
+    for (const tag of state.views.tags) {
+        tag.isActive = false;
+    }
+}
 
 const app = new Vue({
     el: "#app",
