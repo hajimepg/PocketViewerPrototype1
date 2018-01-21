@@ -222,7 +222,7 @@ const app = new Vue({
     store,
     methods: {
         pocketAuth() {
-            store.commit("initAuth");
+            this.$store.commit("initAuth");
             ipcRenderer.send("pocket-auth");
         },
         ...mapMutations([
@@ -231,13 +231,13 @@ const app = new Vue({
             "selectArchiveView",
         ]),
         selectHostsView(index: number) {
-            store.commit("selectHostsView", index);
+            this.$store.commit("selectHostsView", index);
         },
         selectTagsView(index: number) {
-            store.commit("selectTagsView", index);
+            this.$store.commit("selectTagsView", index);
         },
         updateSearchArticle(event) {
-            store.commit("updateSearchArticle", event.target.value);
+            this.$store.commit("updateSearchArticle", event.target.value);
         }
     },
     computed: {
@@ -248,12 +248,13 @@ const app = new Vue({
             searchArticle: "searchArticle",
         }),
         articles() {
-            return store.state.articles.filter(
+            // Note: VuexのTypeScriptの型定義ファイルが更新されるまでanyにキャストする
+            return (this as any).$store.state.articles.filter(
                 (article) => {
-                    if (article.title.indexOf(store.state.searchArticle) !== -1) {
+                    if (article.title.indexOf(this.$store.state.searchArticle) !== -1) {
                         return true;
                     }
-                    if (article.host.indexOf(store.state.searchArticle) !== -1) {
+                    if (article.host.indexOf(this.$store.state.searchArticle) !== -1) {
                         return true;
                     }
                     return false;
