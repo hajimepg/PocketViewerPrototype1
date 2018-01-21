@@ -1,7 +1,6 @@
 import { ipcRenderer } from "electron";
 import Vue from "vue";
-import Vuex from "vuex";
-import { mapState } from "vuex";
+import Vuex, { mapMutations, mapState } from "vuex";
 
 Vue.use(Vuex);
 
@@ -226,15 +225,11 @@ const app = new Vue({
             store.commit("initAuth");
             ipcRenderer.send("pocket-auth");
         },
-        selectUnreadView() {
-            store.commit("selectUnreadView");
-        },
-        selectFavoriteView() {
-            store.commit("selectFavoriteView");
-        },
-        selectArchiveView() {
-            store.commit("selectArchiveView");
-        },
+        ...mapMutations([
+            "selectUnreadView",
+            "selectFavoriteView",
+            "selectArchiveView",
+        ]),
         selectHostsView(index: number) {
             store.commit("selectHostsView", index);
         },
