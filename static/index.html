@@ -20,27 +20,27 @@
             </div>
             <div v-else id="container">
                 <div id="views">
-                    <div class="viewGroup active">
+                    <div class="viewGroup" v-bind:class="{ active: views.unread.isActive }">
                         <div class="unreadCount">{{ views.unread.count }}</div>
                         <div class="viewName"><i class="fas fa-bars"></i>Unread</div>
                     </div>
-                    <div class="viewGroup">
+                    <div class="viewGroup" v-bind:class="{ active: views.favorite.isActive }">
                         <div class="viewName"><i class="far fa-star"></i>Favorite</div>
                     </div>
-                    <div class="viewGroup">
+                    <div class="viewGroup" v-bind:class="{ active: views.archive.isActive }">
                         <div class="viewName"><i class="fas fa-archive"></i>Archive</div>
                     </div>
                     <div class="viewGroup">
                         <div class="viewName"><i class="fas fa-cloud"></i>Host</div>
                     </div>
-                    <div v-for="host in views.hosts" class="viewSubGroup">
+                    <div v-for="host in views.hosts" v-bind:class="{ active: host.isActive }" class="viewSubGroup">
                         <div class="unreadCount">{{ host.count }}</div>
                         <div class="viewName">{{ host.name }}</div>
                     </div>
                     <div class="viewGroup">
                         <div class="viewName"><i class="fas fa-tag"></i>Tag</div>
                     </div>
-                    <div v-for="tag in views.tags" class="viewSubGroup">
+                    <div v-for="tag in views.tags" v-bind:class="{ active: tag.isActive }" class="viewSubGroup">
                         <div class="unreadCount">{{ tag.count }}</div>
                         <div class="viewName">{{ tag.name }}</div>
                     </div>
