@@ -90,22 +90,114 @@ const store = new Vuex.Store({
         selectUnreadView(state) {
             deselectViews(state);
             state.views.unread.isActive = true;
+            state.articles = [
+                {
+                    title: "article1",
+                    host: "twitter.com",
+                    thumb: "images/dummy_image.png",
+                },
+                {
+                    title: "article2",
+                    host: "pixiv.net",
+                    thumb: "images/dummy_image.png",
+                },
+                {
+                    title: "article3",
+                    host: "hatena.ne.jp",
+                    thumb: "images/dummy_image.png",
+                },
+                {
+                    title: "長いタイトルあああああああああああああああああああああああああああああああああ",
+                    host: "twitter.com",
+                    thumb: "images/dummy_image.png",
+                },
+            ];
         },
         selectFavoriteView(state) {
             deselectViews(state);
             state.views.favorite.isActive = true;
+            state.articles = [
+                {
+                    title: "article1",
+                    host: "twitter.com",
+                    thumb: "images/dummy_image.png",
+                },
+            ];
         },
         selectArchiveView(state) {
             deselectViews(state);
             state.views.archive.isActive = true;
+            state.articles = [
+                {
+                    title: "article4",
+                    host: "twitter.com",
+                    thumb: "images/dummy_image.png",
+                },
+                {
+                    title: "article5",
+                    host: "pixiv.net",
+                    thumb: "images/dummy_image.png",
+                },
+            ];
+
         },
         selectHostsView(state, index: number) {
             deselectViews(state);
             state.views.hosts[index].isActive = true;
+
+            switch (index) {
+                case 0:
+                    state.articles = [
+                        {
+                            title: "article1",
+                            host: "twitter.com",
+                            thumb: "images/dummy_image.png",
+                        },
+                    ];
+                    break;
+                case 1:
+                    state.articles = [
+                        {
+                            title: "article2",
+                            host: "pixiv.net",
+                            thumb: "images/dummy_image.png",
+                        },
+                    ];
+                    break;
+                case 2:
+                    state.articles = [
+                        {
+                            title: "article3",
+                            host: "hatena.ne.jp",
+                            thumb: "images/dummy_image.png",
+                        },
+                        {
+                            title: "長いタイトルあああああああああああああああああああああああああああああああああ",
+                            host: "twitter.com",
+                            thumb: "images/dummy_image.png",
+                        },
+                    ];
+                    break;
+            }
         },
         selectTagsView(state, index: number) {
             deselectViews(state);
             state.views.tags[index].isActive = true;
+
+            switch (index) {
+                case 0:
+                    state.articles = [
+                        {
+                            title: "article3",
+                            host: "hatena.ne.jp",
+                            thumb: "images/dummy_image.png",
+                        },
+                    ];
+                    break;
+                case 1:
+                    state.articles = [];
+                    break;
+            }
         },
     },
 });
