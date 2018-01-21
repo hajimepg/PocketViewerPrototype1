@@ -126,6 +126,32 @@ const store = new Vuex.Store({
 
             state.views.archive.isActive = true;
         },
+        selectHostsView(state, index: number) {
+            state.views.unread.isActive = false;
+            state.views.favorite.isActive = false;
+            state.views.archive.isActive = false;
+            for (const host of state.views.hosts) {
+                host.isActive = false;
+            }
+            for (const tag of state.views.tags) {
+                tag.isActive = false;
+            }
+
+            state.views.hosts[index].isActive = true;
+        },
+        selectTagsView(state, index: number) {
+            state.views.unread.isActive = false;
+            state.views.favorite.isActive = false;
+            state.views.archive.isActive = false;
+            for (const host of state.views.hosts) {
+                host.isActive = false;
+            }
+            for (const tag of state.views.tags) {
+                tag.isActive = false;
+            }
+
+            state.views.tags[index].isActive = true;
+        },
     }
 });
 
@@ -145,6 +171,12 @@ const app = new Vue({
         },
         selectArchiveView() {
             store.commit("selectArchiveView");
+        },
+        selectHostsView(index: number) {
+            store.commit("selectHostsView", index);
+        },
+        selectTagsView(index: number) {
+            store.commit("selectTagsView", index);
         },
     },
     computed: mapState({
