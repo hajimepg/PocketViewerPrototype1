@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div id="search">
-                    <input type="text" placeholder="Search">
+                    <input type="text" placeholder="Search" v-bind:value="searchArticle" v-on:input="updateSearchArticle">
                     <i class="fas fa-search"></i>
                 </div>
                 <div id="toolbar">

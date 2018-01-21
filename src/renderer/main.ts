@@ -75,6 +75,7 @@ const store = new Vuex.Store({
                 thumb: "images/dummy_image.png",
             },
         ],
+        searchArticle: "",
     },
     mutations: {
         initAuth(state) {
@@ -199,6 +200,9 @@ const store = new Vuex.Store({
                     break;
             }
         },
+        updateSearchArticle(state, text) {
+            state.searchArticle = text;
+        },
     },
 });
 
@@ -237,13 +241,31 @@ const app = new Vue({
         selectTagsView(index: number) {
             store.commit("selectTagsView", index);
         },
+        updateSearchArticle(event) {
+            store.commit("updateSearchArticle", event.target.value);
+        }
     },
-    computed: mapState({
-        pocketAccessToken: "accessToken",
-        pocketErrorMessage: "authErrorMessage",
-        views: "views",
-        articles: "articles",
-    }),
+    computed: {
+        ...mapState({
+            pocketAccessToken: "accessToken",
+            pocketErrorMessage: "authErrorMessage",
+            views: "views",
+            searchArticle: "searchArticle",
+        }),
+        articles() {
+            return store.state.articles.filter(
+                (article) => {
+                    if (article.title.indexOf(store.state.searchArticle) !== -1) {
+                        return true;
+                    }
+                    if (article.host.indexOf(store.state.searchArticle) !== -1) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+        },
+    }
 });
 /* tslint:enable:object-literal-sort-keys */
 
