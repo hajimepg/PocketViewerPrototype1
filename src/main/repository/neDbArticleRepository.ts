@@ -3,7 +3,7 @@ import * as DataStore from "nedb";
 import IArticleRepository from "../interface/IArticleRepository";
 import Article from "../model/article";
 
-class NeDbArticleRepository implements IArticleRepository {
+export default class NeDbArticleRepository implements IArticleRepository {
     protected db;
 
     public constructor() {
