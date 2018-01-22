@@ -1,10 +1,8 @@
-import { injectable } from "inversify";
 import * as DataStore from "nedb";
 
 import IArticleRepository from "../interface/IArticleRepository";
 import Article from "../model/article";
 
-@injectable()
 class NeDbArticleRepository implements IArticleRepository {
     protected db;
 
