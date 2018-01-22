@@ -1,4 +1,6 @@
+const glob = require("glob");
 const path = require("path");
+const nodeExternals = require("webpack-node-externals");
 
 const moduleSetting = {
     rules: [
@@ -44,6 +46,19 @@ const rendererProsessConfig = {
     resolve: resolveSetting
 };
 
+const unitTestConfig = {
+    entry: glob.sync('./test/**/*.ts'),
+    output: {
+        path: path.resolve(__dirname, "dist/test"),
+        filename: "bundle.js"
+    },
+    target: "node",
+    module: moduleSetting,
+    resolve: resolveSetting,
+    externals: [nodeExternals()],
+    devtool: "source-map",
+};
+
 module.exports = [
-    mainProcessConfig, rendererProsessConfig
+    mainProcessConfig, rendererProsessConfig, unitTestConfig
 ];
