@@ -53,6 +53,19 @@ export default class NeDbArticleRepository implements IArticleRepository {
         });
     }
 
+    public deleteAll() {
+        return new Promise<void>((resolve, reject) => {
+            this.db.remove({}, { multi: true }, (error, numRemoved) => {
+                if (error !== null) {
+                    reject(error);
+                    return;
+                }
+
+                resolve();
+            });
+        });
+    }
+
     public delete(article: Article) {
         return new Promise<void>((resolve, reject) => {
             this.db.remove( { _id: article.id }, {}, (error, numRemoved) => {
