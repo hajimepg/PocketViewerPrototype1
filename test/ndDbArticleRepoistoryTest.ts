@@ -9,7 +9,7 @@ test.beforeEach(async (t) => {
     repo.deleteAll();
 });
 
-test.serial(async (t) => {
+test.serial("insert", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -27,7 +27,7 @@ test.serial(async (t) => {
     t.false(article.isFavorite);
 });
 
-test.serial(async (t) => {
+test.serial("update", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -49,7 +49,7 @@ test.serial(async (t) => {
     t.is(article.isFavorite, updatedArticle.isFavorite);
 });
 
-test.serial(async (t) => {
+test.serial("delete", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -69,7 +69,7 @@ test.serial(async (t) => {
     t.not(-1, ids.indexOf(article3.id));
 });
 
-test.serial(async (t) => {
+test.serial("findUnread", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
