@@ -114,8 +114,8 @@ export default class NeDbArticleRepository implements IArticleRepository {
                 const result = new Array<string>();
 
                 for (const doc of docs) {
-                    if (result.indexOf(doc.host) !== -1) {
-                        result.push(doc);
+                    if (result.indexOf(doc.host) === -1) {
+                        result.push(doc.host);
                     }
                 }
 
@@ -135,8 +135,8 @@ export default class NeDbArticleRepository implements IArticleRepository {
                 const result = new Array<string>();
 
                 for (const doc of docs) {
-                    for (const tag in doc.tags) {
-                        if (result.indexOf(tag) !== -1) {
+                    for (const tag of doc.tags) {
+                        if (result.indexOf(tag) === -1) {
                             result.push(tag);
                         }
                     }
