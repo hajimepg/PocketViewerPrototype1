@@ -10,18 +10,20 @@ test.beforeEach((t) => {
 });
 
 test.serial(async (t) => {
-    const article = await t.context.repo.insert("title", "http://example.com", [], true, false);
+    const article = await t.context.repo.insert("title", "http://example.com", "example.com", [], true, false);
+    t.true(article.id.length > 0);
     t.is("title", article.title);
     t.is("http://example.com", article.url);
+    t.is("example.com", article.host);
     t.is(0, article.tags.length);
     t.true(article.isUnread);
     t.false(article.isFavorite);
 });
 
 test.serial(async (t) => {
-    await t.context.repo.insert("title1", "http://example.com", [], true, false);
-    await t.context.repo.insert("title2", "http://example.com", [], false, false);
-    await t.context.repo.insert("title3", "http://example.com", [], true, false);
+    await t.context.repo.insert("title1", "http://example.com", "example.com", [], true, false);
+    await t.context.repo.insert("title2", "http://example.com", "example.com", [], false, false);
+    await t.context.repo.insert("title3", "http://example.com", "example.com", [], true, false);
 
     const articles: Article[] = await t.context.repo.findUnread();
     t.is(2, articles.length);

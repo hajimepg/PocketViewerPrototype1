@@ -23,9 +23,9 @@ export default class NeDbArticleRepository implements IArticleRepository {
         });
     }
 
-    public insert(title: string, url: string, tags: string[], isUnread: boolean, isFavorite: boolean) {
+    public insert(title: string, url: string, host: string, tags: string[], isUnread: boolean, isFavorite: boolean) {
         return new Promise<Article>((resolve, reject) => {
-            this.db.insert({ title, url, tags, isUnread, isFavorite }, (error, doc) => {
+            this.db.insert({ title, url, host, tags, isUnread, isFavorite }, (error, doc) => {
                 if (error !== null) {
                     reject(error);
                     return;
