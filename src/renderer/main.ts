@@ -1,6 +1,6 @@
 import { ipcRenderer } from "electron";
 import Vue from "vue";
-import Vuex, { mapMutations, mapState } from "vuex";
+import Vuex, { mapActions, mapState } from "vuex";
 
 Vue.use(Vuex);
 
@@ -18,120 +18,53 @@ const store = new Vuex.Store({
         setAuthErrorMessage(state, authErrorMessage: string) {
             state.authErrorMessage = authErrorMessage;
         },
+        updateArticles(state, articles) {
+            state.articles = articles;
+        },
         selectUnreadView(state) {
             deselectViews(state);
             state.views.unread.isActive = true;
-            state.articles = [
-                {
-                    title: "article1",
-                    host: "twitter.com",
-                    thumb: "images/dummy_image.png",
-                },
-                {
-                    title: "article2",
-                    host: "pixiv.net",
-                    thumb: "images/dummy_image.png",
-                },
-                {
-                    title: "article3",
-                    host: "hatena.ne.jp",
-                    thumb: "images/dummy_image.png",
-                },
-                {
-                    title: "長いタイトルあああああああああああああああああああああああああああああああああ",
-                    host: "twitter.com",
-                    thumb: "images/dummy_image.png",
-                },
-            ];
         },
         selectFavoriteView(state) {
             deselectViews(state);
             state.views.favorite.isActive = true;
-            state.articles = [
-                {
-                    title: "article1",
-                    host: "twitter.com",
-                    thumb: "images/dummy_image.png",
-                },
-            ];
         },
         selectArchiveView(state) {
             deselectViews(state);
             state.views.archive.isActive = true;
-            state.articles = [
-                {
-                    title: "article4",
-                    host: "twitter.com",
-                    thumb: "images/dummy_image.png",
-                },
-                {
-                    title: "article5",
-                    host: "pixiv.net",
-                    thumb: "images/dummy_image.png",
-                },
-            ];
-
         },
         selectHostsView(state, index: number) {
             deselectViews(state);
             state.views.hosts[index].isActive = true;
-
-            switch (index) {
-                case 0:
-                    state.articles = [
-                        {
-                            title: "article1",
-                            host: "twitter.com",
-                            thumb: "images/dummy_image.png",
-                        },
-                    ];
-                    break;
-                case 1:
-                    state.articles = [
-                        {
-                            title: "article2",
-                            host: "pixiv.net",
-                            thumb: "images/dummy_image.png",
-                        },
-                    ];
-                    break;
-                case 2:
-                    state.articles = [
-                        {
-                            title: "article3",
-                            host: "hatena.ne.jp",
-                            thumb: "images/dummy_image.png",
-                        },
-                        {
-                            title: "長いタイトルあああああああああああああああああああああああああああああああああ",
-                            host: "twitter.com",
-                            thumb: "images/dummy_image.png",
-                        },
-                    ];
-                    break;
-            }
         },
         selectTagsView(state, index: number) {
             deselectViews(state);
             state.views.tags[index].isActive = true;
-
-            switch (index) {
-                case 0:
-                    state.articles = [
-                        {
-                            title: "article3",
-                            host: "hatena.ne.jp",
-                            thumb: "images/dummy_image.png",
-                        },
-                    ];
-                    break;
-                case 1:
-                    state.articles = [];
-                    break;
-            }
         },
         updateSearchArticle(state, text) {
             state.searchArticle = text;
+        },
+    },
+    actions: {
+        selectUnreadView(context) {
+            context.commit("selectUnreadView");
+            ipcRenderer.send("get-unread-articles");
+        },
+        selectFavoriteView(context) {
+            context.commit("selectFavoriteView");
+            ipcRenderer.send("get-favorite-articles");
+        },
+        selectArchiveView(context) {
+            context.commit("selectArchiveView");
+            ipcRenderer.send("get-archive-articles");
+        },
+        selectHostsView(context, index) {
+            context.commit("selectHostsView", index);
+            ipcRenderer.send("get-host-articles", index);
+        },
+        selectTagsView(context, index) {
+            context.commit("selectTagsView", index);
+            ipcRenderer.send("get-tag-articles", index);
         },
     },
 });
@@ -156,16 +89,16 @@ const app = new Vue({
             this.$store.commit("initAuth");
             ipcRenderer.send("pocket-auth");
         },
-        ...mapMutations([
+        ...mapActions([
             "selectUnreadView",
             "selectFavoriteView",
             "selectArchiveView",
         ]),
         selectHostsView(index: number) {
-            this.$store.commit("selectHostsView", index);
+            this.$store.dispatch("selectHostsView", index);
         },
         selectTagsView(index: number) {
-            this.$store.commit("selectTagsView", index);
+            this.$store.dispatch("selectTagsView", index);
         },
         updateSearchArticle(event) {
             this.$store.commit("updateSearchArticle", event.target.value);
@@ -203,4 +136,8 @@ ipcRenderer.on("pocket-auth-reply", (event, error, accessToken) => {
     else {
         store.commit("setAccessToken", accessToken);
     }
+});
+
+ipcRenderer.on("update-articles", (event, articles) => {
+    store.commit("updateArticles", articles);
 });

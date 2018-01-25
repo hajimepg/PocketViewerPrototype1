@@ -135,3 +135,131 @@ ipcMain.on("sync-initial-state", (event) => {
     };
     /* tslint:enable:object-literal-sort-keys */
 });
+
+ipcMain.on("get-unread-articles", (event) => {
+    /* tslint:disable:object-literal-sort-keys */
+    const articles = [
+        {
+            title: "article1",
+            host: "twitter.com",
+            thumb: "images/dummy_image.png",
+        },
+        {
+            title: "article2",
+            host: "pixiv.net",
+            thumb: "images/dummy_image.png",
+        },
+        {
+            title: "article3",
+            host: "hatena.ne.jp",
+            thumb: "images/dummy_image.png",
+        },
+        {
+            title: "長いタイトルあああああああああああああああああああああああああああああああああ",
+            host: "twitter.com",
+            thumb: "images/dummy_image.png",
+        },
+    ];
+    /* tslint:enable:object-literal-sort-keys */
+
+    event.sender.send("update-articles", articles);
+});
+
+ipcMain.on("get-favorite-articles", (event) => {
+    /* tslint:disable:object-literal-sort-keys */
+    const articles = [
+        {
+            title: "article1",
+            host: "twitter.com",
+            thumb: "images/dummy_image.png",
+        },
+    ];
+    /* tslint:enable:object-literal-sort-keys */
+
+    event.sender.send("update-articles", articles);
+});
+
+ipcMain.on("get-archive-articles", (event) => {
+    /* tslint:disable:object-literal-sort-keys */
+    const articles = [
+        {
+            title: "article4",
+            host: "twitter.com",
+            thumb: "images/dummy_image.png",
+        },
+        {
+            title: "article5",
+            host: "pixiv.net",
+            thumb: "images/dummy_image.png",
+        },
+    ];
+    /* tslint:enable:object-literal-sort-keys */
+
+    event.sender.send("update-articles", articles);
+});
+
+ipcMain.on("get-host-articles", (event, index) => {
+    let articles;
+
+    /* tslint:disable:object-literal-sort-keys */
+    switch (index) {
+        case 0:
+            articles = [
+                {
+                    title: "article1",
+                    host: "twitter.com",
+                    thumb: "images/dummy_image.png",
+                },
+            ];
+            break;
+        case 1:
+            articles = [
+                {
+                    title: "article2",
+                    host: "pixiv.net",
+                    thumb: "images/dummy_image.png",
+                },
+            ];
+            break;
+        case 2:
+            articles = [
+                {
+                    title: "article3",
+                    host: "hatena.ne.jp",
+                    thumb: "images/dummy_image.png",
+                },
+                {
+                    title: "長いタイトルあああああああああああああああああああああああああああああああああ",
+                    host: "twitter.com",
+                    thumb: "images/dummy_image.png",
+                },
+            ];
+            break;
+    }
+    /* tslint:enable:object-literal-sort-keys */
+
+    event.sender.send("update-articles", articles);
+});
+
+ipcMain.on("get-tag-articles", (event, index) => {
+    let articles;
+
+    /* tslint:disable:object-literal-sort-keys */
+    switch (index) {
+        case 0:
+            articles = [
+                {
+                    title: "article3",
+                    host: "hatena.ne.jp",
+                    thumb: "images/dummy_image.png",
+                },
+            ];
+            break;
+        case 1:
+            articles = [];
+            break;
+    }
+    /* tslint:enable:object-literal-sort-keys */
+
+    event.sender.send("update-articles", articles);
+});
