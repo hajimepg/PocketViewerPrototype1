@@ -18,28 +18,11 @@ const store = new Vuex.Store({
         setAuthErrorMessage(state, authErrorMessage: string) {
             state.authErrorMessage = authErrorMessage;
         },
+        updateActiveView(state, active) {
+            state.views.active = active;
+        },
         updateArticles(state, articles) {
             state.articles = articles;
-        },
-        selectUnreadView(state) {
-            deselectViews(state);
-            state.views.unread.isActive = true;
-        },
-        selectFavoriteView(state) {
-            deselectViews(state);
-            state.views.favorite.isActive = true;
-        },
-        selectArchiveView(state) {
-            deselectViews(state);
-            state.views.archive.isActive = true;
-        },
-        selectHostsView(state, index: number) {
-            deselectViews(state);
-            state.views.hosts[index].isActive = true;
-        },
-        selectTagsView(state, index: number) {
-            deselectViews(state);
-            state.views.tags[index].isActive = true;
         },
         updateSearchArticle(state, text) {
             state.searchArticle = text;
@@ -47,39 +30,27 @@ const store = new Vuex.Store({
     },
     actions: {
         selectUnreadView(context) {
-            context.commit("selectUnreadView");
+            context.commit("updateActiveView", { view: "unread", index: undefined });
             ipcRenderer.send("get-unread-articles");
         },
         selectFavoriteView(context) {
-            context.commit("selectFavoriteView");
+            context.commit("updateActiveView", { view: "favorite", index: undefined });
             ipcRenderer.send("get-favorite-articles");
         },
         selectArchiveView(context) {
-            context.commit("selectArchiveView");
+            context.commit("updateActiveView", { view: "archive", index: undefined });
             ipcRenderer.send("get-archive-articles");
         },
         selectHostsView(context, index) {
-            context.commit("selectHostsView", index);
+            context.commit("updateActiveView", { view: "hosts", index });
             ipcRenderer.send("get-host-articles", index);
         },
         selectTagsView(context, index) {
-            context.commit("selectTagsView", index);
+            context.commit("updateActiveView", { view: "tags", index });
             ipcRenderer.send("get-tag-articles", index);
         },
     },
 });
-
-function deselectViews(state) {
-    state.views.unread.isActive = false;
-    state.views.favorite.isActive = false;
-    state.views.archive.isActive = false;
-    for (const host of state.views.hosts) {
-        host.isActive = false;
-    }
-    for (const tag of state.views.tags) {
-        tag.isActive = false;
-    }
-}
 
 const app = new Vue({
     el: "#app",
@@ -108,9 +79,30 @@ const app = new Vue({
         ...mapState({
             pocketAccessToken: "accessToken",
             pocketErrorMessage: "authErrorMessage",
-            views: "views",
             searchArticle: "searchArticle",
         }),
+        views() {
+            const views = (this as any).$store.state.views;
+            return {
+                unread: { count: views.unread.count, isActive: views.active.view === "unread" },
+                favorite: { isActive: views.active.view === "favorite" },
+                archive: { isActive: views.active.view === "archive" },
+                hosts: views.hosts.map((host, index) => {
+                    return {
+                        name: host.name,
+                        count: host.count,
+                        isActive: views.active.view === "hosts" && views.active.index === index
+                    };
+                }),
+                tags: views.tags.map((tag, index) => {
+                    return {
+                        name: tag.name,
+                        count: tag.count,
+                        isActive: views.active.view === "tags" && views.active.index === index
+                    };
+                }),
+            };
+        },
         articles() {
             // Note: VuexのTypeScriptの型定義ファイルが更新されるまでanyにキャストする
             return (this as any).$store.state.articles.filter(
