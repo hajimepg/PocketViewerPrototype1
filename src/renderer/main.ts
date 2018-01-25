@@ -83,24 +83,17 @@ const app = new Vue({
         }),
         views() {
             const views = (this as any).$store.state.views;
+            const active = views.active;
             return {
-                unread: { count: views.unread.count, isActive: views.active.view === "unread" },
-                favorite: { isActive: views.active.view === "favorite" },
-                archive: { isActive: views.active.view === "archive" },
-                hosts: views.hosts.map((host, index) => {
-                    return {
-                        name: host.name,
-                        count: host.count,
-                        isActive: views.active.view === "hosts" && views.active.index === index
-                    };
-                }),
-                tags: views.tags.map((tag, index) => {
-                    return {
-                        name: tag.name,
-                        count: tag.count,
-                        isActive: views.active.view === "tags" && views.active.index === index
-                    };
-                }),
+                unread: { count: views.unread.count, isActive: active.view === "unread" },
+                favorite: { isActive: active.view === "favorite" },
+                archive: { isActive: active.view === "archive" },
+                hosts: views.hosts.map(({ name, count }, index) =>
+                    ({ name, count, isActive: active.view === "hosts" && active.index === index })
+                ),
+                tags: views.tags.map(({ name, count }, index) =>
+                    ({ name, count, isActive: active.view === "tags" && active.index === index })
+                ),
             };
         },
         articles() {
