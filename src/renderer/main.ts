@@ -6,76 +6,7 @@ Vue.use(Vuex);
 
 /* tslint:disable:object-literal-sort-keys */
 const store = new Vuex.Store({
-    state: {
-        // 開発テンポを良くするため、一時的にダミーを設定
-        // TODO: アクセストークンを使用する段階になったら空文字に戻すこと
-        accessToken: "dummyToken",
-        authErrorMessage: "",
-        views: {
-            unread: {
-                count: 456,
-                isActive: true,
-            },
-            favorite: {
-                isActive: false,
-            },
-            archive: {
-                isActive: false,
-            },
-            hosts: [
-                {
-                    name: "twitter.com",
-                    count: 10,
-                    isActive: false,
-                },
-                {
-                    name: "pixiv.net",
-                    count: 20,
-                    isActive: false,
-                },
-                {
-                    name: "Other",
-                    count: 30,
-                    isActive: false,
-                },
-            ],
-            tags: [
-                {
-                    name: "Programming",
-                    count: 40,
-                    isActive: false,
-                },
-                {
-                    name: "Game",
-                    count: 40,
-                    isActive: false,
-                },
-            ]
-        },
-        articles: [
-            {
-                title: "article1",
-                host: "twitter.com",
-                thumb: "images/dummy_image.png",
-            },
-            {
-                title: "article2",
-                host: "pixiv.net",
-                thumb: "images/dummy_image.png",
-            },
-            {
-                title: "article3",
-                host: "hatena.ne.jp",
-                thumb: "images/dummy_image.png",
-            },
-            {
-                title: "長いタイトルあああああああああああああああああああああああああああああああああ",
-                host: "twitter.com",
-                thumb: "images/dummy_image.png",
-            },
-        ],
-        searchArticle: "",
-    },
+    state: ipcRenderer.sendSync("sync-initial-state"),
     mutations: {
         initAuth(state) {
             state.accessToken = "";
