@@ -175,7 +175,6 @@ ipcPromiseReceiver.on("get-archive-articles", async (payload, callback) => {
 });
 
 ipcPromiseReceiver.on("get-host-articles", async (host, callback) => {
-    console.log(host);
     const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
 
     const articles = (await articleRepository.findByHost(host)).map(articleConverter);
