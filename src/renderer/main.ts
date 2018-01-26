@@ -2,6 +2,8 @@ import { ipcRenderer } from "electron";
 import Vue from "vue";
 import Vuex, { mapActions, mapState } from "vuex";
 
+import * as ipcPromise from "../ipcPromise/ipcPromise";
+
 Vue.use(Vuex);
 
 /* tslint:disable:object-literal-sort-keys */
@@ -29,25 +31,30 @@ const store = new Vuex.Store({
         },
     },
     actions: {
-        selectUnreadView(context) {
+        async selectUnreadView(context) {
             context.commit("updateActiveView", { view: "unread", index: undefined });
-            ipcRenderer.send("get-unread-articles");
+            const articles = await ipcPromise.send("get-unread-articles", undefined);
+            context.commit("updateArticles", articles);
         },
-        selectFavoriteView(context) {
+        async selectFavoriteView(context) {
             context.commit("updateActiveView", { view: "favorite", index: undefined });
-            ipcRenderer.send("get-favorite-articles");
+            const articles = await ipcPromise.send("get-favorite-articles", undefined);
+            context.commit("updateArticles", articles);
         },
-        selectArchiveView(context) {
+        async selectArchiveView(context) {
             context.commit("updateActiveView", { view: "archive", index: undefined });
-            ipcRenderer.send("get-archive-articles");
+            const articles = await ipcPromise.send("get-archive-articles", undefined);
+            context.commit("updateArticles", articles);
         },
-        selectHostsView(context, index) {
+        async selectHostsView(context, index) {
             context.commit("updateActiveView", { view: "hosts", index });
-            ipcRenderer.send("get-host-articles", index);
+            const articles = await ipcPromise.send("get-host-articles", index);
+            context.commit("updateArticles", articles);
         },
-        selectTagsView(context, index) {
+        async selectTagsView(context, index) {
             context.commit("updateActiveView", { view: "tags", index });
-            ipcRenderer.send("get-tag-articles", index);
+            const articles = await ipcPromise.send("get-tag-articles", index);
+            context.commit("updateArticles", articles);
         },
     },
 });
@@ -121,8 +128,4 @@ ipcRenderer.on("pocket-auth-reply", (event, error, accessToken) => {
     else {
         store.commit("setAccessToken", accessToken);
     }
-});
-
-ipcRenderer.on("update-articles", (event, articles) => {
-    store.commit("updateArticles", articles);
 });

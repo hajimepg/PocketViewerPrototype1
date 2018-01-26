@@ -4,6 +4,7 @@ import * as url from "url";
 
 import { app, BrowserWindow, ipcMain } from "electron";
 
+import IPCPromiseReceiver from "../ipcPromise/ipcPromiseReceiver";
 import PocketAuth from "./pocketAuth";
 
 let window: BrowserWindow | null;
@@ -128,7 +129,9 @@ ipcMain.on("sync-initial-state", (event) => {
     /* tslint:enable:object-literal-sort-keys */
 });
 
-ipcMain.on("get-unread-articles", (event) => {
+const ipcPromiseReceiver = new IPCPromiseReceiver();
+
+ipcPromiseReceiver.on("get-unread-articles", (payload, callback) => {
     /* tslint:disable:object-literal-sort-keys */
     const articles = [
         {
@@ -154,10 +157,10 @@ ipcMain.on("get-unread-articles", (event) => {
     ];
     /* tslint:enable:object-literal-sort-keys */
 
-    event.sender.send("update-articles", articles);
+    callback(articles);
 });
 
-ipcMain.on("get-favorite-articles", (event) => {
+ipcPromiseReceiver.on("get-favorite-articles", (payload, callback) => {
     /* tslint:disable:object-literal-sort-keys */
     const articles = [
         {
@@ -168,10 +171,10 @@ ipcMain.on("get-favorite-articles", (event) => {
     ];
     /* tslint:enable:object-literal-sort-keys */
 
-    event.sender.send("update-articles", articles);
+    callback(articles);
 });
 
-ipcMain.on("get-archive-articles", (event) => {
+ipcPromiseReceiver.on("get-archive-articles", (payload, callback) => {
     /* tslint:disable:object-literal-sort-keys */
     const articles = [
         {
@@ -187,10 +190,10 @@ ipcMain.on("get-archive-articles", (event) => {
     ];
     /* tslint:enable:object-literal-sort-keys */
 
-    event.sender.send("update-articles", articles);
+    callback(articles);
 });
 
-ipcMain.on("get-host-articles", (event, index) => {
+ipcPromiseReceiver.on("get-host-articles", (index, callback) => {
     let articles;
 
     /* tslint:disable:object-literal-sort-keys */
@@ -230,10 +233,10 @@ ipcMain.on("get-host-articles", (event, index) => {
     }
     /* tslint:enable:object-literal-sort-keys */
 
-    event.sender.send("update-articles", articles);
+    callback(articles);
 });
 
-ipcMain.on("get-tag-articles", (event, index) => {
+ipcPromiseReceiver.on("get-tag-articles", (index, callback) => {
     let articles;
 
     /* tslint:disable:object-literal-sort-keys */
@@ -253,5 +256,5 @@ ipcMain.on("get-tag-articles", (event, index) => {
     }
     /* tslint:enable:object-literal-sort-keys */
 
-    event.sender.send("update-articles", articles);
+    callback(articles);
 });
