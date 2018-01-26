@@ -48,12 +48,12 @@ const store = new Vuex.Store({
         },
         async selectHostsView(context, index) {
             context.commit("updateActiveView", { view: "hosts", index });
-            const articles = await ipcPromise.send("get-host-articles", index);
+            const articles = await ipcPromise.send("get-host-articles", context.state.views.hosts[index].name);
             context.commit("updateArticles", articles);
         },
         async selectTagsView(context, index) {
             context.commit("updateActiveView", { view: "tags", index });
-            const articles = await ipcPromise.send("get-tag-articles", index);
+            const articles = await ipcPromise.send("get-tag-articles", context.state.views.tags[index].name);
             context.commit("updateArticles", articles);
         },
     },

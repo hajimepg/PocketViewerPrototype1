@@ -3,9 +3,14 @@ import * as path from "path";
 import * as url from "url";
 
 import { app, BrowserWindow, ipcMain } from "electron";
+import * as inversify from "inversify";
 
 import IPCPromiseReceiver from "../ipcPromise/ipcPromiseReceiver";
+import IArticleRepository from "./interface/IArticleRepository";
 import PocketAuth from "./pocketAuth";
+
+import initContainer from "./inversify.config";
+import TYPES from "./types";
 
 let window: BrowserWindow | null;
 
@@ -25,7 +30,11 @@ function createWindow() {
     });
 }
 
-app.on("ready", () => {
+let container: inversify.Container;
+
+app.on("ready", async () => {
+    container = await initContainer();
+
     BrowserWindow.addDevToolsExtension(path.join(__dirname, "../../node_modules/vue-devtools/vender"));
 
     createWindow();
@@ -131,130 +140,53 @@ ipcMain.on("sync-initial-state", (event) => {
 
 const ipcPromiseReceiver = new IPCPromiseReceiver();
 
-ipcPromiseReceiver.on("get-unread-articles", (payload, callback) => {
+const articleConverter = (article) => {
     /* tslint:disable:object-literal-sort-keys */
-    const articles = [
-        {
-            title: "article1",
-            host: "twitter.com",
-            thumb: "images/dummy_image.png",
-        },
-        {
-            title: "article2",
-            host: "pixiv.net",
-            thumb: "images/dummy_image.png",
-        },
-        {
-            title: "article3",
-            host: "hatena.ne.jp",
-            thumb: "images/dummy_image.png",
-        },
-        {
-            title: "長いタイトルあああああああああああああああああああああああああああああああああ",
-            host: "twitter.com",
-            thumb: "images/dummy_image.png",
-        },
-    ];
+    return {
+        title: article.title,
+        host: article.host,
+        thumb: "images/dummy_image.png",
+    };
     /* tslint:enable:object-literal-sort-keys */
+};
+
+ipcPromiseReceiver.on("get-unread-articles", async (payload, callback) => {
+    const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
+
+    const articles = (await articleRepository.findUnread()).map(articleConverter);
 
     callback(articles);
 });
 
-ipcPromiseReceiver.on("get-favorite-articles", (payload, callback) => {
-    /* tslint:disable:object-literal-sort-keys */
-    const articles = [
-        {
-            title: "article1",
-            host: "twitter.com",
-            thumb: "images/dummy_image.png",
-        },
-    ];
-    /* tslint:enable:object-literal-sort-keys */
+ipcPromiseReceiver.on("get-favorite-articles", async (payload, callback) => {
+    const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
+
+    const articles = (await articleRepository.findFavorite()).map(articleConverter);
 
     callback(articles);
 });
 
-ipcPromiseReceiver.on("get-archive-articles", (payload, callback) => {
-    /* tslint:disable:object-literal-sort-keys */
-    const articles = [
-        {
-            title: "article4",
-            host: "twitter.com",
-            thumb: "images/dummy_image.png",
-        },
-        {
-            title: "article5",
-            host: "pixiv.net",
-            thumb: "images/dummy_image.png",
-        },
-    ];
-    /* tslint:enable:object-literal-sort-keys */
+ipcPromiseReceiver.on("get-archive-articles", async (payload, callback) => {
+    const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
+
+    const articles = (await articleRepository.findArchive()).map(articleConverter);
 
     callback(articles);
 });
 
-ipcPromiseReceiver.on("get-host-articles", (index, callback) => {
-    let articles;
+ipcPromiseReceiver.on("get-host-articles", async (host, callback) => {
+    console.log(host);
+    const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
 
-    /* tslint:disable:object-literal-sort-keys */
-    switch (index) {
-        case 0:
-            articles = [
-                {
-                    title: "article1",
-                    host: "twitter.com",
-                    thumb: "images/dummy_image.png",
-                },
-            ];
-            break;
-        case 1:
-            articles = [
-                {
-                    title: "article2",
-                    host: "pixiv.net",
-                    thumb: "images/dummy_image.png",
-                },
-            ];
-            break;
-        case 2:
-            articles = [
-                {
-                    title: "article3",
-                    host: "hatena.ne.jp",
-                    thumb: "images/dummy_image.png",
-                },
-                {
-                    title: "長いタイトルあああああああああああああああああああああああああああああああああ",
-                    host: "twitter.com",
-                    thumb: "images/dummy_image.png",
-                },
-            ];
-            break;
-    }
-    /* tslint:enable:object-literal-sort-keys */
+    const articles = (await articleRepository.findByHost(host)).map(articleConverter);
 
     callback(articles);
 });
 
-ipcPromiseReceiver.on("get-tag-articles", (index, callback) => {
-    let articles;
+ipcPromiseReceiver.on("get-tag-articles", async (tag, callback) => {
+    const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
 
-    /* tslint:disable:object-literal-sort-keys */
-    switch (index) {
-        case 0:
-            articles = [
-                {
-                    title: "article3",
-                    host: "hatena.ne.jp",
-                    thumb: "images/dummy_image.png",
-                },
-            ];
-            break;
-        case 1:
-            articles = [];
-            break;
-    }
-    /* tslint:enable:object-literal-sort-keys */
+    const articles = (await articleRepository.findByTag(tag)).map(articleConverter);
 
     callback(articles);
 });
