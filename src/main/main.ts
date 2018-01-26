@@ -71,75 +71,6 @@ ipcMain.on("pocket-auth", (event) => {
         });
 });
 
-ipcMain.on("sync-initial-state", (event) => {
-    /* tslint:disable:object-literal-sort-keys */
-    event.returnValue = {
-        // 開発テンポを良くするため、一時的にダミーを設定
-        // TODO: アクセストークンを使用する段階になったら空文字に戻すこと
-        accessToken: "dummyToken",
-        authErrorMessage: "",
-        views: {
-            unread: {
-                count: 456,
-            },
-            hosts: [
-                {
-                    name: "twitter.com",
-                    count: 10,
-                },
-                {
-                    name: "pixiv.net",
-                    count: 20,
-                },
-                {
-                    name: "Other",
-                    count: 30,
-                },
-            ],
-            tags: [
-                {
-                    name: "Programming",
-                    count: 40,
-                },
-                {
-                    name: "Game",
-                    count: 40,
-                },
-            ],
-            active: {
-                view: "unread",
-                index: undefined,
-            },
-        },
-        articles: [
-            {
-                title: "article1",
-                host: "twitter.com",
-                thumb: "images/dummy_image.png",
-            },
-            {
-                title: "article2",
-                host: "pixiv.net",
-                thumb: "images/dummy_image.png",
-            },
-            {
-                title: "article3",
-                host: "hatena.ne.jp",
-                thumb: "images/dummy_image.png",
-            },
-            {
-                title: "長いタイトルあああああああああああああああああああああああああああああああああ",
-                host: "twitter.com",
-                thumb: "images/dummy_image.png",
-            },
-        ],
-        searchArticle: "",
-    };
-    /* tslint:enable:object-literal-sort-keys */
-});
-
-const ipcPromiseReceiver = new IPCPromiseReceiver();
-
 const articleConverter = (article) => {
     /* tslint:disable:object-literal-sort-keys */
     return {
@@ -149,6 +80,48 @@ const articleConverter = (article) => {
     };
     /* tslint:enable:object-literal-sort-keys */
 };
+
+ipcMain.on("sync-initial-state", async (event) => {
+    const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
+
+    const unreadArticles = await articleRepository.findUnread();
+
+    const hosts = Array<{ name: string, count: number}>();
+    for (const host of (await articleRepository.findHosts())) {
+        const count = (await articleRepository.findByHost(host)).length;
+        hosts.push({ name: host, count });
+    }
+
+    const tags = Array<{ name: string, count: number}>();
+    for (const tag of (await articleRepository.findTags())) {
+        const count = (await articleRepository.findByTag(tag)).length;
+        tags.push({ name: tag, count });
+    }
+
+    /* tslint:disable:object-literal-sort-keys */
+    event.returnValue = {
+        // 開発テンポを良くするため、一時的にダミーを設定
+        // TODO: アクセストークンを使用する段階になったら空文字に戻すこと
+        accessToken: "dummyToken",
+        authErrorMessage: "",
+        views: {
+            unread: {
+                count: unreadArticles.length,
+            },
+            hosts,
+            tags,
+            active: {
+                view: "unread",
+                index: undefined,
+            },
+        },
+        articles: unreadArticles.map(articleConverter),
+        searchArticle: "",
+    };
+    /* tslint:enable:object-literal-sort-keys */
+});
+
+const ipcPromiseReceiver = new IPCPromiseReceiver();
 
 ipcPromiseReceiver.on("get-unread-articles", async (payload, callback) => {
     const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
