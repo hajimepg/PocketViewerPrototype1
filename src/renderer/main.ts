@@ -3,6 +3,7 @@ import Vue from "vue";
 import Vuex, { mapActions, mapState } from "vuex";
 
 import * as ipcPromise from "../ipcPromise/ipcPromise";
+import mutations from "./mutations";
 
 Vue.use(Vuex);
 
@@ -10,63 +11,63 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: ipcRenderer.sendSync("sync-initial-state"),
     mutations: {
-        initAuth(state) {
+        [mutations.INIT_AUTH](state) {
             state.authenticate.isAuthenticate = false;
             state.authenticate.errorMessage = "";
         },
-        updateIsAuthenticate(state, value: boolean) {
+        [mutations.UPDATE_IS_AUTHENTICATE](state, value: boolean) {
             state.authenticate.isAuthenticate = value;
         },
-        updateAuthErrorMessage(state, errorMessage: string) {
+        [mutations.UPDATE_AUTH_ERROR_MESEAGE](state, errorMessage: string) {
             state.authenticate.errorMessage = errorMessage;
         },
-        updateActiveView(state, active) {
+        [mutations.UPDATE_ACTIVE_VIEW](state, active) {
             state.views.active = active;
         },
-        updateArticles(state, articles) {
+        [mutations.UPDATE_ARTICLES](state, articles) {
             state.articles = articles;
         },
-        updateSearchArticle(state, text) {
+        [mutations.UPDATE_SEARCH_ARTICLES](state, text) {
             state.searchArticle = text;
         },
     },
     actions: {
         async pocketAuth(context) {
-            context.commit("initAuth");
+            context.commit(mutations.INIT_AUTH);
 
             const errorMessage: string | null = await ipcPromise.send("pocket-auth", undefined);
 
             if (errorMessage !== null) {
-                context.commit("updateAuthErrorMessage", errorMessage);
+                context.commit(mutations.UPDATE_AUTH_ERROR_MESEAGE, errorMessage);
             }
             else {
-                context.commit("updateIsAuthenticate", true);
+                context.commit(mutations.UPDATE_IS_AUTHENTICATE, true);
             }
         },
         async selectUnreadView(context) {
-            context.commit("updateActiveView", { view: "unread", index: undefined });
+            context.commit(mutations.UPDATE_ACTIVE_VIEW, { view: "unread", index: undefined });
             const articles = await ipcPromise.send("get-unread-articles", undefined);
-            context.commit("updateArticles", articles);
+            context.commit(mutations.UPDATE_ARTICLES, articles);
         },
         async selectFavoriteView(context) {
-            context.commit("updateActiveView", { view: "favorite", index: undefined });
+            context.commit(mutations.UPDATE_ACTIVE_VIEW, { view: "favorite", index: undefined });
             const articles = await ipcPromise.send("get-favorite-articles", undefined);
-            context.commit("updateArticles", articles);
+            context.commit(mutations.UPDATE_ARTICLES, articles);
         },
         async selectArchiveView(context) {
-            context.commit("updateActiveView", { view: "archive", index: undefined });
+            context.commit(mutations.UPDATE_ACTIVE_VIEW, { view: "archive", index: undefined });
             const articles = await ipcPromise.send("get-archive-articles", undefined);
-            context.commit("updateArticles", articles);
+            context.commit(mutations.UPDATE_ARTICLES, articles);
         },
         async selectHostsView(context, index) {
-            context.commit("updateActiveView", { view: "hosts", index });
+            context.commit(mutations.UPDATE_ACTIVE_VIEW, { view: "hosts", index });
             const articles = await ipcPromise.send("get-host-articles", context.state.views.hosts[index].name);
-            context.commit("updateArticles", articles);
+            context.commit(mutations.UPDATE_ARTICLES, articles);
         },
         async selectTagsView(context, index) {
-            context.commit("updateActiveView", { view: "tags", index });
+            context.commit(mutations.UPDATE_ACTIVE_VIEW, { view: "tags", index });
             const articles = await ipcPromise.send("get-tag-articles", context.state.views.tags[index].name);
-            context.commit("updateArticles", articles);
+            context.commit(mutations.UPDATE_ARTICLES, articles);
         },
     },
 });
@@ -88,7 +89,7 @@ const app = new Vue({
             this.$store.dispatch("selectTagsView", index);
         },
         updateSearchArticle(event) {
-            this.$store.commit("updateSearchArticle", event.target.value);
+            this.$store.commit(mutations.UPDATE_SEARCH_ARTICLES, event.target.value);
         }
     },
     computed: {
