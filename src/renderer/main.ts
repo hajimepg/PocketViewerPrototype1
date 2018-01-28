@@ -11,14 +11,14 @@ const store = new Vuex.Store({
     state: ipcRenderer.sendSync("sync-initial-state"),
     mutations: {
         initAuth(state) {
-            state.accessToken = "";
-            state.authErrorMessage = "";
+            state.authenticate.isAuthenticate = false;
+            state.authenticate.errorMessage = "";
         },
-        setAccessToken(state, accessToken: string) {
-            state.accessToken = accessToken;
+        updateIsAuthenticate(state, value: boolean) {
+            state.authenticate.isAuthenticate = value;
         },
-        setAuthErrorMessage(state, authErrorMessage: string) {
-            state.authErrorMessage = authErrorMessage;
+        updateAuthErrorMessage(state, errorMessage: string) {
+            state.authenticate.errorMessage = errorMessage;
         },
         updateActiveView(state, active) {
             state.views.active = active;
@@ -34,14 +34,13 @@ const store = new Vuex.Store({
         async pocketAuth(context) {
             context.commit("initAuth");
 
-            const result: { accessToken: string | null, errorMessage: string | null }
-                = await ipcPromise.send("pocket-auth", undefined);
+            const errorMessage: string | null = await ipcPromise.send("pocket-auth", undefined);
 
-            if (result.errorMessage !== null) {
-                context.commit("setAuthErrorMessage", result.errorMessage);
+            if (errorMessage !== null) {
+                context.commit("updateAuthErrorMessage", errorMessage);
             }
             else {
-                context.commit("setAccessToken", result.accessToken);
+                context.commit("updateIsAuthenticate", true);
             }
         },
         async selectUnreadView(context) {
@@ -94,8 +93,7 @@ const app = new Vue({
     },
     computed: {
         ...mapState({
-            pocketAccessToken: "accessToken",
-            pocketErrorMessage: "authErrorMessage",
+            authenticate: "authenticate",
             searchArticle: "searchArticle",
         }),
         views() {

@@ -54,20 +54,24 @@ app.on("activate", () => {
     }
 });
 
+let accessToken: string = "";
+
 ipcPromiseReceiver.on("pocket-auth", async (payload, callback) => {
     const authCredentials = JSON.parse(fs.readFileSync(path.join(__dirname, "../../credentials.json"), "utf-8"));
 
     const pocketAuth = new PocketAuth(authCredentials.pocket.consumer_key);
 
     pocketAuth.getAccessToken()
-        .then((accessToken) => {
+        .then((newAccessToken) => {
+            accessToken = newAccessToken;
+
             if (window !== null) {
                 window.show();
             }
-            callback({ accessToken, errorMessage: null });
+            callback(null);
         })
         .catch((error: Error) => {
-            callback({ accessToken: null, errorMessage: error.message });
+            callback(error.message);
         });
 });
 
@@ -100,8 +104,10 @@ ipcMain.on("sync-initial-state", async (event) => {
 
     /* tslint:disable:object-literal-sort-keys */
     event.returnValue = {
-        accessToken: "",
-        authErrorMessage: "",
+        authenticate: {
+            isAuthenticate: false,
+            errorMessage: "",
+        },
         views: {
             unread: {
                 count: unreadArticles.length,
