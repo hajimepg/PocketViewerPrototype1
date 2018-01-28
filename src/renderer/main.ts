@@ -31,6 +31,19 @@ const store = new Vuex.Store({
         },
     },
     actions: {
+        async pocketAuth(context) {
+            context.commit("initAuth");
+
+            const result: { accessToken: string | null, errorMessage: string | null }
+                = await ipcPromise.send("pocket-auth", undefined);
+
+            if (result.errorMessage !== null) {
+                context.commit("setAuthErrorMessage", result.errorMessage);
+            }
+            else {
+                context.commit("setAccessToken", result.accessToken);
+            }
+        },
         async selectUnreadView(context) {
             context.commit("updateActiveView", { view: "unread", index: undefined });
             const articles = await ipcPromise.send("get-unread-articles", undefined);
@@ -63,11 +76,8 @@ const app = new Vue({
     el: "#app",
     store,
     methods: {
-        pocketAuth() {
-            this.$store.commit("initAuth");
-            ipcRenderer.send("pocket-auth");
-        },
         ...mapActions([
+            "pocketAuth",
             "selectUnreadView",
             "selectFavoriteView",
             "selectArchiveView",
@@ -120,12 +130,3 @@ const app = new Vue({
     }
 });
 /* tslint:enable:object-literal-sort-keys */
-
-ipcRenderer.on("pocket-auth-reply", (event, error, accessToken) => {
-    if (error !== null) {
-        store.commit("setAuthErrorMessage", error);
-    }
-    else {
-        store.commit("setAccessToken", accessToken);
-    }
-});

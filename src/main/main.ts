@@ -12,6 +12,8 @@ import PocketAuth from "./pocketAuth";
 import initContainer from "./inversify.config";
 import TYPES from "./types";
 
+const ipcPromiseReceiver = new IPCPromiseReceiver();
+
 let window: BrowserWindow | null;
 
 function createWindow() {
@@ -52,22 +54,20 @@ app.on("activate", () => {
     }
 });
 
-const authCredentials = JSON.parse(fs.readFileSync(path.join(__dirname, "../../credentials.json"), "utf-8"));
+ipcPromiseReceiver.on("pocket-auth", async (payload, callback) => {
+    const authCredentials = JSON.parse(fs.readFileSync(path.join(__dirname, "../../credentials.json"), "utf-8"));
 
-let pocketAuth: PocketAuth;
-
-ipcMain.on("pocket-auth", (event) => {
-    pocketAuth = new PocketAuth(authCredentials.pocket.consumer_key);
+    const pocketAuth = new PocketAuth(authCredentials.pocket.consumer_key);
 
     pocketAuth.getAccessToken()
         .then((accessToken) => {
             if (window !== null) {
                 window.show();
             }
-            event.sender.send("pocket-auth-reply", null, accessToken);
+            callback({ accessToken, errorMessage: null });
         })
         .catch((error: Error) => {
-            event.sender.send("pocket-auth-reply", error.message, null);
+            callback({ accessToken: null, errorMessage: error.message });
         });
 });
 
@@ -118,8 +118,6 @@ ipcMain.on("sync-initial-state", async (event) => {
     };
     /* tslint:enable:object-literal-sort-keys */
 });
-
-const ipcPromiseReceiver = new IPCPromiseReceiver();
 
 ipcPromiseReceiver.on("get-unread-articles", async (payload, callback) => {
     const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
