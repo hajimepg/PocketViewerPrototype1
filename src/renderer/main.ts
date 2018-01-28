@@ -11,10 +11,6 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: ipcRenderer.sendSync("sync-initial-state"),
     mutations: {
-        [mutations.INIT_AUTH](state) {
-            state.authenticate.isAuthenticate = false;
-            state.authenticate.errorMessage = "";
-        },
         [mutations.UPDATE_IS_AUTHENTICATE](state, value: boolean) {
             state.authenticate.isAuthenticate = value;
         },
@@ -33,7 +29,8 @@ const store = new Vuex.Store({
     },
     actions: {
         async pocketAuth(context) {
-            context.commit(mutations.INIT_AUTH);
+            context.commit(mutations.UPDATE_IS_AUTHENTICATE, false);
+            context.commit(mutations.UPDATE_AUTH_ERROR_MESEAGE, "");
 
             const errorMessage: string | null = await ipcPromise.send("pocket-auth", undefined);
 
