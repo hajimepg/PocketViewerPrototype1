@@ -54,6 +54,10 @@ app.on("activate", () => {
     }
 });
 
+ipcMain.on("sync-is-authenticate", (event) => {
+    event.returnValue = false;
+});
+
 let accessToken: string = "";
 
 ipcPromiseReceiver.on("pocket-auth", async (payload, callback) => {
@@ -85,10 +89,10 @@ const articleConverter = (article) => {
     /* tslint:enable:object-literal-sort-keys */
 };
 
-ipcMain.on("sync-initial-state", async (event) => {
+ipcPromiseReceiver.on("get-views", async (payload, callback) => {
     const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
 
-    const unreadArticles = await articleRepository.findUnread();
+    const unreadCount = (await articleRepository.findUnread()).length;
 
     const hosts = Array<{ name: string, count: number}>();
     for (const host of (await articleRepository.findHosts())) {
@@ -102,27 +106,7 @@ ipcMain.on("sync-initial-state", async (event) => {
         tags.push({ name: tag, count });
     }
 
-    /* tslint:disable:object-literal-sort-keys */
-    event.returnValue = {
-        authenticate: {
-            isAuthenticate: false,
-            errorMessage: "",
-        },
-        views: {
-            unread: {
-                count: unreadArticles.length,
-            },
-            hosts,
-            tags,
-            active: {
-                view: "unread",
-                index: undefined,
-            },
-        },
-        articles: unreadArticles.map(articleConverter),
-        searchArticle: "",
-    };
-    /* tslint:enable:object-literal-sort-keys */
+    callback({ unreadCount, hosts, tags });
 });
 
 ipcPromiseReceiver.on("get-unread-articles", async (payload, callback) => {

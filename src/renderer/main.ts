@@ -9,13 +9,40 @@ Vue.use(Vuex);
 
 /* tslint:disable:object-literal-sort-keys */
 const store = new Vuex.Store({
-    state: ipcRenderer.sendSync("sync-initial-state"),
+    state: {
+        authenticate: {
+            isAuthenticate: ipcRenderer.sendSync("sync-is-authenticate"),
+            errorMessage: "",
+        },
+        views: {
+            unread: {
+                count: 0,
+            },
+            hosts: [],
+            tags: [],
+            active: {
+                view: "unread",
+                index: undefined,
+            },
+        },
+        articles: [],
+        searchArticle: "",
+    },
     mutations: {
         [mutations.UPDATE_IS_AUTHENTICATE](state, value: boolean) {
             state.authenticate.isAuthenticate = value;
         },
         [mutations.UPDATE_AUTH_ERROR_MESEAGE](state, errorMessage: string) {
             state.authenticate.errorMessage = errorMessage;
+        },
+        [mutations.UPDATE_UNREAD_COUNT](state, count: number) {
+            state.views.unread.count = count;
+        },
+        [mutations.UPDATE_HOSTS](state, hosts) {
+            state.views.hosts = hosts;
+        },
+        [mutations.UPDATE_TAGS](state, tags) {
+            state.views.tags = tags;
         },
         [mutations.UPDATE_ACTIVE_VIEW](state, active) {
             state.views.active = active;
@@ -39,6 +66,16 @@ const store = new Vuex.Store({
             }
             else {
                 context.commit(mutations.UPDATE_IS_AUTHENTICATE, true);
+
+                // TODO: コンポーネント化したらmountイベントでやるようにする
+                const views = await ipcPromise.send("get-views", undefined);
+                context.commit(mutations.UPDATE_UNREAD_COUNT, views.unreadCount);
+                context.commit(mutations.UPDATE_HOSTS, views.hosts);
+                context.commit(mutations.UPDATE_TAGS, views.tags);
+
+                // TODO: 初期ビューはUnreadと決め打ち
+                const articles = await ipcPromise.send("get-unread-articles", undefined);
+                context.commit(mutations.UPDATE_ARTICLES, articles);
             }
         },
         async selectUnreadView(context) {
