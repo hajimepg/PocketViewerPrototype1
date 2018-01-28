@@ -100,9 +100,7 @@ ipcMain.on("sync-initial-state", async (event) => {
 
     /* tslint:disable:object-literal-sort-keys */
     event.returnValue = {
-        // 開発テンポを良くするため、一時的にダミーを設定
-        // TODO: アクセストークンを使用する段階になったら空文字に戻すこと
-        accessToken: "dummyToken",
+        accessToken: "",
         authErrorMessage: "",
         views: {
             unread: {
