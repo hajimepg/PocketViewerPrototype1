@@ -6,7 +6,8 @@ export default class Article {
         public host: string,
         public tags: string[],
         public isUnread: boolean,
-        public isFavorite: boolean
+        public isFavorite: boolean,
+        public addedAt: Date
     ) {
     }
 }

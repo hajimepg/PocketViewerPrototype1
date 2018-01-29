@@ -7,6 +7,7 @@ test("insert", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
+    const addedAt = new Date();
     /* tslint:disable:object-literal-sort-keys */
     const article = await repo.insert({
         title: "title",
@@ -15,6 +16,7 @@ test("insert", async (t) => {
         tags: ["Game", "Programming"],
         isUnread: true,
         isFavorite: false,
+        addedAt,
     });
     /* tslint:enable:object-literal-sort-keys */
 
@@ -27,6 +29,7 @@ test("insert", async (t) => {
     t.not(-1, article.tags.indexOf("Programming"));
     t.true(article.isUnread);
     t.false(article.isFavorite);
+    t.is(addedAt, article.addedAt);
 });
 
 test("update", async (t) => {
@@ -41,6 +44,7 @@ test("update", async (t) => {
         tags: ["Game", "Programming"],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date("2018/01/01"),
     });
     /* tslint:enable:object-literal-sort-keys */
 
@@ -49,6 +53,7 @@ test("update", async (t) => {
     article.tags.push("Anime");
     article.isUnread = false;
     article.isFavorite = true;
+    article.addedAt = new Date();
 
     const updatedArticle = await repo.update(article);
     t.is(article.id, updatedArticle.id);
@@ -57,6 +62,7 @@ test("update", async (t) => {
     t.deepEqual(article.tags, updatedArticle.tags);
     t.is(article.isUnread, updatedArticle.isUnread);
     t.is(article.isFavorite, updatedArticle.isFavorite);
+    t.is(article.addedAt, updatedArticle.addedAt);
 });
 
 test("delete", async (t) => {
@@ -71,6 +77,7 @@ test("delete", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     const article2 = await repo.insert({
         title: "title2",
@@ -79,6 +86,7 @@ test("delete", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     const article3 = await repo.insert({
         title: "title3",
@@ -87,6 +95,7 @@ test("delete", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
 
@@ -114,6 +123,7 @@ test("findUnread", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     await repo.insert({
         title: "title2",
@@ -122,6 +132,7 @@ test("findUnread", async (t) => {
         tags: [],
         isUnread: false,
         isFavorite: false,
+        addedAt: new Date(),
     });
     await repo.insert({
         title: "title3",
@@ -130,6 +141,7 @@ test("findUnread", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
 
@@ -152,6 +164,7 @@ test("findByTag", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     await repo.insert({
         title: "title2",
@@ -160,6 +173,7 @@ test("findByTag", async (t) => {
         tags: ["Game"],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     await repo.insert({
         title: "title3",
@@ -168,6 +182,7 @@ test("findByTag", async (t) => {
         tags: ["Game", "Programming"],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
 
@@ -209,6 +224,7 @@ test("findHosts", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
 
@@ -226,6 +242,7 @@ test("findHosts", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
 
@@ -244,6 +261,7 @@ test("findHosts", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
 
@@ -272,6 +290,7 @@ test("findTags", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
 
@@ -288,6 +307,7 @@ test("findTags", async (t) => {
         tags: ["tag1"],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
 
@@ -305,6 +325,7 @@ test("findTags", async (t) => {
         tags: ["tag2", "tag3"],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
 
@@ -324,6 +345,7 @@ test("findTags", async (t) => {
         tags: ["tag3", "tag4"],
         isUnread: true,
         isFavorite: false,
+        addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
 

@@ -23,15 +23,16 @@ export default class NeDbArticleRepository implements IArticleRepository {
         });
     }
 
-    public insert({ title, url, host, tags, isUnread, isFavorite }: IArticleRepositoryInsertData) {
+    public insert({ title, url, host, tags, isUnread, isFavorite, addedAt }: IArticleRepositoryInsertData) {
         return new Promise<Article>((resolve, reject) => {
-            this.db.insert({ title, url, host, tags, isUnread, isFavorite }, (error, doc) => {
+            this.db.insert({ title, url, host, tags, isUnread, isFavorite, addedAt }, (error, doc) => {
                 if (error !== null) {
                     reject(error);
                     return;
                 }
 
-                resolve(new Article(doc._id, doc.title, doc.url, doc.host, doc.tags, doc.isUnread, doc.isFavorite));
+                resolve(new Article(doc._id, doc.title, doc.url, doc.host, doc.tags, doc.isUnread, doc.isFavorite,
+                    doc.addedAt));
             });
         });
     }
@@ -48,7 +49,8 @@ export default class NeDbArticleRepository implements IArticleRepository {
                     return;
                 }
 
-                resolve(new Article(doc._id, doc.title, doc.url, doc.host, doc.tags, doc.isUnread, doc.isFavorite));
+                resolve(new Article(doc._id, doc.title, doc.url, doc.host, doc.tags, doc.isUnread, doc.isFavorite,
+                    doc.addedAt));
             });
         });
     }
@@ -156,7 +158,8 @@ export default class NeDbArticleRepository implements IArticleRepository {
                 }
 
                 resolve(docs.map((doc) => {
-                    return new Article(doc._id, doc.title, doc.url, doc.host, doc.tags, doc.isUnread, doc.isFavorite);
+                    return new Article(doc._id, doc.title, doc.url, doc.host, doc.tags, doc.isUnread, doc.isFavorite,
+                        doc.addedAt);
                 }));
             });
         });

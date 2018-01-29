@@ -7,6 +7,7 @@ export interface IArticleRepositoryInsertData {
     tags: string[];
     isUnread: boolean;
     isFavorite: boolean;
+    addedAt: Date;
 }
 
 export interface IArticleRepository {
