@@ -1,6 +1,6 @@
 import * as DataStore from "nedb";
 
-import IArticleRepository from "../interface/IArticleRepository";
+import { IArticleRepository, IArticleRepositoryInsertData } from "../interface/IArticleRepository";
 import Article from "../model/article";
 
 export default class NeDbArticleRepository implements IArticleRepository {
@@ -23,7 +23,7 @@ export default class NeDbArticleRepository implements IArticleRepository {
         });
     }
 
-    public insert(title: string, url: string, host: string, tags: string[], isUnread: boolean, isFavorite: boolean) {
+    public insert({ title, url, host, tags, isUnread, isFavorite }: IArticleRepositoryInsertData) {
         return new Promise<Article>((resolve, reject) => {
             this.db.insert({ title, url, host, tags, isUnread, isFavorite }, (error, doc) => {
                 if (error !== null) {

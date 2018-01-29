@@ -6,7 +6,7 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import * as inversify from "inversify";
 
 import IPCPromiseReceiver from "../ipcPromise/ipcPromiseReceiver";
-import IArticleRepository from "./interface/IArticleRepository";
+import { IArticleRepository } from "./interface/IArticleRepository";
 import PocketAuth from "./pocketAuth";
 
 import initContainer from "./inversify.config";
@@ -156,9 +156,16 @@ ipcPromiseReceiver.on("update-articles", async (payload, callback) => {
 
     const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
 
-    await articleRepository.insert(`new record ${updateArticlesCount}`,
-        `http://example.com/${updateArticlesCount}`,
-        "example.com", [], true, false);
+    /* tslint:disable:object-literal-sort-keys */
+    await articleRepository.insert({
+        title: `new record ${updateArticlesCount}`,
+        url: `http://example.com/${updateArticlesCount}`,
+        host: "example.com",
+        tags: [],
+        isUnread: true,
+        isFavorite: false,
+    });
+    /* tslint:enable:object-literal-sort-keys */
 
     updateArticlesCount++;
 

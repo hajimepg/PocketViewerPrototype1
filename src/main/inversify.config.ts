@@ -4,7 +4,7 @@ import * as inversify from "inversify";
 
 import TYPES from "./types";
 
-import IArticleRepository from "./interface/IArticleRepository";
+import { IArticleRepository } from "./interface/IArticleRepository";
 
 import NeDbArticleRepository from "./repository/neDbArticleRepository";
 

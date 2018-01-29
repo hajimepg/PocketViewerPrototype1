@@ -13,8 +13,16 @@ test.serial("insert", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
-    const article = await repo.insert("title", "http://example.com", "example.com",
-        ["Game", "Programming"], true, false);
+    /* tslint:disable:object-literal-sort-keys */
+    const article = await repo.insert({
+        title: "title",
+        url: "http://example.com",
+        host: "example.com",
+        tags: ["Game", "Programming"],
+        isUnread: true,
+        isFavorite: false,
+    });
+    /* tslint:enable:object-literal-sort-keys */
 
     t.true(article.id.length > 0);
     t.is("title", article.title);
@@ -31,8 +39,16 @@ test.serial("update", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
-    const article = await repo.insert("title", "http://example.com", "example.com",
-        ["Game", "Programming"], true, false);
+    /* tslint:disable:object-literal-sort-keys */
+    const article = await repo.insert({
+        title: "title",
+        url: "http://example.com",
+        host: "example.com",
+        tags: ["Game", "Programming"],
+        isUnread: true,
+        isFavorite: false,
+    });
+    /* tslint:enable:object-literal-sort-keys */
 
     article.url = "http://example.net";
     article.host = "example.net";
@@ -53,9 +69,32 @@ test.serial("delete", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
-    const article1 = await repo.insert("title1", "http://example.com", "example.com", [], true, false);
-    const article2 = await repo.insert("title2", "http://example.com", "example.com", [], true, false);
-    const article3 = await repo.insert("title3", "http://example.com", "example.com", [], true, false);
+    /* tslint:disable:object-literal-sort-keys */
+    const article1 = await repo.insert({
+        title: "title1",
+        url: "http://example.com",
+        host: "example.com",
+        tags: [],
+        isUnread: true,
+        isFavorite: false,
+    });
+    const article2 = await repo.insert({
+        title: "title2",
+        url: "http://example.com",
+        host: "example.com",
+        tags: [],
+        isUnread: true,
+        isFavorite: false,
+    });
+    const article3 = await repo.insert({
+        title: "title3",
+        url: "http://example.com",
+        host: "example.com",
+        tags: [],
+        isUnread: true,
+        isFavorite: false,
+    });
+    /* tslint:enable:object-literal-sort-keys */
 
     const allArticlesBefore = await repo.findAll();
     t.is(3, allArticlesBefore.length);
@@ -73,9 +112,32 @@ test.serial("findUnread", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
-    await repo.insert("title1", "http://example.com", "example.com", [], true, false);
-    await repo.insert("title2", "http://example.com", "example.com", [], false, false);
-    await repo.insert("title3", "http://example.com", "example.com", [], true, false);
+    /* tslint:disable:object-literal-sort-keys */
+    await repo.insert({
+        title: "title1",
+        url: "http://example.com",
+        host: "example.com",
+        tags: [],
+        isUnread: true,
+        isFavorite: false,
+    });
+    await repo.insert({
+        title: "title2",
+        url: "http://example.com",
+        host: "example.com",
+        tags: [],
+        isUnread: false,
+        isFavorite: false,
+    });
+    await repo.insert({
+        title: "title3",
+        url: "http://example.com",
+        host: "example.com",
+        tags: [],
+        isUnread: true,
+        isFavorite: false,
+    });
+    /* tslint:enable:object-literal-sort-keys */
 
     const articles = await repo.findUnread();
     t.is(2, articles.length);
@@ -88,9 +150,32 @@ test.serial("findByTag", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
-    await repo.insert("title1", "http://example.com", "example.com", [], true, false);
-    await repo.insert("title2", "http://example.com", "example.com", ["Game"], true, false);
-    await repo.insert("title3", "http://example.com", "example.com", ["Game", "Programming"], true, false);
+    /* tslint:disable:object-literal-sort-keys */
+    await repo.insert({
+        title: "title1",
+        url: "http://example.com",
+        host: "example.com",
+        tags: [],
+        isUnread: true,
+        isFavorite: false,
+    });
+    await repo.insert({
+        title: "title2",
+        url: "http://example.com",
+        host: "example.com",
+        tags: ["Game"],
+        isUnread: true,
+        isFavorite: false,
+    });
+    await repo.insert({
+        title: "title3",
+        url: "http://example.com",
+        host: "example.com",
+        tags: ["Game", "Programming"],
+        isUnread: true,
+        isFavorite: false,
+    });
+    /* tslint:enable:object-literal-sort-keys */
 
     {
         const articles = await repo.findByTag("Game");
@@ -122,7 +207,16 @@ test.serial("findHosts", async (t) => {
         t.is(0, hosts.length);
     }
 
-    await repo.insert("title", "http://example.com", "example.com", [], true, false);
+    /* tslint:disable:object-literal-sort-keys */
+    await repo.insert({
+        title: "title",
+        url: "http://example.com",
+        host: "example.com",
+        tags: [],
+        isUnread: true,
+        isFavorite: false,
+    });
+    /* tslint:enable:object-literal-sort-keys */
 
     {
         const hosts = await repo.findHosts();
@@ -130,7 +224,16 @@ test.serial("findHosts", async (t) => {
         t.not(-1, hosts.indexOf("example.com"));
     }
 
-    await repo.insert("title", "http://example.net", "example.net", [], true, false);
+    /* tslint:disable:object-literal-sort-keys */
+    await repo.insert({
+        title: "title",
+        url: "http://example.net",
+        host: "example.net",
+        tags: [],
+        isUnread: true,
+        isFavorite: false,
+    });
+    /* tslint:enable:object-literal-sort-keys */
 
     {
         const hosts = await repo.findHosts();
@@ -139,7 +242,16 @@ test.serial("findHosts", async (t) => {
         t.not(-1, hosts.indexOf("example.net"));
     }
 
-    await repo.insert("title", "http://example.com/another", "example.com", [], true, false);
+    /* tslint:disable:object-literal-sort-keys */
+    await repo.insert({
+        title: "title",
+        url: "http://example.com/another",
+        host: "example.com",
+        tags: [],
+        isUnread: true,
+        isFavorite: false,
+    });
+    /* tslint:enable:object-literal-sort-keys */
 
     {
         const hosts = await repo.findHosts();
@@ -158,14 +270,32 @@ test.serial("findTags", async (t) => {
         t.is(0, tags.length);
     }
 
-    await repo.insert("title", "http://example.com", "example.com", [], true, false);
+    /* tslint:disable:object-literal-sort-keys */
+    await repo.insert({
+        title: "title",
+        url: "http://example.com",
+        host: "example.com",
+        tags: [],
+        isUnread: true,
+        isFavorite: false,
+    });
+    /* tslint:enable:object-literal-sort-keys */
 
     {
         const tags = await repo.findTags();
         t.is(0, tags.length);
     }
 
-    await repo.insert("title", "http://example.com", "example.com", ["tag1"], true, false);
+    /* tslint:disable:object-literal-sort-keys */
+    await repo.insert({
+        title: "title",
+        url: "http://example.com",
+        host: "example.com",
+        tags: ["tag1"],
+        isUnread: true,
+        isFavorite: false,
+    });
+    /* tslint:enable:object-literal-sort-keys */
 
     {
         const tags = await repo.findTags();
@@ -173,7 +303,16 @@ test.serial("findTags", async (t) => {
         t.not(-1, tags.indexOf("tag1"));
     }
 
-    await repo.insert("title", "http://example.com", "example.com", ["tag2", "tag3"], true, false);
+    /* tslint:disable:object-literal-sort-keys */
+    await repo.insert({
+        title: "title",
+        url: "http://example.com",
+        host: "example.com",
+        tags: ["tag2", "tag3"],
+        isUnread: true,
+        isFavorite: false,
+    });
+    /* tslint:enable:object-literal-sort-keys */
 
     {
         const tags = await repo.findTags();
@@ -183,7 +322,16 @@ test.serial("findTags", async (t) => {
         t.not(-1, tags.indexOf("tag3"));
     }
 
-    await repo.insert("title", "http://example.com", "example.com", ["tag3", "tag4"], true, false);
+    /* tslint:disable:object-literal-sort-keys */
+    await repo.insert({
+        title: "title",
+        url: "http://example.com",
+        host: "example.com",
+        tags: ["tag3", "tag4"],
+        isUnread: true,
+        isFavorite: false,
+    });
+    /* tslint:enable:object-literal-sort-keys */
 
     {
         const tags = await repo.findTags();
