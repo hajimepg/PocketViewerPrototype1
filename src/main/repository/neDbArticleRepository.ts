@@ -151,7 +151,7 @@ export default class NeDbArticleRepository implements IArticleRepository {
 
     protected findArticles(query) {
         return new Promise<Article[]>((resolve, reject) => {
-            this.db.find(query, (error, docs) => {
+            this.db.find(query).sort({ addedAt: -1 }).exec((error, docs) => {
                 if (error !== null) {
                     reject(error);
                     return;

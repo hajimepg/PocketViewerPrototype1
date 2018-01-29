@@ -123,7 +123,7 @@ test("findUnread", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
-        addedAt: new Date(),
+        addedAt: new Date("2018/01/01"),
     });
     await repo.insert({
         title: "title2",
@@ -132,7 +132,7 @@ test("findUnread", async (t) => {
         tags: [],
         isUnread: false,
         isFavorite: false,
-        addedAt: new Date(),
+        addedAt: new Date("2018/01/02"),
     });
     await repo.insert({
         title: "title3",
@@ -141,15 +141,15 @@ test("findUnread", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
-        addedAt: new Date(),
+        addedAt: new Date("2018/01/03"),
     });
     /* tslint:enable:object-literal-sort-keys */
 
     const articles = await repo.findUnread();
     t.is(2, articles.length);
     const titles = articles.map((article) => article.title);
-    t.not(-1, titles.indexOf("title1"));
-    t.not(-1, titles.indexOf("title3"));
+    t.is("title3", articles[0].title);
+    t.is("title1", articles[1].title);
 });
 
 test("findByTag", async (t) => {
@@ -164,7 +164,7 @@ test("findByTag", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
-        addedAt: new Date(),
+        addedAt: new Date("2018/01/01"),
     });
     await repo.insert({
         title: "title2",
@@ -173,7 +173,7 @@ test("findByTag", async (t) => {
         tags: ["Game"],
         isUnread: true,
         isFavorite: false,
-        addedAt: new Date(),
+        addedAt: new Date("2018/01/02"),
     });
     await repo.insert({
         title: "title3",
@@ -182,7 +182,7 @@ test("findByTag", async (t) => {
         tags: ["Game", "Programming"],
         isUnread: true,
         isFavorite: false,
-        addedAt: new Date(),
+        addedAt: new Date("2018/01/03"),
     });
     /* tslint:enable:object-literal-sort-keys */
 
@@ -190,15 +190,15 @@ test("findByTag", async (t) => {
         const articles = await repo.findByTag("Game");
         t.is(2, articles.length);
         const titles = articles.map((article) => article.title);
-        t.not(-1, titles.indexOf("title2"));
-        t.not(-1, titles.indexOf("title3"));
+        t.is("title3", articles[0].title);
+        t.is("title2", articles[1].title);
     }
 
     {
         const articles = await repo.findByTag("Programming");
         t.is(1, articles.length);
         const titles = articles.map((article) => article.title);
-        t.not(-1, titles.indexOf("title3"));
+        t.is("title3", articles[0].title);
     }
 
     {
