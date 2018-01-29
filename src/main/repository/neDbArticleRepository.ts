@@ -6,8 +6,8 @@ import Article from "../model/article";
 export default class NeDbArticleRepository implements IArticleRepository {
     protected db;
 
-    public constructor() {
-        this.db = new DataStore({ filename: "db/article.db" });
+    public constructor(options = {}) {
+        this.db = new DataStore(options);
     }
 
     public init() {

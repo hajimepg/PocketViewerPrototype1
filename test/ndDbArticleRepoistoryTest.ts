@@ -3,13 +3,7 @@ import test from "ava";
 import Article from "../src/main/model/article";
 import NeDbArticleRepository from "../src/main/repository/neDbArticleRepository";
 
-test.beforeEach(async (t) => {
-    const repo = new NeDbArticleRepository();
-    await repo.init();
-    repo.deleteAll();
-});
-
-test.serial("insert", async (t) => {
+test("insert", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -35,7 +29,7 @@ test.serial("insert", async (t) => {
     t.false(article.isFavorite);
 });
 
-test.serial("update", async (t) => {
+test("update", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -65,7 +59,7 @@ test.serial("update", async (t) => {
     t.is(article.isFavorite, updatedArticle.isFavorite);
 });
 
-test.serial("delete", async (t) => {
+test("delete", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -108,7 +102,7 @@ test.serial("delete", async (t) => {
     t.not(-1, ids.indexOf(article3.id));
 });
 
-test.serial("findUnread", async (t) => {
+test("findUnread", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -146,7 +140,7 @@ test.serial("findUnread", async (t) => {
     t.not(-1, titles.indexOf("title3"));
 });
 
-test.serial("findByTag", async (t) => {
+test("findByTag", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -198,7 +192,7 @@ test.serial("findByTag", async (t) => {
     }
 });
 
-test.serial("findHosts", async (t) => {
+test("findHosts", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -261,7 +255,7 @@ test.serial("findHosts", async (t) => {
     }
 });
 
-test.serial("findTags", async (t) => {
+test("findTags", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
