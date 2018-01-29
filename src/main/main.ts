@@ -161,7 +161,7 @@ ipcPromiseReceiver.on("update-articles", async (payload, callback) => {
         title: `new record ${updateArticlesCount}`,
         url: `http://example.com/${updateArticlesCount}`,
         host: "example.com",
-        tags: [],
+        tags: [`tag${updateArticlesCount}`],
         isUnread: true,
         isFavorite: false,
         addedAt: new Date(),
