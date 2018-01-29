@@ -148,3 +148,19 @@ ipcPromiseReceiver.on("get-tag-articles", async (tag, callback) => {
 
     callback(articles);
 });
+
+let updateArticlesCount = 1;
+
+ipcPromiseReceiver.on("update-articles", async (payload, callback) => {
+    console.log("update-articles");
+
+    const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
+
+    await articleRepository.insert(`new record ${updateArticlesCount}`,
+        `http://example.com/${updateArticlesCount}`,
+        "example.com", [], true, false);
+
+    updateArticlesCount++;
+
+    callback(undefined);
+});

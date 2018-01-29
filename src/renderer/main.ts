@@ -18,11 +18,11 @@ const store = new Vuex.Store({
             unread: {
                 count: 0,
             },
-            hosts: [],
-            tags: [],
+            hosts: [] as Array<{ name: string, count: number }>,
+            tags: [] as Array<{ name: string, count: number }>,
             active: {
                 view: "unread",
-                index: undefined,
+                index: undefined as (number | undefined),
             },
         },
         articles: [],
@@ -103,6 +103,40 @@ const store = new Vuex.Store({
             const articles = await ipcPromise.send("get-tag-articles", context.state.views.tags[index].name);
             context.commit(mutations.UPDATE_ARTICLES, articles);
         },
+        async reloadViews(context) {
+            console.log("reloadViews called.");
+            await ipcPromise.send("update-articles", undefined);
+
+            const views = await ipcPromise.send("get-views", undefined);
+            context.commit(mutations.UPDATE_UNREAD_COUNT, views.unreadCount);
+            context.commit(mutations.UPDATE_HOSTS, views.hosts);
+            context.commit(mutations.UPDATE_TAGS, views.tags);
+
+            if (context.state.views.active.view === "unread") {
+                const articles = await ipcPromise.send("get-unread-articles", undefined);
+                context.commit(mutations.UPDATE_ARTICLES, articles);
+            }
+            else if (context.state.views.active.view === "favorite") {
+                const articles = await ipcPromise.send("get-favorite-articles", undefined);
+                context.commit(mutations.UPDATE_ARTICLES, articles);
+            }
+            else if (context.state.views.active.view === "archive") {
+                const articles = await ipcPromise.send("get-archive-articles", undefined);
+                context.commit(mutations.UPDATE_ARTICLES, articles);
+            }
+            else if (context.state.views.active.view === "hosts") {
+                const index = context.state.views.active.index || 0;
+                const articles = await ipcPromise.send("get-host-articles", context.state.views.hosts[index].name);
+                context.commit(mutations.UPDATE_ARTICLES, articles);
+            }
+            else if (context.state.views.active.view === "tags") {
+                const index = context.state.views.active.index || 0;
+                const articles = await ipcPromise.send("get-tag-articles", context.state.views.tags[index].name);
+                context.commit(mutations.UPDATE_ARTICLES, articles);
+            }
+
+            console.log("reloadViews finished.");
+        }
     },
 });
 
@@ -115,6 +149,7 @@ const app = new Vue({
             "selectUnreadView",
             "selectFavoriteView",
             "selectArchiveView",
+            "reloadViews",
         ]),
         selectHostsView(index: number) {
             this.$store.dispatch("selectHostsView", index);
