@@ -107,7 +107,7 @@ export default class NeDbArticleRepository implements IArticleRepository {
 
     public findHosts() {
         return new Promise<string[]>((resolve, reject) => {
-            this.db.find({ isUnread: true }, { host: 1 }, (error, docs) => {
+            this.db.find({ isUnread: true }, { host: 1 }).sort({ host: 1 }).exec((error, docs) => {
                 if (error !== null) {
                     reject(error);
                     return;
@@ -128,7 +128,7 @@ export default class NeDbArticleRepository implements IArticleRepository {
 
     public findTags() {
         return new Promise<string[]>((resolve, reject) => {
-            this.db.find({ isUnread: true }, { tags: 1 }, (error, docs) => {
+            this.db.find({ isUnread: true }, { tags: 1 }).sort({ tags: 1 }).exec((error, docs) => {
                 if (error !== null) {
                     reject(error);
                     return;

@@ -231,7 +231,7 @@ test("findHosts", async (t) => {
     {
         const hosts = await repo.findHosts();
         t.is(1, hosts.length);
-        t.not(-1, hosts.indexOf("example.com"));
+        t.is("example.com", hosts[0]);
     }
 
     /* tslint:disable:object-literal-sort-keys */
@@ -249,8 +249,8 @@ test("findHosts", async (t) => {
     {
         const hosts = await repo.findHosts();
         t.is(2, hosts.length);
-        t.not(-1, hosts.indexOf("example.com"));
-        t.not(-1, hosts.indexOf("example.net"));
+        t.is("example.com", hosts[0]);
+        t.is("example.net", hosts[1]);
     }
 
     /* tslint:disable:object-literal-sort-keys */
@@ -268,8 +268,8 @@ test("findHosts", async (t) => {
     {
         const hosts = await repo.findHosts();
         t.is(2, hosts.length);
-        t.not(-1, hosts.indexOf("example.com"));
-        t.not(-1, hosts.indexOf("example.net"));
+        t.is("example.com", hosts[0]);
+        t.is("example.net", hosts[1]);
     }
 });
 
@@ -314,7 +314,7 @@ test("findTags", async (t) => {
     {
         const tags = await repo.findTags();
         t.is(1, tags.length);
-        t.not(-1, tags.indexOf("tag1"));
+        t.is("tag1", tags[0]);
     }
 
     /* tslint:disable:object-literal-sort-keys */
@@ -332,9 +332,9 @@ test("findTags", async (t) => {
     {
         const tags = await repo.findTags();
         t.is(3, tags.length);
-        t.not(-1, tags.indexOf("tag1"));
-        t.not(-1, tags.indexOf("tag2"));
-        t.not(-1, tags.indexOf("tag3"));
+        t.is("tag1", tags[0]);
+        t.is("tag2", tags[1]);
+        t.is("tag3", tags[2]);
     }
 
     /* tslint:disable:object-literal-sort-keys */
@@ -352,9 +352,9 @@ test("findTags", async (t) => {
     {
         const tags = await repo.findTags();
         t.is(4, tags.length);
-        t.not(-1, tags.indexOf("tag1"));
-        t.not(-1, tags.indexOf("tag2"));
-        t.not(-1, tags.indexOf("tag3"));
-        t.not(-1, tags.indexOf("tag4"));
+        t.is("tag1", tags[0]);
+        t.is("tag2", tags[1]);
+        t.is("tag3", tags[2]);
+        t.is("tag4", tags[3]);
     }
 });
