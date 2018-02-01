@@ -1,3 +1,5 @@
 export default {
-    ArticleRepository: Symbol("IArticleRepository"),
+    ArticleRepository: Symbol("ArticleRepository"),
+    ArticleUpdateService: Symbol("ArticleUpdateService"),
+    PocketGateway: Symbol("PocketGateway"),
 };
