@@ -3,7 +3,7 @@ import test from "ava";
 import Article from "../src/main/model/article";
 import NeDbArticleRepository from "../src/main/repository/neDbArticleRepository";
 
-test("insert", async (t) => {
+test("NeDbArticleRepository::insert", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -32,7 +32,7 @@ test("insert", async (t) => {
     t.is(addedAt, article.addedAt);
 });
 
-test("update", async (t) => {
+test("NeDbArticleRepository::update", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -65,7 +65,7 @@ test("update", async (t) => {
     t.is(article.addedAt, updatedArticle.addedAt);
 });
 
-test("delete", async (t) => {
+test("NeDbArticleRepository::delete", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -111,7 +111,7 @@ test("delete", async (t) => {
     t.not(-1, ids.indexOf(article3.id));
 });
 
-test("findUnread", async (t) => {
+test("NeDbArticleRepository::findUnread", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -152,7 +152,7 @@ test("findUnread", async (t) => {
     t.is("title1", articles[1].title);
 });
 
-test("findByTag", async (t) => {
+test("NeDbArticleRepository::findByTag", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -207,7 +207,7 @@ test("findByTag", async (t) => {
     }
 });
 
-test("findHosts", async (t) => {
+test("NeDbArticleRepository::findHosts", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
@@ -273,7 +273,7 @@ test("findHosts", async (t) => {
     }
 });
 
-test("findTags", async (t) => {
+test("NeDbArticleRepository::findTags", async (t) => {
     const repo = new NeDbArticleRepository();
     await repo.init();
 
