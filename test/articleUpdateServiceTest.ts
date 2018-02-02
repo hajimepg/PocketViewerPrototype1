@@ -33,7 +33,7 @@ test.beforeEach(async (t) => {
     t.context.container = container;
 });
 
-test("ArticleUpdateServiceTest::update", async (t) => {
+test("update", async (t) => {
     const service = t.context.container.get<ArticleUpdateService>(TYPES.ArticleUpdateService);
 
     await t.notThrows(

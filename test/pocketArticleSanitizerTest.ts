@@ -2,7 +2,7 @@ import test from "ava";
 
 import * as Sanitizer from "../src/main/pocketArticleSanitizer";
 
-test("PocketArticleSanitizer::basic", (t) => {
+test("basic", (t) => {
     t.notThrows(() => {
         // tslint:disable:object-literal-sort-keys
         const sanitizedArticle = Sanitizer.sanitize({

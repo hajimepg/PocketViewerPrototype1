@@ -46,11 +46,18 @@ const rendererProsessConfig = {
     resolve: resolveSetting
 };
 
+const unitTestEntryObj =
+    glob.sync("./test/**/*Test.ts")
+        .reduce((acc, file) => {
+            acc[path.basename(file, path.extname(file))] = file;
+            return acc;
+        }, {});
+
 const unitTestConfig = {
-    entry: glob.sync('./test/**/*.ts'),
+    entry: unitTestEntryObj,
     output: {
         path: path.resolve(__dirname, "dist/test"),
-        filename: "bundle.js"
+        filename: "[name].js"
     },
     target: "node",
     module: moduleSetting,

@@ -14,7 +14,7 @@ test.beforeEach(async (t) => {
     t.context.repo.init();
 });
 
-test("NeDbArticleRepository::insert", async (t) => {
+test("insert", async (t) => {
     const addedAt = new Date();
     /* tslint:disable:object-literal-sort-keys */
     const article = await t.context.repo.insert({
@@ -40,7 +40,7 @@ test("NeDbArticleRepository::insert", async (t) => {
     t.is(addedAt, article.addedAt);
 });
 
-test("NeDbArticleRepository::update", async (t) => {
+test("update", async (t) => {
     /* tslint:disable:object-literal-sort-keys */
     const article = await t.context.repo.insert({
         title: "title",
@@ -70,7 +70,7 @@ test("NeDbArticleRepository::update", async (t) => {
     t.is(article.addedAt, updatedArticle.addedAt);
 });
 
-test("NeDbArticleRepository::delete", async (t) => {
+test("delete", async (t) => {
     /* tslint:disable:object-literal-sort-keys */
     const article1 = await t.context.repo.insert({
         title: "title1",
@@ -113,7 +113,7 @@ test("NeDbArticleRepository::delete", async (t) => {
     t.not(-1, ids.indexOf(article3.id));
 });
 
-test("NeDbArticleRepository::findUnread", async (t) => {
+test("findUnread", async (t) => {
     /* tslint:disable:object-literal-sort-keys */
     await t.context.repo.insert({
         title: "title1",
@@ -151,7 +151,7 @@ test("NeDbArticleRepository::findUnread", async (t) => {
     t.is("title1", articles[1].title);
 });
 
-test("NeDbArticleRepository::findByTag", async (t) => {
+test("findByTag", async (t) => {
     /* tslint:disable:object-literal-sort-keys */
     await t.context.repo.insert({
         title: "title1",
@@ -203,7 +203,7 @@ test("NeDbArticleRepository::findByTag", async (t) => {
     }
 });
 
-test("NeDbArticleRepository::findHosts", async (t) => {
+test("findHosts", async (t) => {
     {
         const hosts = await t.context.repo.findHosts();
         t.is(0, hosts.length);
@@ -266,7 +266,7 @@ test("NeDbArticleRepository::findHosts", async (t) => {
     }
 });
 
-test("NeDbArticleRepository::findTags", async (t) => {
+test("findTags", async (t) => {
     {
         const tags = await t.context.repo.findTags();
         t.is(0, tags.length);
