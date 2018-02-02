@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import { injectable } from "inversify";
 
 import IPocketGateway from "../interface/IPocketGateway";
