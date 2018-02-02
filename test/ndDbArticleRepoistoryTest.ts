@@ -1,15 +1,23 @@
-import test from "ava";
+import { contexualize } from "./testHelper";
 
 import Article from "../src/main/model/article";
 import NeDbArticleRepository from "../src/main/repository/neDbArticleRepository";
 
-test("NeDbArticleRepository::insert", async (t) => {
-    const repo = new NeDbArticleRepository();
-    await repo.init();
+const test = contexualize(() => {
+    return {
+        repo: new NeDbArticleRepository(),
+    };
+});
 
+test.beforeEach(async (t) => {
+    t.context.repo = new NeDbArticleRepository();
+    t.context.repo.init();
+});
+
+test("NeDbArticleRepository::insert", async (t) => {
     const addedAt = new Date();
     /* tslint:disable:object-literal-sort-keys */
-    const article = await repo.insert({
+    const article = await t.context.repo.insert({
         title: "title",
         url: "http://example.com",
         host: "example.com",
@@ -33,11 +41,8 @@ test("NeDbArticleRepository::insert", async (t) => {
 });
 
 test("NeDbArticleRepository::update", async (t) => {
-    const repo = new NeDbArticleRepository();
-    await repo.init();
-
     /* tslint:disable:object-literal-sort-keys */
-    const article = await repo.insert({
+    const article = await t.context.repo.insert({
         title: "title",
         url: "http://example.com",
         host: "example.com",
@@ -55,7 +60,7 @@ test("NeDbArticleRepository::update", async (t) => {
     article.isFavorite = true;
     article.addedAt = new Date();
 
-    const updatedArticle = await repo.update(article);
+    const updatedArticle = await t.context.repo.update(article);
     t.is(article.id, updatedArticle.id);
     t.is(article.url, updatedArticle.url);
     t.is(article.host, updatedArticle.host);
@@ -66,11 +71,8 @@ test("NeDbArticleRepository::update", async (t) => {
 });
 
 test("NeDbArticleRepository::delete", async (t) => {
-    const repo = new NeDbArticleRepository();
-    await repo.init();
-
     /* tslint:disable:object-literal-sort-keys */
-    const article1 = await repo.insert({
+    const article1 = await t.context.repo.insert({
         title: "title1",
         url: "http://example.com",
         host: "example.com",
@@ -79,7 +81,7 @@ test("NeDbArticleRepository::delete", async (t) => {
         isFavorite: false,
         addedAt: new Date(),
     });
-    const article2 = await repo.insert({
+    const article2 = await t.context.repo.insert({
         title: "title2",
         url: "http://example.com",
         host: "example.com",
@@ -88,7 +90,7 @@ test("NeDbArticleRepository::delete", async (t) => {
         isFavorite: false,
         addedAt: new Date(),
     });
-    const article3 = await repo.insert({
+    const article3 = await t.context.repo.insert({
         title: "title3",
         url: "http://example.com",
         host: "example.com",
@@ -99,12 +101,12 @@ test("NeDbArticleRepository::delete", async (t) => {
     });
     /* tslint:enable:object-literal-sort-keys */
 
-    const allArticlesBefore = await repo.findAll();
+    const allArticlesBefore = await t.context.repo.findAll();
     t.is(3, allArticlesBefore.length);
 
-    await repo.delete(article2);
+    await t.context.repo.delete(article2);
 
-    const allArticlesAfter = await repo.findAll();
+    const allArticlesAfter = await t.context.repo.findAll();
     t.is(2, allArticlesAfter.length);
     const ids = allArticlesAfter.map((article) => article.id);
     t.not(-1, ids.indexOf(article1.id));
@@ -112,11 +114,8 @@ test("NeDbArticleRepository::delete", async (t) => {
 });
 
 test("NeDbArticleRepository::findUnread", async (t) => {
-    const repo = new NeDbArticleRepository();
-    await repo.init();
-
     /* tslint:disable:object-literal-sort-keys */
-    await repo.insert({
+    await t.context.repo.insert({
         title: "title1",
         url: "http://example.com",
         host: "example.com",
@@ -125,7 +124,7 @@ test("NeDbArticleRepository::findUnread", async (t) => {
         isFavorite: false,
         addedAt: new Date("2018/01/01"),
     });
-    await repo.insert({
+    await t.context.repo.insert({
         title: "title2",
         url: "http://example.com",
         host: "example.com",
@@ -134,7 +133,7 @@ test("NeDbArticleRepository::findUnread", async (t) => {
         isFavorite: false,
         addedAt: new Date("2018/01/02"),
     });
-    await repo.insert({
+    await t.context.repo.insert({
         title: "title3",
         url: "http://example.com",
         host: "example.com",
@@ -145,7 +144,7 @@ test("NeDbArticleRepository::findUnread", async (t) => {
     });
     /* tslint:enable:object-literal-sort-keys */
 
-    const articles = await repo.findUnread();
+    const articles = await t.context.repo.findUnread();
     t.is(2, articles.length);
     const titles = articles.map((article) => article.title);
     t.is("title3", articles[0].title);
@@ -153,11 +152,8 @@ test("NeDbArticleRepository::findUnread", async (t) => {
 });
 
 test("NeDbArticleRepository::findByTag", async (t) => {
-    const repo = new NeDbArticleRepository();
-    await repo.init();
-
     /* tslint:disable:object-literal-sort-keys */
-    await repo.insert({
+    await t.context.repo.insert({
         title: "title1",
         url: "http://example.com",
         host: "example.com",
@@ -166,7 +162,7 @@ test("NeDbArticleRepository::findByTag", async (t) => {
         isFavorite: false,
         addedAt: new Date("2018/01/01"),
     });
-    await repo.insert({
+    await t.context.repo.insert({
         title: "title2",
         url: "http://example.com",
         host: "example.com",
@@ -175,7 +171,7 @@ test("NeDbArticleRepository::findByTag", async (t) => {
         isFavorite: false,
         addedAt: new Date("2018/01/02"),
     });
-    await repo.insert({
+    await t.context.repo.insert({
         title: "title3",
         url: "http://example.com",
         host: "example.com",
@@ -187,7 +183,7 @@ test("NeDbArticleRepository::findByTag", async (t) => {
     /* tslint:enable:object-literal-sort-keys */
 
     {
-        const articles = await repo.findByTag("Game");
+        const articles = await t.context.repo.findByTag("Game");
         t.is(2, articles.length);
         const titles = articles.map((article) => article.title);
         t.is("title3", articles[0].title);
@@ -195,29 +191,26 @@ test("NeDbArticleRepository::findByTag", async (t) => {
     }
 
     {
-        const articles = await repo.findByTag("Programming");
+        const articles = await t.context.repo.findByTag("Programming");
         t.is(1, articles.length);
         const titles = articles.map((article) => article.title);
         t.is("title3", articles[0].title);
     }
 
     {
-        const articles = await repo.findByTag("Anime");
+        const articles = await t.context.repo.findByTag("Anime");
         t.is(0, articles.length);
     }
 });
 
 test("NeDbArticleRepository::findHosts", async (t) => {
-    const repo = new NeDbArticleRepository();
-    await repo.init();
-
     {
-        const hosts = await repo.findHosts();
+        const hosts = await t.context.repo.findHosts();
         t.is(0, hosts.length);
     }
 
     /* tslint:disable:object-literal-sort-keys */
-    await repo.insert({
+    await t.context.repo.insert({
         title: "title",
         url: "http://example.com",
         host: "example.com",
@@ -229,13 +222,13 @@ test("NeDbArticleRepository::findHosts", async (t) => {
     /* tslint:enable:object-literal-sort-keys */
 
     {
-        const hosts = await repo.findHosts();
+        const hosts = await t.context.repo.findHosts();
         t.is(1, hosts.length);
         t.is("example.com", hosts[0]);
     }
 
     /* tslint:disable:object-literal-sort-keys */
-    await repo.insert({
+    await t.context.repo.insert({
         title: "title",
         url: "http://example.net",
         host: "example.net",
@@ -247,14 +240,14 @@ test("NeDbArticleRepository::findHosts", async (t) => {
     /* tslint:enable:object-literal-sort-keys */
 
     {
-        const hosts = await repo.findHosts();
+        const hosts = await t.context.repo.findHosts();
         t.is(2, hosts.length);
         t.is("example.com", hosts[0]);
         t.is("example.net", hosts[1]);
     }
 
     /* tslint:disable:object-literal-sort-keys */
-    await repo.insert({
+    await t.context.repo.insert({
         title: "title",
         url: "http://example.com/another",
         host: "example.com",
@@ -266,7 +259,7 @@ test("NeDbArticleRepository::findHosts", async (t) => {
     /* tslint:enable:object-literal-sort-keys */
 
     {
-        const hosts = await repo.findHosts();
+        const hosts = await t.context.repo.findHosts();
         t.is(2, hosts.length);
         t.is("example.com", hosts[0]);
         t.is("example.net", hosts[1]);
@@ -274,16 +267,13 @@ test("NeDbArticleRepository::findHosts", async (t) => {
 });
 
 test("NeDbArticleRepository::findTags", async (t) => {
-    const repo = new NeDbArticleRepository();
-    await repo.init();
-
     {
-        const tags = await repo.findTags();
+        const tags = await t.context.repo.findTags();
         t.is(0, tags.length);
     }
 
     /* tslint:disable:object-literal-sort-keys */
-    await repo.insert({
+    await t.context.repo.insert({
         title: "title",
         url: "http://example.com",
         host: "example.com",
@@ -295,12 +285,12 @@ test("NeDbArticleRepository::findTags", async (t) => {
     /* tslint:enable:object-literal-sort-keys */
 
     {
-        const tags = await repo.findTags();
+        const tags = await t.context.repo.findTags();
         t.is(0, tags.length);
     }
 
     /* tslint:disable:object-literal-sort-keys */
-    await repo.insert({
+    await t.context.repo.insert({
         title: "title",
         url: "http://example.com",
         host: "example.com",
@@ -312,13 +302,13 @@ test("NeDbArticleRepository::findTags", async (t) => {
     /* tslint:enable:object-literal-sort-keys */
 
     {
-        const tags = await repo.findTags();
+        const tags = await t.context.repo.findTags();
         t.is(1, tags.length);
         t.is("tag1", tags[0]);
     }
 
     /* tslint:disable:object-literal-sort-keys */
-    await repo.insert({
+    await t.context.repo.insert({
         title: "title",
         url: "http://example.com",
         host: "example.com",
@@ -330,7 +320,7 @@ test("NeDbArticleRepository::findTags", async (t) => {
     /* tslint:enable:object-literal-sort-keys */
 
     {
-        const tags = await repo.findTags();
+        const tags = await t.context.repo.findTags();
         t.is(3, tags.length);
         t.is("tag1", tags[0]);
         t.is("tag2", tags[1]);
@@ -338,7 +328,7 @@ test("NeDbArticleRepository::findTags", async (t) => {
     }
 
     /* tslint:disable:object-literal-sort-keys */
-    await repo.insert({
+    await t.context.repo.insert({
         title: "title",
         url: "http://example.com",
         host: "example.com",
@@ -350,7 +340,7 @@ test("NeDbArticleRepository::findTags", async (t) => {
     /* tslint:enable:object-literal-sort-keys */
 
     {
-        const tags = await repo.findTags();
+        const tags = await t.context.repo.findTags();
         t.is(4, tags.length);
         t.is("tag1", tags[0]);
         t.is("tag2", tags[1]);

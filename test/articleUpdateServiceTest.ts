@@ -1,7 +1,8 @@
 import "reflect-metadata";
 
-import test from "ava";
 import * as inversify from "inversify";
+
+import { contexualize } from "./testHelper";
 
 import { IArticleRepository } from "../src/main/interface/IArticleRepository";
 import IPocketGateway from "../src/main/interface/IPocketGateway";
@@ -11,6 +12,12 @@ import NeDbArticleRepository from "../src/main/repository/neDbArticleRepository"
 import ArticleUpdateService from "../src/main/service/articleUpdateService";
 
 import TYPES from "../src/main/types";
+
+const test = contexualize(() => {
+    return {
+        container: new inversify.Container(),
+    };
+});
 
 test.beforeEach(async (t) => {
     const container = new inversify.Container();
@@ -27,7 +34,7 @@ test.beforeEach(async (t) => {
 });
 
 test("ArticleUpdateServiceTest::update", async (t) => {
-    const service = (t.context.container as inversify.Container).get<ArticleUpdateService>(TYPES.ArticleUpdateService);
+    const service = t.context.container.get<ArticleUpdateService>(TYPES.ArticleUpdateService);
 
     await t.notThrows(
         service.update()
