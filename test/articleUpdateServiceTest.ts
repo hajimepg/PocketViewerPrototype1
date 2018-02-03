@@ -1,6 +1,7 @@
 import "reflect-metadata";
 
 import * as inversify from "inversify";
+import * as td from "testdouble";
 
 import { contexualize } from "./testHelper";
 
@@ -14,29 +15,25 @@ import ArticleUpdateService from "../src/main/service/articleUpdateService";
 import TYPES from "../src/main/types";
 
 const test = contexualize(() => {
-    return {
-        container: new inversify.Container(),
-    };
-});
-
-test.beforeEach(async (t) => {
     const container = new inversify.Container();
 
-    const articleRepository = new NeDbArticleRepository();
-    await articleRepository.init();
+    let articleRepository = new NeDbArticleRepository();
+    articleRepository = td.object(articleRepository);
     container.bind<IArticleRepository>(TYPES.ArticleRepository).toConstantValue(articleRepository);
 
-    container.bind<IPocketGateway>(TYPES.PocketGateway).to(PocketGateway);
+    let pocketGateway = new PocketGateway();
+    pocketGateway = td.object(pocketGateway);
+    container.bind<IPocketGateway>(TYPES.PocketGateway).toConstantValue(pocketGateway);
 
     container.bind<ArticleUpdateService>(TYPES.ArticleUpdateService).to(ArticleUpdateService);
 
-    t.context.container = container;
+    const service = container.get<ArticleUpdateService>(TYPES.ArticleUpdateService);
+
+    return { articleRepository, pocketGateway, service };
 });
 
 test("update", async (t) => {
-    const service = t.context.container.get<ArticleUpdateService>(TYPES.ArticleUpdateService);
-
     await t.notThrows(
-        service.update()
+        t.context.service.update()
     );
 });
