@@ -3,6 +3,21 @@ import * as DataStore from "nedb";
 import { IArticleRepository, IArticleRepositoryInsertData } from "../interface/IArticleRepository";
 import Article from "../model/article";
 
+function articleFactory(doc): Article {
+    return new Article(
+        doc._id,
+        doc.title,
+        doc.url,
+        doc.host,
+        doc.tags,
+        doc.isUnread,
+        doc.isFavorite,
+        doc.isArchive,
+        doc.addedAt,
+        doc.itemId
+    );
+}
+
 export default class NeDbArticleRepository implements IArticleRepository {
     protected db;
 
@@ -23,16 +38,29 @@ export default class NeDbArticleRepository implements IArticleRepository {
         });
     }
 
-    public insert({ itemId, title, url, host, tags, isUnread, isFavorite, addedAt }: IArticleRepositoryInsertData) {
+    public insert(data: IArticleRepositoryInsertData) {
         return new Promise<Article>((resolve, reject) => {
-            this.db.insert({ itemId, title, url, host, tags, isUnread, isFavorite, addedAt }, (error, doc) => {
+            // tslint:disable:object-literal-sort-keys
+            const insertDoc = {
+                itemId: data.itemId,
+                title: data.title,
+                url: data.url,
+                host: data.host,
+                tags: data.tags,
+                isUnread: data.isUnread,
+                isFavorite: data.isFavorite,
+                isArchive: data.isArchive,
+                addedAt: data.addedAt
+            };
+            // tslint:enable:object-literal-sort-keys
+
+            this.db.insert(insertDoc, (error, doc) => {
                 if (error !== null) {
                     reject(error);
                     return;
                 }
 
-                resolve(new Article(doc._id, doc.title, doc.url, doc.host, doc.tags, doc.isUnread, doc.isFavorite,
-                    doc.addedAt, doc.itemId));
+                resolve(articleFactory(doc));
             });
         });
     }
@@ -49,8 +77,7 @@ export default class NeDbArticleRepository implements IArticleRepository {
                     return;
                 }
 
-                resolve(new Article(doc._id, doc.title, doc.url, doc.host, doc.tags, doc.isUnread, doc.isFavorite,
-                    doc.addedAt, doc.itemId));
+                resolve(articleFactory(doc));
             });
         });
     }
@@ -94,7 +121,7 @@ export default class NeDbArticleRepository implements IArticleRepository {
     }
 
     public findArchive() {
-        return this.findArticles({ isUnread: false });
+        return this.findArticles({ isArchive: true });
     }
 
     public findByHost(host: string) {
@@ -170,10 +197,7 @@ export default class NeDbArticleRepository implements IArticleRepository {
                     return;
                 }
 
-                resolve(docs.map((doc) => {
-                    return new Article(doc._id, doc.title, doc.url, doc.host, doc.tags, doc.isUnread, doc.isFavorite,
-                        doc.addedAt, doc.itemId);
-                }));
+                resolve(docs.map(articleFactory));
             });
         });
     }

@@ -164,6 +164,7 @@ ipcPromiseReceiver.on("update-articles", async (payload, callback) => {
         tags: [`tag${updateArticlesCount}`],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date(),
         itemId: updateArticlesCount,
     });

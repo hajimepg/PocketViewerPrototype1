@@ -7,6 +7,7 @@ export default class Article {
         public tags: string[],
         public isUnread: boolean,
         public isFavorite: boolean,
+        public isArchive: boolean,
         public addedAt: Date,
         public itemId: number
     ) {

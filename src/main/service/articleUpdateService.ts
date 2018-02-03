@@ -26,6 +26,7 @@ export default class ArticleUpdateService {
                     tags: [], // TODO: implement
                     isFavorite: article.favorite,
                     isUnread: article.status === "normal",
+                    isArchive: article.status === "archived",
                     addedAt: article.timeAdded,
                 });
                 // tslint:enabled:object-literal-sort-keys

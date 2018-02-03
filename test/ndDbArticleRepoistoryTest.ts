@@ -25,6 +25,7 @@ test("insert", async (t) => {
         tags: ["Game", "Programming"],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt,
     });
     /* tslint:enable:object-literal-sort-keys */
@@ -52,6 +53,7 @@ test("update", async (t) => {
         tags: ["Game", "Programming"],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date("2018/01/01"),
     });
     /* tslint:enable:object-literal-sort-keys */
@@ -85,6 +87,7 @@ test("delete", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date(),
     });
     const article2 = await t.context.repo.insert({
@@ -95,6 +98,7 @@ test("delete", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date(),
     });
     const article3 = await t.context.repo.insert({
@@ -105,6 +109,7 @@ test("delete", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
@@ -131,6 +136,7 @@ test("findUnread", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date("2018/01/01"),
     });
     await t.context.repo.insert({
@@ -141,6 +147,7 @@ test("findUnread", async (t) => {
         tags: [],
         isUnread: false,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date("2018/01/02"),
     });
     await t.context.repo.insert({
@@ -151,6 +158,7 @@ test("findUnread", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date("2018/01/03"),
     });
     /* tslint:enable:object-literal-sort-keys */
@@ -172,6 +180,7 @@ test("findByTag", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date("2018/01/01"),
     });
     await t.context.repo.insert({
@@ -182,6 +191,7 @@ test("findByTag", async (t) => {
         tags: ["Game"],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date("2018/01/02"),
     });
     await t.context.repo.insert({
@@ -192,6 +202,7 @@ test("findByTag", async (t) => {
         tags: ["Game", "Programming"],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date("2018/01/03"),
     });
     /* tslint:enable:object-literal-sort-keys */
@@ -227,6 +238,7 @@ test("findByItemId", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date("2018/01/01"),
     });
     await t.context.repo.insert({
@@ -237,6 +249,7 @@ test("findByItemId", async (t) => {
         tags: [],
         isUnread: false,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date("2018/01/02"),
     });
     /* tslint:enable:object-literal-sort-keys */
@@ -274,6 +287,7 @@ test("findHosts", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
@@ -293,6 +307,7 @@ test("findHosts", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
@@ -313,6 +328,7 @@ test("findHosts", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
@@ -340,6 +356,7 @@ test("findTags", async (t) => {
         tags: [],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
@@ -358,6 +375,7 @@ test("findTags", async (t) => {
         tags: ["tag1"],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
@@ -377,6 +395,7 @@ test("findTags", async (t) => {
         tags: ["tag2", "tag3"],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
@@ -398,6 +417,7 @@ test("findTags", async (t) => {
         tags: ["tag3", "tag4"],
         isUnread: true,
         isFavorite: false,
+        isArchive: false,
         addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */

@@ -9,6 +9,7 @@ import { IArticleRepository } from "../src/main/interface/IArticleRepository";
 import IPocketGateway from "../src/main/interface/IPocketGateway";
 
 import PocketGateway from "../src/main/gateway/PocketGateway";
+import Article from "../src/main/model/article";
 import { PocketArticle } from "../src/main/model/pocketArticle";
 import NeDbArticleRepository from "../src/main/repository/neDbArticleRepository";
 import ArticleUpdateService from "../src/main/service/articleUpdateService";
@@ -32,6 +33,34 @@ const test = contexualize(() => {
 
     return { articleRepository, pocketGateway, service };
 });
+
+interface IArticleFactoryData {
+    id?: string;
+    title?: string;
+    url?: string;
+    host?: string;
+    tags?: string[];
+    isUnread?: boolean;
+    isFavorite?: boolean;
+    isArchive?: boolean;
+    addedAt?: Date;
+    itemId?: number;
+}
+
+function ArticleFactory(data: IArticleFactoryData): Article {
+    const id = data.id || "id";
+    const title = data.title || "title";
+    const url = data.url || "http://example.com/";
+    const host = data.host || "example.com";
+    const tags = data.tags || [];
+    const isUnread = data.isUnread || false;
+    const isFavorite = data.isFavorite || false;
+    const isArchive = data.isFavorite || false;
+    const addedAt = data.addedAt || new Date();
+    const itemId = data.itemId || 1;
+
+    return new Article(id, title, url, host, tags, isUnread, isFavorite, isArchive, addedAt, itemId);
+}
 
 interface IPocketArticleFactoryData {
     itemId?: number;
@@ -112,6 +141,7 @@ test("new Data", async (t) => {
             tags: [],
             isFavorite: favorite,
             isUnread: true,
+            isArchive: false,
             addedAt: timeAdded,
         }));
         // tslint:enabled:object-literal-sort-keys

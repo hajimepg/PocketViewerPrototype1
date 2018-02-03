@@ -8,6 +8,7 @@ export interface IArticleRepositoryInsertData {
     tags: string[];
     isUnread: boolean;
     isFavorite: boolean;
+    isArchive: boolean;
     addedAt: Date;
 }
 
