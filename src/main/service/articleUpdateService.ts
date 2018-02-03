@@ -22,7 +22,7 @@ export default class ArticleUpdateService {
                     title: article.resolvedTitle,
                     url: article.resolvedUrl,
                     host: "example.com",
-                    tags: [],
+                    tags: [], // TODO: implement
                     isFavorite: article.favorite,
                     isUnread: article.status === "normal",
                     addedAt: article.timeAdded,
