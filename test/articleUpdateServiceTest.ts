@@ -117,6 +117,9 @@ test("new Data", async (t) => {
     const resolvedUrl = "http://www.example.com/resolvedUrl";
     const timeAdded = new Date();
 
+    td.when(t.context.articleRepository.findByItemId(itemId))
+        .thenResolve(null);
+
     td.when(t.context.pocketGateway.retrieve())
         .thenResolve([
             PocketArticleFactory({
@@ -145,5 +148,35 @@ test("new Data", async (t) => {
             addedAt: timeAdded,
         }));
         // tslint:enabled:object-literal-sort-keys
+    });
+});
+
+test("update to archive", async (t) => {
+    const itemId = 1;
+
+    td.when(t.context.articleRepository.findByItemId(itemId))
+        .thenResolve(
+            ArticleFactory({
+                itemId,
+                isArchive: false,
+            })
+        );
+
+    td.when(t.context.pocketGateway.retrieve())
+        .thenResolve([
+            PocketArticleFactory({
+                itemId,
+                status: "archived",
+            }),
+        ]);
+
+    await t.context.service.update();
+
+    t.notThrows(() => {
+        td.verify(t.context.articleRepository.update(
+            td.matchers.argThat((article: Article) => {
+                return article.isArchive === true;
+            })
+        ));
     });
 });

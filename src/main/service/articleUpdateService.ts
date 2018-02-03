@@ -17,19 +17,28 @@ export default class ArticleUpdateService {
             const articles = await this.gateway.retrieve();
 
             for (const article of articles) {
-                // tslint:disable:object-literal-sort-keys
-                this.repository.insert({
-                    itemId: article.itemId,
-                    title: article.resolvedTitle,
-                    url: article.resolvedUrl,
-                    host: "example.com",
-                    tags: [], // TODO: implement
-                    isFavorite: article.favorite,
-                    isUnread: article.status === "normal",
-                    isArchive: article.status === "archived",
-                    addedAt: article.timeAdded,
-                });
-                // tslint:enabled:object-literal-sort-keys
+                const savedArticle = await this.repository.findByItemId(article.itemId);
+
+                if (savedArticle === null) {
+                    // tslint:disable:object-literal-sort-keys
+                    await this.repository.insert({
+                        itemId: article.itemId,
+                        title: article.resolvedTitle,
+                        url: article.resolvedUrl,
+                        host: "example.com",
+                        tags: [], // TODO: implement
+                        isFavorite: article.favorite,
+                        isUnread: article.status === "normal",
+                        isArchive: article.status === "archived",
+                        addedAt: article.timeAdded,
+                    });
+                    // tslint:enabled:object-literal-sort-keys
+                }
+                else {
+                    savedArticle.isArchive = article.status === "archived";
+
+                    await this.repository.update(savedArticle);
+                }
             }
 
             resolve();
