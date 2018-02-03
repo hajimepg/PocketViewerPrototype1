@@ -81,7 +81,7 @@ function PocketArticleFactory(data: IPocketArticleFactoryData): PocketArticle {
     // tslint:enabled:object-literal-sort-keys
 }
 
-test("update", async (t) => {
+test("new Data", async (t) => {
     const favorite = true;
     const resolvedTitle = "resolvedTitle";
     const resolvedUrl = "http://www.example.com/resolvedUrl";
