@@ -33,45 +33,81 @@ const test = contexualize(() => {
     return { articleRepository, pocketGateway, service };
 });
 
-test("update", async (t) => {
-    const timeAdded = new Date();
+interface IPocketArticleFactoryData {
+    itemId?: number;
+    resolvedId?: number;
+    givenUrl?: string;
+    givenTitle?: string;
+    favorite?: boolean;
+    status?: "normal" | "archived" | "deleted";
+    timeAdded?: Date;
+    timeUpdated?: Date;
+    timeRead?: Date | null;
+    timeFavorited?: Date | null;
+    sortId?: string;
+    resolvedTitle?: string;
+    resolvedUrl?: string;
+    excerpt?: string;
+    isArticle?: boolean;
+    isIndex?: string;
+    hasVideo?: "none" | "has in" | "is";
+    hasImage?: "none" | "has in" | "is";
+    wordCount?: number;
+}
+
+function PocketArticleFactory(data: IPocketArticleFactoryData): PocketArticle {
     // tslint:disable:object-literal-sort-keys
+    return new PocketArticle({
+        itemId: data.itemId || 1,
+        resolvedId: data.resolvedId || 1,
+        givenUrl: data.givenUrl || "http://www.example.com/givenUrl",
+        givenTitle: data.givenTitle || "title",
+        favorite: data.favorite || false,
+        status: data.status || "normal",
+        timeAdded: data.timeAdded || new Date(),
+        timeUpdated: data.timeUpdated || new Date(),
+        timeRead: data.timeRead || null,
+        timeFavorited: data.timeFavorited || null,
+        sortId: data.sortId || "sortId",
+        resolvedTitle: data.resolvedTitle || "resolvedTitle",
+        resolvedUrl: data.resolvedUrl || "http://www.example.com/resolvedUrl",
+        excerpt: data.excerpt || "excerpt",
+        isArticle: data.isArticle || true,
+        isIndex: data.isIndex || "isIndex",
+        hasVideo: data.hasVideo || "none",
+        hasImage: data.hasImage || "none",
+        wordCount: data.wordCount || 0,
+    });
+    // tslint:enabled:object-literal-sort-keys
+}
+
+test("update", async (t) => {
+    const favorite = true;
+    const resolvedTitle = "resolvedTitle";
+    const resolvedUrl = "http://www.example.com/resolvedUrl";
+    const timeAdded = new Date();
+
     td.when(t.context.pocketGateway.retrieve())
         .thenResolve([
-            new PocketArticle({
-                itemId: 1,
-                resolvedId: 1,
-                givenUrl: "http://www.example.com/givenUrl",
-                givenTitle: "title",
-                favorite: false,
+            PocketArticleFactory({
+                favorite,
+                resolvedTitle,
+                resolvedUrl,
                 status: "normal",
                 timeAdded,
-                timeUpdated: new Date(),
-                timeRead: null,
-                timeFavorited: null,
-                sortId: "sortId",
-                resolvedTitle: "resolvedTitle",
-                resolvedUrl: "http://www.example.com/resolvedUrl",
-                excerpt: "excerpt",
-                isArticle: true,
-                isIndex: "isIndex",
-                hasVideo: "none",
-                hasImage: "none",
-                wordCount: 0,
             }),
         ]);
-    // tslint:enabled:object-literal-sort-keys
 
     await t.context.service.update();
 
     t.notThrows(() => {
         // tslint:disable:object-literal-sort-keys
         td.verify(t.context.articleRepository.insert({
-            title: "resolvedTitle",
-            url: "http://www.example.com/resolvedUrl",
+            title: resolvedTitle,
+            url: resolvedUrl,
             host: "example.com",
             tags: [],
-            isFavorite: false,
+            isFavorite: favorite,
             isUnread: false,
             addedAt: timeAdded,
         }));
