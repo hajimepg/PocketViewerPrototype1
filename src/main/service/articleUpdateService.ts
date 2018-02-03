@@ -13,7 +13,23 @@ export default class ArticleUpdateService {
     }
 
     public update(): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<void>(async (resolve, reject) => {
+            const articles = await this.gateway.retrieve();
+
+            for (const article of articles) {
+                // tslint:disable:object-literal-sort-keys
+                this.repository.insert({
+                    title: article.resolvedTitle,
+                    url: article.resolvedUrl,
+                    host: "example.com",
+                    tags: [],
+                    isFavorite: article.favorite,
+                    isUnread: false,
+                    addedAt: article.timeAdded,
+                });
+                // tslint:enabled:object-literal-sort-keys
+            }
+
             resolve();
         });
     }
