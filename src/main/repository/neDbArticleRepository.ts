@@ -23,16 +23,16 @@ export default class NeDbArticleRepository implements IArticleRepository {
         });
     }
 
-    public insert({ title, url, host, tags, isUnread, isFavorite, addedAt }: IArticleRepositoryInsertData) {
+    public insert({ itemId, title, url, host, tags, isUnread, isFavorite, addedAt }: IArticleRepositoryInsertData) {
         return new Promise<Article>((resolve, reject) => {
-            this.db.insert({ title, url, host, tags, isUnread, isFavorite, addedAt }, (error, doc) => {
+            this.db.insert({ itemId, title, url, host, tags, isUnread, isFavorite, addedAt }, (error, doc) => {
                 if (error !== null) {
                     reject(error);
                     return;
                 }
 
                 resolve(new Article(doc._id, doc.title, doc.url, doc.host, doc.tags, doc.isUnread, doc.isFavorite,
-                    doc.addedAt));
+                    doc.addedAt, doc.itemId));
             });
         });
     }
@@ -50,7 +50,7 @@ export default class NeDbArticleRepository implements IArticleRepository {
                 }
 
                 resolve(new Article(doc._id, doc.title, doc.url, doc.host, doc.tags, doc.isUnread, doc.isFavorite,
-                    doc.addedAt));
+                    doc.addedAt, doc.itemId));
             });
         });
     }
@@ -103,6 +103,19 @@ export default class NeDbArticleRepository implements IArticleRepository {
 
     public findByTag(tag: string) {
         return this.findArticles({ tags: { $elemMatch: tag } });
+    }
+
+    public findByItemId(itemId: number) {
+        return new Promise<Article | null>((resolve, reject) => {
+            this.db.findOne({ itemId }, (error, doc) => {
+                if (error !== null) {
+                    reject(error);
+                    return;
+                }
+
+                resolve(doc);
+            });
+        });
     }
 
     public findHosts() {
@@ -159,7 +172,7 @@ export default class NeDbArticleRepository implements IArticleRepository {
 
                 resolve(docs.map((doc) => {
                     return new Article(doc._id, doc.title, doc.url, doc.host, doc.tags, doc.isUnread, doc.isFavorite,
-                        doc.addedAt);
+                        doc.addedAt, doc.itemId);
                 }));
             });
         });

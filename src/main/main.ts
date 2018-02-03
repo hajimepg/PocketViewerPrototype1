@@ -165,6 +165,7 @@ ipcPromiseReceiver.on("update-articles", async (payload, callback) => {
         isUnread: true,
         isFavorite: false,
         addedAt: new Date(),
+        itemId: updateArticlesCount,
     });
     /* tslint:enable:object-literal-sort-keys */
 

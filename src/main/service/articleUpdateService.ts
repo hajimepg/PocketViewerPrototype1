@@ -19,6 +19,7 @@ export default class ArticleUpdateService {
             for (const article of articles) {
                 // tslint:disable:object-literal-sort-keys
                 this.repository.insert({
+                    itemId: article.itemId,
                     title: article.resolvedTitle,
                     url: article.resolvedUrl,
                     host: "example.com",

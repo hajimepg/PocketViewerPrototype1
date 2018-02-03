@@ -82,6 +82,7 @@ function PocketArticleFactory(data: IPocketArticleFactoryData): PocketArticle {
 }
 
 test("new Data", async (t) => {
+    const itemId = 1;
     const favorite = true;
     const resolvedTitle = "resolvedTitle";
     const resolvedUrl = "http://www.example.com/resolvedUrl";
@@ -90,6 +91,7 @@ test("new Data", async (t) => {
     td.when(t.context.pocketGateway.retrieve())
         .thenResolve([
             PocketArticleFactory({
+                itemId,
                 favorite,
                 resolvedTitle,
                 resolvedUrl,
@@ -103,6 +105,7 @@ test("new Data", async (t) => {
     t.notThrows(() => {
         // tslint:disable:object-literal-sort-keys
         td.verify(t.context.articleRepository.insert({
+            itemId,
             title: resolvedTitle,
             url: resolvedUrl,
             host: "example.com",
