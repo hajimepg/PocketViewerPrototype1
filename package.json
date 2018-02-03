@@ -12,6 +12,7 @@
     "koa": "^2.4.1",
     "nedb": "^1.8.0",
     "reflect-metadata": "^0.1.12",
+    "testdouble": "^3.3.3",
     "ts-loader": "^3.2.0",
     "tslint": "^5.8.0",
     "typescript": "^2.6.2",
