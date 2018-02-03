@@ -24,7 +24,7 @@ export default class ArticleUpdateService {
                     host: "example.com",
                     tags: [],
                     isFavorite: article.favorite,
-                    isUnread: false,
+                    isUnread: article.status === "normal",
                     addedAt: article.timeAdded,
                 });
                 // tslint:enabled:object-literal-sort-keys

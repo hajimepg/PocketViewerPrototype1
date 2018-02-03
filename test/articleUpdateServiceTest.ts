@@ -108,7 +108,7 @@ test("update", async (t) => {
             host: "example.com",
             tags: [],
             isFavorite: favorite,
-            isUnread: false,
+            isUnread: true,
             addedAt: timeAdded,
         }));
         // tslint:enabled:object-literal-sort-keys
