@@ -175,8 +175,60 @@ test("update to archive", async (t) => {
     t.notThrows(() => {
         td.verify(t.context.articleRepository.update(
             td.matchers.argThat((article: Article) => {
-                return article.isArchive === true;
+                return article.itemId === itemId
+                   &&  article.isArchive === true;
             })
         ));
     });
+});
+
+test("saved archive is deleted", async (t) => {
+    const itemId = 1;
+
+    td.when(t.context.articleRepository.findByItemId(itemId))
+        .thenResolve(
+            ArticleFactory({
+                itemId,
+                isArchive: false,
+            })
+        );
+
+    td.when(t.context.pocketGateway.retrieve())
+        .thenResolve([
+            PocketArticleFactory({
+                itemId,
+                status: "deleted",
+            }),
+        ]);
+
+    await t.context.service.update();
+
+    t.notThrows(() => {
+        td.verify(t.context.articleRepository.delete(
+            td.matchers.argThat((article: Article) => {
+                return article.itemId === itemId;
+            })
+        ));
+    });
+});
+
+test("unsaved archive is deleted", async (t) => {
+    const itemId = 1;
+
+    td.when(t.context.articleRepository.findByItemId(itemId))
+        .thenResolve(null);
+
+    td.when(t.context.pocketGateway.retrieve())
+        .thenResolve([
+            PocketArticleFactory({
+                itemId,
+                status: "deleted",
+            }),
+        ]);
+
+    await t.context.service.update();
+
+    t.is(0, td.explain(t.context.articleRepository.insert).callCount);
+    t.is(0, td.explain(t.context.articleRepository.update).callCount);
+    t.is(0, td.explain(t.context.articleRepository.delete).callCount);
 });

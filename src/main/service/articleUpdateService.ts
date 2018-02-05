@@ -20,6 +20,10 @@ export default class ArticleUpdateService {
                 const savedArticle = await this.repository.findByItemId(article.itemId);
 
                 if (savedArticle === null) {
+                    if (article.status === "deleted") {
+                        continue;
+                    }
+
                     // tslint:disable:object-literal-sort-keys
                     await this.repository.insert({
                         itemId: article.itemId,
@@ -33,6 +37,12 @@ export default class ArticleUpdateService {
                         addedAt: article.timeAdded,
                     });
                     // tslint:enabled:object-literal-sort-keys
+
+                    continue;
+                }
+
+                if (article.status === "deleted") {
+                    await this.repository.delete(savedArticle);
                 }
                 else {
                     savedArticle.isArchive = article.status === "archived";
