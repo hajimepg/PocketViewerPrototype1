@@ -1,19 +1,7 @@
 import { Article } from "../model/article";
 
-export interface IArticleRepositoryInsertData {
-    id: number;
-    title: string;
-    url: string;
-    host: string;
-    tags: string[];
-    isUnread: boolean;
-    isFavorite: boolean;
-    isArchive: boolean;
-    addedAt: Date;
-}
-
 export interface IArticleRepository {
-    insert(data: IArticleRepositoryInsertData): Promise<Article>;
+    insert(article: Article): Promise<Article>;
     update(article: Article): Promise<Article>;
     deleteAll(): Promise<void>;
     delete(article: Article): Promise<void>;

@@ -2,6 +2,7 @@ import { inject, injectable } from "inversify";
 
 import { IArticleRepository } from "../interface/IArticleRepository";
 import IPocketGateway from "../interface/IPocketGateway";
+import { Article } from "../model/article";
 import TYPE from "../types";
 
 @injectable()
@@ -25,7 +26,7 @@ export default class ArticleUpdateService {
                     }
 
                     // tslint:disable:object-literal-sort-keys
-                    await this.repository.insert({
+                    await this.repository.insert(new Article({
                         id: article.itemId,
                         title: article.resolvedTitle,
                         url: article.resolvedUrl,
@@ -35,7 +36,7 @@ export default class ArticleUpdateService {
                         isUnread: article.status === "normal",
                         isArchive: article.status === "archived",
                         addedAt: article.timeAdded,
-                    });
+                    }));
                     // tslint:enabled:object-literal-sort-keys
 
                     continue;

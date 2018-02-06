@@ -17,7 +17,7 @@ test.beforeEach(async (t) => {
 test("insert", async (t) => {
     const addedAt = new Date();
     /* tslint:disable:object-literal-sort-keys */
-    const article = await t.context.repo.insert({
+    const article = await t.context.repo.insert(new Article({
         id: 1,
         title: "title",
         url: "http://example.com",
@@ -27,7 +27,7 @@ test("insert", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt,
-    });
+    }));
     /* tslint:enable:object-literal-sort-keys */
 
     t.is(1, article.id);
@@ -44,7 +44,7 @@ test("insert", async (t) => {
 
 test("update", async (t) => {
     /* tslint:disable:object-literal-sort-keys */
-    const article = await t.context.repo.insert({
+    const article = await t.context.repo.insert(new Article({
         id: 1,
         title: "title",
         url: "http://example.com",
@@ -54,7 +54,7 @@ test("update", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date("2018/01/01"),
-    });
+    }));
     /* tslint:enable:object-literal-sort-keys */
 
     article.url = "http://example.net";
@@ -76,7 +76,7 @@ test("update", async (t) => {
 
 test("delete", async (t) => {
     /* tslint:disable:object-literal-sort-keys */
-    const article1 = await t.context.repo.insert({
+    const article1 = await t.context.repo.insert(new Article({
         id: 1,
         title: "title1",
         url: "http://example.com",
@@ -86,8 +86,8 @@ test("delete", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date(),
-    });
-    const article2 = await t.context.repo.insert({
+    }));
+    const article2 = await t.context.repo.insert(new Article({
         id: 2,
         title: "title2",
         url: "http://example.com",
@@ -97,8 +97,8 @@ test("delete", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date(),
-    });
-    const article3 = await t.context.repo.insert({
+    }));
+    const article3 = await t.context.repo.insert(new Article({
         id: 3,
         title: "title3",
         url: "http://example.com",
@@ -108,7 +108,7 @@ test("delete", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date(),
-    });
+    }));
     /* tslint:enable:object-literal-sort-keys */
 
     const allArticlesBefore = await t.context.repo.findAll();
@@ -125,7 +125,7 @@ test("delete", async (t) => {
 
 test("findUnread", async (t) => {
     /* tslint:disable:object-literal-sort-keys */
-    await t.context.repo.insert({
+    await t.context.repo.insert(new Article({
         id: 1,
         title: "title1",
         url: "http://example.com",
@@ -135,8 +135,8 @@ test("findUnread", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date("2018/01/01"),
-    });
-    await t.context.repo.insert({
+    }));
+    await t.context.repo.insert(new Article({
         id: 2,
         title: "title2",
         url: "http://example.com",
@@ -146,8 +146,8 @@ test("findUnread", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date("2018/01/02"),
-    });
-    await t.context.repo.insert({
+    }));
+    await t.context.repo.insert(new Article({
         id: 3,
         title: "title3",
         url: "http://example.com",
@@ -157,7 +157,7 @@ test("findUnread", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date("2018/01/03"),
-    });
+    }));
     /* tslint:enable:object-literal-sort-keys */
 
     const articles = await t.context.repo.findUnread();
@@ -169,7 +169,7 @@ test("findUnread", async (t) => {
 
 test("findByTag", async (t) => {
     /* tslint:disable:object-literal-sort-keys */
-    await t.context.repo.insert({
+    await t.context.repo.insert(new Article({
         id: 1,
         title: "title1",
         url: "http://example.com",
@@ -179,8 +179,8 @@ test("findByTag", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date("2018/01/01"),
-    });
-    await t.context.repo.insert({
+    }));
+    await t.context.repo.insert(new Article({
         id: 2,
         title: "title2",
         url: "http://example.com",
@@ -190,8 +190,8 @@ test("findByTag", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date("2018/01/02"),
-    });
-    await t.context.repo.insert({
+    }));
+    await t.context.repo.insert(new Article({
         id: 3,
         title: "title3",
         url: "http://example.com",
@@ -201,7 +201,7 @@ test("findByTag", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date("2018/01/03"),
-    });
+    }));
     /* tslint:enable:object-literal-sort-keys */
 
     {
@@ -227,7 +227,7 @@ test("findByTag", async (t) => {
 
 test("findByItemId", async (t) => {
     /* tslint:disable:object-literal-sort-keys */
-    await t.context.repo.insert({
+    await t.context.repo.insert(new Article({
         id: 1,
         title: "title1",
         url: "http://example.com",
@@ -237,8 +237,8 @@ test("findByItemId", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date("2018/01/01"),
-    });
-    await t.context.repo.insert({
+    }));
+    await t.context.repo.insert(new Article({
         id: 2,
         title: "title2",
         url: "http://example.com",
@@ -248,7 +248,7 @@ test("findByItemId", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date("2018/01/02"),
-    });
+    }));
     /* tslint:enable:object-literal-sort-keys */
 
     {
@@ -276,7 +276,7 @@ test("findHosts", async (t) => {
     }
 
     /* tslint:disable:object-literal-sort-keys */
-    await t.context.repo.insert({
+    await t.context.repo.insert(new Article({
         id: 1,
         title: "title",
         url: "http://example.com",
@@ -286,7 +286,7 @@ test("findHosts", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date(),
-    });
+    }));
     /* tslint:enable:object-literal-sort-keys */
 
     {
@@ -296,7 +296,7 @@ test("findHosts", async (t) => {
     }
 
     /* tslint:disable:object-literal-sort-keys */
-    await t.context.repo.insert({
+    await t.context.repo.insert(new Article({
         id: 2,
         title: "title",
         url: "http://example.net",
@@ -306,7 +306,7 @@ test("findHosts", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date(),
-    });
+    }));
     /* tslint:enable:object-literal-sort-keys */
 
     {
@@ -317,7 +317,7 @@ test("findHosts", async (t) => {
     }
 
     /* tslint:disable:object-literal-sort-keys */
-    await t.context.repo.insert({
+    await t.context.repo.insert(new Article({
         id: 3,
         title: "title",
         url: "http://example.com/another",
@@ -327,7 +327,7 @@ test("findHosts", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date(),
-    });
+    }));
     /* tslint:enable:object-literal-sort-keys */
 
     {
@@ -345,7 +345,7 @@ test("findTags", async (t) => {
     }
 
     /* tslint:disable:object-literal-sort-keys */
-    await t.context.repo.insert({
+    await t.context.repo.insert(new Article({
         id: 1,
         title: "title",
         url: "http://example.com",
@@ -355,7 +355,7 @@ test("findTags", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date(),
-    });
+    }));
     /* tslint:enable:object-literal-sort-keys */
 
     {
@@ -364,7 +364,7 @@ test("findTags", async (t) => {
     }
 
     /* tslint:disable:object-literal-sort-keys */
-    await t.context.repo.insert({
+    await t.context.repo.insert(new Article({
         id: 2,
         title: "title",
         url: "http://example.com",
@@ -374,7 +374,7 @@ test("findTags", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date(),
-    });
+    }));
     /* tslint:enable:object-literal-sort-keys */
 
     {
@@ -384,7 +384,7 @@ test("findTags", async (t) => {
     }
 
     /* tslint:disable:object-literal-sort-keys */
-    await t.context.repo.insert({
+    await t.context.repo.insert(new Article({
         id: 3,
         title: "title",
         url: "http://example.com",
@@ -394,7 +394,7 @@ test("findTags", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date(),
-    });
+    }));
     /* tslint:enable:object-literal-sort-keys */
 
     {
@@ -406,7 +406,7 @@ test("findTags", async (t) => {
     }
 
     /* tslint:disable:object-literal-sort-keys */
-    await t.context.repo.insert({
+    await t.context.repo.insert(new Article({
         id: 4,
         title: "title",
         url: "http://example.com",
@@ -416,7 +416,7 @@ test("findTags", async (t) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date(),
-    });
+    }));
     /* tslint:enable:object-literal-sort-keys */
 
     {

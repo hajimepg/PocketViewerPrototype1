@@ -133,19 +133,18 @@ test("new Data", async (t) => {
     await t.context.service.update();
 
     t.notThrows(() => {
-        // tslint:disable:object-literal-sort-keys
-        td.verify(t.context.articleRepository.insert({
-            id,
-            title: resolvedTitle,
-            url: resolvedUrl,
-            host: "example.com",
-            tags: [],
-            isFavorite: favorite,
-            isUnread: true,
-            isArchive: false,
-            addedAt: timeAdded,
-        }));
-        // tslint:enabled:object-literal-sort-keys
+        td.verify(t.context.articleRepository.insert(
+            td.matchers.argThat((article: Article) => {
+                return article.id === id
+                    && article.title === resolvedTitle
+                    && article.url === resolvedUrl
+                    && article.host === "example.com"
+                    && article.tags.length === 0
+                    && article.isFavorite === favorite
+                    && article.isUnread === true
+                    && article.addedAt === timeAdded;
+            })
+        ));
     });
 });
 

@@ -1,6 +1,6 @@
 import * as DataStore from "nedb";
 
-import { IArticleRepository, IArticleRepositoryInsertData } from "../interface/IArticleRepository";
+import { IArticleRepository } from "../interface/IArticleRepository";
 import { Article } from "../model/article";
 
 function articleFactory(doc): Article {
@@ -39,19 +39,19 @@ export default class NeDbArticleRepository implements IArticleRepository {
         });
     }
 
-    public insert(data: IArticleRepositoryInsertData) {
+    public insert(article: Article) {
         return new Promise<Article>((resolve, reject) => {
             // tslint:disable:object-literal-sort-keys
             const insertDoc = {
-                _id: data.id,
-                title: data.title,
-                url: data.url,
-                host: data.host,
-                tags: data.tags,
-                isUnread: data.isUnread,
-                isFavorite: data.isFavorite,
-                isArchive: data.isArchive,
-                addedAt: data.addedAt
+                _id: article.id,
+                title: article.title,
+                url: article.url,
+                host: article.host,
+                tags: article.tags,
+                isUnread: article.isUnread,
+                isFavorite: article.isFavorite,
+                isArchive: article.isArchive,
+                addedAt: article.addedAt
             };
             // tslint:enable:object-literal-sort-keys
 
