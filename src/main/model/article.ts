@@ -1,5 +1,5 @@
 export interface IArticleConstractorData {
-    id: string;
+    id: number;
     title: string;
     url: string;
     host: string;
@@ -8,11 +8,10 @@ export interface IArticleConstractorData {
     isFavorite: boolean;
     isArchive: boolean;
     addedAt: Date;
-    itemId: number;
 }
 
 export class Article {
-    public readonly id: string;
+    public readonly id: number;
     public title: string;
     public url: string;
     public host: string;
@@ -21,7 +20,6 @@ export class Article {
     public isFavorite: boolean;
     public isArchive: boolean;
     public addedAt: Date;
-    public itemId: number;
 
     public constructor(data: IArticleConstractorData) {
         this.id = data.id;
@@ -32,6 +30,5 @@ export class Article {
         this.isUnread = data.isUnread;
         this.isFavorite = data.isFavorite;
         this.addedAt = data.addedAt;
-        this.itemId = data.itemId;
     }
 }

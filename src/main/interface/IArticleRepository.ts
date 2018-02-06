@@ -1,7 +1,7 @@
 import { Article } from "../model/article";
 
 export interface IArticleRepositoryInsertData {
-    itemId: number;
+    id: number;
     title: string;
     url: string;
     host: string;
@@ -23,7 +23,7 @@ export interface IArticleRepository {
     findArchive(): Promise<Article[]>;
     findByHost(host: string): Promise<Article[]>;
     findByTag(tag: string): Promise<Article[]>;
-    findByItemId(itemId: number): Promise<Article | null>;
+    findById(id: number): Promise<Article | null>;
     findHosts(): Promise<string[]>;
     findTags(): Promise<string[]>;
 }

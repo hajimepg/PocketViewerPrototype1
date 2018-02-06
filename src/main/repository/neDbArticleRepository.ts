@@ -15,7 +15,6 @@ function articleFactory(doc): Article {
         isFavorite: doc.isFavorite,
         isArchive: doc.isArchive,
         addedAt: doc.addedAt,
-        itemId: doc.itemId
     });
     // tslint:enable:object-literal-sort-keys
 }
@@ -44,7 +43,7 @@ export default class NeDbArticleRepository implements IArticleRepository {
         return new Promise<Article>((resolve, reject) => {
             // tslint:disable:object-literal-sort-keys
             const insertDoc = {
-                itemId: data.itemId,
+                _id: data.id,
                 title: data.title,
                 url: data.url,
                 host: data.host,
@@ -134,9 +133,9 @@ export default class NeDbArticleRepository implements IArticleRepository {
         return this.findArticles({ tags: { $elemMatch: tag } });
     }
 
-    public findByItemId(itemId: number) {
+    public findById(id: number) {
         return new Promise<Article | null>((resolve, reject) => {
-            this.db.findOne({ itemId }, (error, doc) => {
+            this.db.findOne({ _id: id }, (error, doc) => {
                 if (error !== null) {
                     reject(error);
                     return;

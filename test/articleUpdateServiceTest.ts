@@ -35,7 +35,7 @@ const test = contexualize(() => {
 });
 
 interface IArticleFactoryData {
-    id?: string;
+    id?: number;
     title?: string;
     url?: string;
     host?: string;
@@ -44,11 +44,10 @@ interface IArticleFactoryData {
     isFavorite?: boolean;
     isArchive?: boolean;
     addedAt?: Date;
-    itemId?: number;
 }
 
 function ArticleFactory(data: IArticleFactoryData): Article {
-    const id = data.id || "id";
+    const id = data.id || 1;
     const title = data.title || "title";
     const url = data.url || "http://example.com/";
     const host = data.host || "example.com";
@@ -57,9 +56,8 @@ function ArticleFactory(data: IArticleFactoryData): Article {
     const isFavorite = data.isFavorite || false;
     const isArchive = data.isFavorite || false;
     const addedAt = data.addedAt || new Date();
-    const itemId = data.itemId || 1;
 
-    return new Article({ id, title, url, host, tags, isUnread, isFavorite, isArchive, addedAt, itemId });
+    return new Article({ id, title, url, host, tags, isUnread, isFavorite, isArchive, addedAt });
 }
 
 interface IPocketArticleFactoryData {
@@ -111,19 +109,19 @@ function PocketArticleFactory(data: IPocketArticleFactoryData): PocketArticle {
 }
 
 test("new Data", async (t) => {
-    const itemId = 1;
+    const id = 1;
     const favorite = true;
     const resolvedTitle = "resolvedTitle";
     const resolvedUrl = "http://www.example.com/resolvedUrl";
     const timeAdded = new Date();
 
-    td.when(t.context.articleRepository.findByItemId(itemId))
+    td.when(t.context.articleRepository.findById(id))
         .thenResolve(null);
 
     td.when(t.context.pocketGateway.retrieve())
         .thenResolve([
             PocketArticleFactory({
-                itemId,
+                itemId: id,
                 favorite,
                 resolvedTitle,
                 resolvedUrl,
@@ -137,7 +135,7 @@ test("new Data", async (t) => {
     t.notThrows(() => {
         // tslint:disable:object-literal-sort-keys
         td.verify(t.context.articleRepository.insert({
-            itemId,
+            id,
             title: resolvedTitle,
             url: resolvedUrl,
             host: "example.com",
@@ -152,12 +150,12 @@ test("new Data", async (t) => {
 });
 
 test("update to archive", async (t) => {
-    const itemId = 1;
+    const id = 1;
 
-    td.when(t.context.articleRepository.findByItemId(itemId))
+    td.when(t.context.articleRepository.findById(id))
         .thenResolve(
             ArticleFactory({
-                itemId,
+                id,
                 isArchive: false,
             })
         );
@@ -165,7 +163,7 @@ test("update to archive", async (t) => {
     td.when(t.context.pocketGateway.retrieve())
         .thenResolve([
             PocketArticleFactory({
-                itemId,
+                itemId: id,
                 status: "archived",
             }),
         ]);
@@ -175,7 +173,7 @@ test("update to archive", async (t) => {
     t.notThrows(() => {
         td.verify(t.context.articleRepository.update(
             td.matchers.argThat((article: Article) => {
-                return article.itemId === itemId
+                return article.id === id
                    &&  article.isArchive === true;
             })
         ));
@@ -183,12 +181,12 @@ test("update to archive", async (t) => {
 });
 
 test("saved archive is deleted", async (t) => {
-    const itemId = 1;
+    const id = 1;
 
-    td.when(t.context.articleRepository.findByItemId(itemId))
+    td.when(t.context.articleRepository.findById(id))
         .thenResolve(
             ArticleFactory({
-                itemId,
+                id,
                 isArchive: false,
             })
         );
@@ -196,7 +194,7 @@ test("saved archive is deleted", async (t) => {
     td.when(t.context.pocketGateway.retrieve())
         .thenResolve([
             PocketArticleFactory({
-                itemId,
+                itemId: id,
                 status: "deleted",
             }),
         ]);
@@ -206,22 +204,22 @@ test("saved archive is deleted", async (t) => {
     t.notThrows(() => {
         td.verify(t.context.articleRepository.delete(
             td.matchers.argThat((article: Article) => {
-                return article.itemId === itemId;
+                return article.id === id;
             })
         ));
     });
 });
 
 test("unsaved archive is deleted", async (t) => {
-    const itemId = 1;
+    const id = 1;
 
-    td.when(t.context.articleRepository.findByItemId(itemId))
+    td.when(t.context.articleRepository.findById(id))
         .thenResolve(null);
 
     td.when(t.context.pocketGateway.retrieve())
         .thenResolve([
             PocketArticleFactory({
-                itemId,
+                itemId: id,
                 status: "deleted",
             }),
         ]);

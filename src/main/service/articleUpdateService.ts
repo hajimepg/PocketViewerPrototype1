@@ -17,7 +17,7 @@ export default class ArticleUpdateService {
             const articles = await this.gateway.retrieve();
 
             for (const article of articles) {
-                const savedArticle = await this.repository.findByItemId(article.itemId);
+                const savedArticle = await this.repository.findById(article.itemId);
 
                 if (savedArticle === null) {
                     if (article.status === "deleted") {
@@ -26,7 +26,7 @@ export default class ArticleUpdateService {
 
                     // tslint:disable:object-literal-sort-keys
                     await this.repository.insert({
-                        itemId: article.itemId,
+                        id: article.itemId,
                         title: article.resolvedTitle,
                         url: article.resolvedUrl,
                         host: "example.com",

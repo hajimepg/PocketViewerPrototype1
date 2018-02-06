@@ -158,6 +158,7 @@ ipcPromiseReceiver.on("update-articles", async (payload, callback) => {
 
     /* tslint:disable:object-literal-sort-keys */
     await articleRepository.insert({
+        id: updateArticlesCount,
         title: `new record ${updateArticlesCount}`,
         url: `http://example.com/${updateArticlesCount}`,
         host: "example.com",
@@ -166,7 +167,6 @@ ipcPromiseReceiver.on("update-articles", async (payload, callback) => {
         isFavorite: false,
         isArchive: false,
         addedAt: new Date(),
-        itemId: updateArticlesCount,
     });
     /* tslint:enable:object-literal-sort-keys */
 
