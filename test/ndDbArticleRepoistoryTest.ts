@@ -1,6 +1,6 @@
 import { contexualize } from "./testHelper";
 
-import Article from "../src/main/model/article";
+import { Article } from "../src/main/model/article";
 import NeDbArticleRepository from "../src/main/repository/neDbArticleRepository";
 
 const test = contexualize(() => {

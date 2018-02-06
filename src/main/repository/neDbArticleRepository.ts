@@ -1,21 +1,23 @@
 import * as DataStore from "nedb";
 
 import { IArticleRepository, IArticleRepositoryInsertData } from "../interface/IArticleRepository";
-import Article from "../model/article";
+import { Article } from "../model/article";
 
 function articleFactory(doc): Article {
-    return new Article(
-        doc._id,
-        doc.title,
-        doc.url,
-        doc.host,
-        doc.tags,
-        doc.isUnread,
-        doc.isFavorite,
-        doc.isArchive,
-        doc.addedAt,
-        doc.itemId
-    );
+    // tslint:disable:object-literal-sort-keys
+    return new Article({
+        id: doc._id,
+        title: doc.title,
+        url: doc.url,
+        host: doc.host,
+        tags: doc.tags,
+        isUnread: doc.isUnread,
+        isFavorite: doc.isFavorite,
+        isArchive: doc.isArchive,
+        addedAt: doc.addedAt,
+        itemId: doc.itemId
+    });
+    // tslint:enable:object-literal-sort-keys
 }
 
 export default class NeDbArticleRepository implements IArticleRepository {

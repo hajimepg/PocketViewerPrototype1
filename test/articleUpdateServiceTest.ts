@@ -9,7 +9,7 @@ import { IArticleRepository } from "../src/main/interface/IArticleRepository";
 import IPocketGateway from "../src/main/interface/IPocketGateway";
 
 import PocketGateway from "../src/main/gateway/PocketGateway";
-import Article from "../src/main/model/article";
+import { Article } from "../src/main/model/article";
 import { PocketArticle } from "../src/main/model/pocketArticle";
 import NeDbArticleRepository from "../src/main/repository/neDbArticleRepository";
 import ArticleUpdateService from "../src/main/service/articleUpdateService";
@@ -59,7 +59,7 @@ function ArticleFactory(data: IArticleFactoryData): Article {
     const addedAt = data.addedAt || new Date();
     const itemId = data.itemId || 1;
 
-    return new Article(id, title, url, host, tags, isUnread, isFavorite, isArchive, addedAt, itemId);
+    return new Article({ id, title, url, host, tags, isUnread, isFavorite, isArchive, addedAt, itemId });
 }
 
 interface IPocketArticleFactoryData {

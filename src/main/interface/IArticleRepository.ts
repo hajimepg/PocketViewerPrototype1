@@ -1,4 +1,4 @@
-import Article from "../model/article";
+import { Article } from "../model/article";
 
 export interface IArticleRepositoryInsertData {
     itemId: number;
