@@ -29,6 +29,7 @@ export class Article {
         this.tags = data.tags;
         this.isUnread = data.isUnread;
         this.isFavorite = data.isFavorite;
+        this.isArchive = data.isArchive;
         this.addedAt = data.addedAt;
     }
 }
