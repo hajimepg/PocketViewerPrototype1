@@ -44,6 +44,7 @@ export class PocketArticle {
     public constructor(data: IPocketArticleConstractorData) {
         this.itemId = data.itemId;
         this.resolvedId = data.resolvedId;
+        this.givenTitle = data.givenTitle;
         this.givenUrl = data.resolvedUrl;
         this.favorite = data.favorite;
         this.status = data.status;
