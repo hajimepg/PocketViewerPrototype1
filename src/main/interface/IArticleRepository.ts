@@ -6,7 +6,7 @@ export interface IArticleRepository {
     deleteAll(): Promise<void>;
     delete(article: Article): Promise<void>;
     findAll(): Promise<Article[]>;
-    findUnread(): Promise<Article[]>;
+    findHome(): Promise<Article[]>;
     findFavorite(): Promise<Article[]>;
     findArchive(): Promise<Article[]>;
     findByHost(host: string): Promise<Article[]>;

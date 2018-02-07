@@ -123,7 +123,7 @@ test("delete", async (t) => {
     t.not(-1, ids.indexOf(article3.id));
 });
 
-test("findUnread", async (t) => {
+test("findHome", async (t) => {
     /* tslint:disable:object-literal-sort-keys */
     await t.context.repo.insert(new Article({
         id: 1,
@@ -142,9 +142,9 @@ test("findUnread", async (t) => {
         url: "http://example.com",
         host: "example.com",
         tags: [],
-        isUnread: false,
+        isUnread: true,
         isFavorite: false,
-        isArchive: false,
+        isArchive: true,
         addedAt: new Date("2018/01/02"),
     }));
     await t.context.repo.insert(new Article({
@@ -160,7 +160,7 @@ test("findUnread", async (t) => {
     }));
     /* tslint:enable:object-literal-sort-keys */
 
-    const articles = await t.context.repo.findUnread();
+    const articles = await t.context.repo.findHome();
     t.is(2, articles.length);
     const titles = articles.map((article) => article.title);
     t.is("title3", articles[0].title);

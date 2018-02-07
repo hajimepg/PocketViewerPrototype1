@@ -92,7 +92,7 @@ const articleConverter = (article) => {
 ipcPromiseReceiver.on("get-views", async (payload, callback) => {
     const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
 
-    const unreadCount = (await articleRepository.findUnread()).length;
+    const homeCount = (await articleRepository.findHome()).length;
 
     const hosts = Array<{ name: string, count: number}>();
     for (const host of (await articleRepository.findHosts())) {
@@ -106,13 +106,13 @@ ipcPromiseReceiver.on("get-views", async (payload, callback) => {
         tags.push({ name: tag, count });
     }
 
-    callback({ unreadCount, hosts, tags });
+    callback({ homeCount, hosts, tags });
 });
 
-ipcPromiseReceiver.on("get-unread-articles", async (payload, callback) => {
+ipcPromiseReceiver.on("get-home-articles", async (payload, callback) => {
     const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
 
-    const articles = (await articleRepository.findUnread()).map(articleConverter);
+    const articles = (await articleRepository.findHome()).map(articleConverter);
 
     callback(articles);
 });
@@ -149,28 +149,28 @@ ipcPromiseReceiver.on("get-tag-articles", async (tag, callback) => {
     callback(articles);
 });
 
-let updateArticlesCount = 1;
-
 ipcPromiseReceiver.on("update-articles", async (payload, callback) => {
     console.log("update-articles");
 
     const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
 
+    const articles = await articleRepository.findAll();
+
+    const id = (articles.length > 0) ? Math.max(...articles.map((article) => article.id)) + 1 : 1;
+
     /* tslint:disable:object-literal-sort-keys */
     await articleRepository.insert({
-        id: updateArticlesCount,
-        title: `new record ${updateArticlesCount}`,
-        url: `http://example.com/${updateArticlesCount}`,
+        id,
+        title: `new record ${id}`,
+        url: `http://example.com/${id}`,
         host: "example.com",
-        tags: [`tag${updateArticlesCount}`],
+        tags: [`tag${id}`],
         isUnread: true,
         isFavorite: false,
         isArchive: false,
         addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
-
-    updateArticlesCount++;
 
     callback(undefined);
 });

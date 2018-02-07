@@ -20,9 +20,9 @@
             </div>
             <div v-else id="container">
                 <div id="views">
-                    <div class="viewGroup" v-bind:class="{ active: views.unread.isActive }" v-on:click="selectUnreadView">
-                        <div class="unreadCount">{{ views.unread.count }}</div>
-                        <div class="viewName"><i class="fas fa-bars"></i>Unread</div>
+                    <div class="viewGroup" v-bind:class="{ active: views.home.isActive }" v-on:click="selectHomeView">
+                        <div class="unreadCount">{{ views.home.count }}</div>
+                        <div class="viewName"><i class="fas fa-bars"></i>Home</div>
                     </div>
                     <div class="viewGroup" v-bind:class="{ active: views.favorite.isActive }" v-on:click="selectFavoriteView">
                         <div class="viewName"><i class="far fa-star"></i>Favorite</div>

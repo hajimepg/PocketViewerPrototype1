@@ -113,8 +113,8 @@ export default class NeDbArticleRepository implements IArticleRepository {
         return this.findArticles({});
     }
 
-    public findUnread() {
-        return this.findArticles({ isUnread: true });
+    public findHome() {
+        return this.findArticles({ isArchive: false });
     }
 
     public findFavorite() {

@@ -15,13 +15,13 @@ const store = new Vuex.Store({
             errorMessage: "",
         },
         views: {
-            unread: {
+            home: {
                 count: 0,
             },
             hosts: [] as Array<{ name: string, count: number }>,
             tags: [] as Array<{ name: string, count: number }>,
             active: {
-                view: "unread",
+                view: "home",
                 index: undefined as (number | undefined),
             },
         },
@@ -35,8 +35,8 @@ const store = new Vuex.Store({
         [mutations.UPDATE_AUTH_ERROR_MESEAGE](state, errorMessage: string) {
             state.authenticate.errorMessage = errorMessage;
         },
-        [mutations.UPDATE_UNREAD_COUNT](state, count: number) {
-            state.views.unread.count = count;
+        [mutations.UPDATE_HOME_COUNT](state, count: number) {
+            state.views.home.count = count;
         },
         [mutations.UPDATE_HOSTS](state, hosts) {
             state.views.hosts = hosts;
@@ -69,18 +69,18 @@ const store = new Vuex.Store({
 
                 // TODO: コンポーネント化したらmountイベントでやるようにする
                 const views = await ipcPromise.send("get-views", undefined);
-                context.commit(mutations.UPDATE_UNREAD_COUNT, views.unreadCount);
+                context.commit(mutations.UPDATE_HOME_COUNT, views.homeCount);
                 context.commit(mutations.UPDATE_HOSTS, views.hosts);
                 context.commit(mutations.UPDATE_TAGS, views.tags);
 
-                // TODO: 初期ビューはUnreadと決め打ち
-                const articles = await ipcPromise.send("get-unread-articles", undefined);
+                // TODO: 初期ビューはHomeと決め打ち
+                const articles = await ipcPromise.send("get-home-articles", undefined);
                 context.commit(mutations.UPDATE_ARTICLES, articles);
             }
         },
-        async selectUnreadView(context) {
-            context.commit(mutations.UPDATE_ACTIVE_VIEW, { view: "unread", index: undefined });
-            const articles = await ipcPromise.send("get-unread-articles", undefined);
+        async selectHomeView(context) {
+            context.commit(mutations.UPDATE_ACTIVE_VIEW, { view: "home", index: undefined });
+            const articles = await ipcPromise.send("get-home-articles", undefined);
             context.commit(mutations.UPDATE_ARTICLES, articles);
         },
         async selectFavoriteView(context) {
@@ -108,12 +108,12 @@ const store = new Vuex.Store({
             await ipcPromise.send("update-articles", undefined);
 
             const views = await ipcPromise.send("get-views", undefined);
-            context.commit(mutations.UPDATE_UNREAD_COUNT, views.unreadCount);
+            context.commit(mutations.UPDATE_HOME_COUNT, views.homeCount);
             context.commit(mutations.UPDATE_HOSTS, views.hosts);
             context.commit(mutations.UPDATE_TAGS, views.tags);
 
-            if (context.state.views.active.view === "unread") {
-                const articles = await ipcPromise.send("get-unread-articles", undefined);
+            if (context.state.views.active.view === "home") {
+                const articles = await ipcPromise.send("get-home-articles", undefined);
                 context.commit(mutations.UPDATE_ARTICLES, articles);
             }
             else if (context.state.views.active.view === "favorite") {
@@ -146,7 +146,7 @@ const app = new Vue({
     methods: {
         ...mapActions([
             "pocketAuth",
-            "selectUnreadView",
+            "selectHomeView",
             "selectFavoriteView",
             "selectArchiveView",
             "reloadViews",
@@ -170,7 +170,7 @@ const app = new Vue({
             const views = (this as any).$store.state.views;
             const active = views.active;
             return {
-                unread: { count: views.unread.count, isActive: active.view === "unread" },
+                home: { count: views.home.count, isActive: active.view === "home" },
                 favorite: { isActive: active.view === "favorite" },
                 archive: { isActive: active.view === "archive" },
                 hosts: views.hosts.map(({ name, count }, index) =>
