@@ -1,4 +1,4 @@
-import * as DataStore from "nedb";
+import DataStore = require("nedb");
 
 import { IArticleRepository } from "../interface/IArticleRepository";
 import { Article } from "../model/article";

@@ -3,7 +3,7 @@ import * as url from "url";
 
 import axios from "axios";
 import { shell } from "electron";
-import * as Koa from "koa";
+import Koa = require("koa");
 
 export default class PocketAuth {
     protected static readonly redirectUri = "http://localhost:3000/";
