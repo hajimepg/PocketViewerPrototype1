@@ -229,3 +229,39 @@ test("unsaved archive is deleted", async (t) => {
     t.is(0, td.explain(t.context.articleRepository.update).callCount);
     t.is(0, td.explain(t.context.articleRepository.delete).callCount);
 });
+
+test("nothing to update", async (t) => {
+    const id = 1;
+    const addedAt = new Date();
+    const title = "title";
+    const url = "http://www.example.com";
+    const isUnread = true;
+
+    td.when(t.context.articleRepository.findById(id))
+        .thenResolve(
+            ArticleFactory({
+                id,
+                addedAt,
+                title,
+                url,
+                isUnread,
+            })
+        );
+
+    td.when(t.context.pocketGateway.retrieve())
+        .thenResolve([
+            PocketArticleFactory({
+                itemId: id,
+                timeAdded: addedAt,
+                resolvedTitle: title,
+                resolvedUrl: url,
+                status: "normal",
+            }),
+        ]);
+
+    await t.context.service.update();
+
+    t.is(0, td.explain(t.context.articleRepository.insert).callCount);
+    t.is(0, td.explain(t.context.articleRepository.update).callCount);
+    t.is(0, td.explain(t.context.articleRepository.delete).callCount);
+});

@@ -1,3 +1,5 @@
+import assert from "assert";
+
 import { inject, injectable } from "inversify";
 
 import { IArticleRepository } from "../interface/IArticleRepository";
@@ -44,7 +46,20 @@ export default class ArticleUpdateService {
                         await this.repository.insert(newArticle);
                     }
                     else {
-                        await this.repository.update(newArticle);
+                        switch (newArticle.isUpdated(savedArticle)) {
+                            case "updated":
+                                await this.repository.update(newArticle);
+                                break;
+                            case "no updated":
+                                // do nothing
+                                break;
+                            case "different id":
+                                assert.fail(
+                                    savedArticle.id, newArticle.id,
+                                    "try to update a different artcile"
+                                );
+                                break;
+                        }
                     }
                 }
             }
