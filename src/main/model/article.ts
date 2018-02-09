@@ -1,3 +1,5 @@
+import lodash from "lodash";
+
 export interface IArticleConstractorData {
     id: number;
     title: string;
@@ -50,7 +52,7 @@ export class Article {
             return "updated";
         }
 
-        if (this.tags !== other.tags) {
+        if (lodash.difference(this.tags, other.tags).length > 0) {
             return "updated";
         }
 
@@ -66,7 +68,7 @@ export class Article {
             return "updated";
         }
 
-        if (this.addedAt !== other.addedAt) {
+        if (this.addedAt.getTime() !== other.addedAt.getTime()) {
             return "updated";
         }
 
