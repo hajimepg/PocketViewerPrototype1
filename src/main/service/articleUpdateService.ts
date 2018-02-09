@@ -18,37 +18,34 @@ export default class ArticleUpdateService {
             const articles = await this.gateway.retrieve();
 
             for (const article of articles) {
+                // tslint:disable:object-literal-sort-keys
+                const newArticle = new Article({
+                    id: article.itemId,
+                    title: article.resolvedTitle,
+                    url: article.resolvedUrl,
+                    host: "example.com",
+                    tags: [], // TODO: implement
+                    isFavorite: article.favorite,
+                    isUnread: article.status === "normal",
+                    isArchive: article.status === "archived",
+                    addedAt: article.timeAdded,
+                });
+                // tslint:enabled:object-literal-sort-keys
+
                 const savedArticle = await this.repository.findById(article.itemId);
 
-                if (savedArticle === null) {
-                    if (article.status === "deleted") {
-                        continue;
-                    }
-
-                    // tslint:disable:object-literal-sort-keys
-                    await this.repository.insert(new Article({
-                        id: article.itemId,
-                        title: article.resolvedTitle,
-                        url: article.resolvedUrl,
-                        host: "example.com",
-                        tags: [], // TODO: implement
-                        isFavorite: article.favorite,
-                        isUnread: article.status === "normal",
-                        isArchive: article.status === "archived",
-                        addedAt: article.timeAdded,
-                    }));
-                    // tslint:enabled:object-literal-sort-keys
-
-                    continue;
-                }
-
                 if (article.status === "deleted") {
-                    await this.repository.delete(savedArticle);
+                    if (savedArticle !== null) {
+                        await this.repository.delete(savedArticle);
+                    }
                 }
                 else {
-                    savedArticle.isArchive = article.status === "archived";
-
-                    await this.repository.update(savedArticle);
+                    if (savedArticle === null) {
+                        await this.repository.insert(newArticle);
+                    }
+                    else {
+                        await this.repository.update(newArticle);
+                    }
                 }
             }
 
