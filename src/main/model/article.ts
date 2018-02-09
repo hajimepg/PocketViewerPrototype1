@@ -32,4 +32,44 @@ export class Article {
         this.isArchive = data.isArchive;
         this.addedAt = data.addedAt;
     }
+
+    public isUpdated(other: Article): "updated" | "no updated" | "different id" {
+        if (this.id !== other.id) {
+            return "different id";
+        }
+
+        if (this.title !== other.title) {
+            return "updated";
+        }
+
+        if (this.url !== other.url) {
+            return "updated";
+        }
+
+        if (this.host !== other.host) {
+            return "updated";
+        }
+
+        if (this.tags !== other.tags) {
+            return "updated";
+        }
+
+        if (this.isUnread !== other.isUnread) {
+            return "updated";
+        }
+
+        if (this.isFavorite !== other.isFavorite) {
+            return "updated";
+        }
+
+        if (this.isArchive !== other.isArchive) {
+            return "updated";
+        }
+
+        if (this.addedAt !== other.addedAt) {
+            return "updated";
+        }
+
+        return "no updated";
+    }
 }
