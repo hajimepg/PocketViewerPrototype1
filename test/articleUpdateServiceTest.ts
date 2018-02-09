@@ -54,7 +54,7 @@ function ArticleFactory(data: IArticleFactoryData): Article {
     const tags = data.tags || [];
     const isUnread = data.isUnread || false;
     const isFavorite = data.isFavorite || false;
-    const isArchive = data.isFavorite || false;
+    const isArchive = data.isArchive || false;
     const addedAt = data.addedAt || new Date();
 
     return new Article({ id, title, url, host, tags, isUnread, isFavorite, isArchive, addedAt });
