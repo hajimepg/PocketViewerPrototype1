@@ -7,7 +7,7 @@ import { PocketArticle } from "../model/pocketArticle";
 
 @injectable()
 export default class PocketGateway implements IPocketGateway {
-    public retrieve(): Promise<PocketArticle[]> {
+    public retrieve(accessToken: string): Promise<PocketArticle[]> {
         return new Promise<PocketArticle[]>((resolve, reject) => {
             resolve([]);
         });

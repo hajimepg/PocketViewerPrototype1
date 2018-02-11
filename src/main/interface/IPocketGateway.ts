@@ -1,5 +1,5 @@
 import { PocketArticle } from "../model/pocketArticle";
 
 export default interface IPocketGateway {
-    retrieve(): Promise<PocketArticle[]>;
+    retrieve(accessToken: string): Promise<PocketArticle[]>;
 }

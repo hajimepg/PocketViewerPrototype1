@@ -16,9 +16,9 @@ export default class ArticleUpdateService {
     ) {
     }
 
-    public update(): Promise<void> {
+    public update(accessToken: string): Promise<void> {
         return new Promise<void>(async (resolve, reject) => {
-            const articles = await this.gateway.retrieve();
+            const articles = await this.gateway.retrieve(accessToken);
 
             for (const article of articles) {
                 const articleUrl = new URL(article.resolvedUrl);

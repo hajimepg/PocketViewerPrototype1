@@ -118,7 +118,7 @@ test("new Data", async (t) => {
     td.when(t.context.articleRepository.findById(id))
         .thenResolve(null);
 
-    td.when(t.context.pocketGateway.retrieve())
+    td.when(t.context.pocketGateway.retrieve("access token"))
         .thenResolve([
             PocketArticleFactory({
                 itemId: id,
@@ -131,7 +131,7 @@ test("new Data", async (t) => {
             }),
         ]);
 
-    await t.context.service.update();
+    await t.context.service.update("access token");
 
     t.notThrows(() => {
         td.verify(t.context.articleRepository.insert(
@@ -155,7 +155,7 @@ test("new Data(Already read)", async (t) => {
     td.when(t.context.articleRepository.findById(id))
         .thenResolve(null);
 
-    td.when(t.context.pocketGateway.retrieve())
+    td.when(t.context.pocketGateway.retrieve("access token"))
         .thenResolve([
             PocketArticleFactory({
                 itemId: id,
@@ -164,7 +164,7 @@ test("new Data(Already read)", async (t) => {
             }),
         ]);
 
-    await t.context.service.update();
+    await t.context.service.update("access token");
 
     t.notThrows(() => {
         td.verify(t.context.articleRepository.insert(
@@ -187,7 +187,7 @@ test("update to archive", async (t) => {
             })
         );
 
-    td.when(t.context.pocketGateway.retrieve())
+    td.when(t.context.pocketGateway.retrieve("access token"))
         .thenResolve([
             PocketArticleFactory({
                 itemId: id,
@@ -195,7 +195,7 @@ test("update to archive", async (t) => {
             }),
         ]);
 
-    await t.context.service.update();
+    await t.context.service.update("access token");
 
     t.notThrows(() => {
         td.verify(t.context.articleRepository.update(
@@ -218,7 +218,7 @@ test("saved archive is deleted", async (t) => {
             })
         );
 
-    td.when(t.context.pocketGateway.retrieve())
+    td.when(t.context.pocketGateway.retrieve("access token"))
         .thenResolve([
             PocketArticleFactory({
                 itemId: id,
@@ -226,7 +226,7 @@ test("saved archive is deleted", async (t) => {
             }),
         ]);
 
-    await t.context.service.update();
+    await t.context.service.update("access token");
 
     t.notThrows(() => {
         td.verify(t.context.articleRepository.delete(
@@ -243,7 +243,7 @@ test("unsaved archive is deleted", async (t) => {
     td.when(t.context.articleRepository.findById(id))
         .thenResolve(null);
 
-    td.when(t.context.pocketGateway.retrieve())
+    td.when(t.context.pocketGateway.retrieve("access token"))
         .thenResolve([
             PocketArticleFactory({
                 itemId: id,
@@ -251,7 +251,7 @@ test("unsaved archive is deleted", async (t) => {
             }),
         ]);
 
-    await t.context.service.update();
+    await t.context.service.update("access token");
 
     t.is(0, td.explain(t.context.articleRepository.insert).callCount);
     t.is(0, td.explain(t.context.articleRepository.update).callCount);
@@ -276,7 +276,7 @@ test("nothing to update", async (t) => {
             })
         );
 
-    td.when(t.context.pocketGateway.retrieve())
+    td.when(t.context.pocketGateway.retrieve("access token"))
         .thenResolve([
             PocketArticleFactory({
                 itemId: id,
@@ -287,7 +287,7 @@ test("nothing to update", async (t) => {
             }),
         ]);
 
-    await t.context.service.update();
+    await t.context.service.update("access token");
 
     t.is(0, td.explain(t.context.articleRepository.insert).callCount);
     t.is(0, td.explain(t.context.articleRepository.update).callCount);
