@@ -10,6 +10,7 @@ import { IArticleRepository } from "./interface/IArticleRepository";
 import IPocketGateway from "./interface/IPocketGateway";
 import { Article } from "./model/article";
 import PocketAuth from "./pocketAuth";
+import ArticleUpdateService from "./service/articleUpdateService";
 
 import initContainer from "./inversify.config";
 import TYPES from "./types";
@@ -154,37 +155,13 @@ ipcPromiseReceiver.on("get-tag-articles", async (tag, callback) => {
 });
 
 ipcPromiseReceiver.on("update-articles", async (payload, callback) => {
-    console.log("update-articles");
+    const articleUpdateService = container.get<ArticleUpdateService>(TYPES.ArticleUpdateService);
 
-    const articleRepository = container.get<IArticleRepository>(TYPES.ArticleRepository);
-
-    const articles = await articleRepository.findAll();
-
-    const id = (articles.length > 0) ? Math.max(...articles.map((article) => article.id)) + 1 : 1;
-
-    /* tslint:disable:object-literal-sort-keys */
-    const newArticle = new Article({
-        id,
-        title: `new record ${id}`,
-        url: `http://example.com/${id}`,
-        host: "example.com",
-        tags: [`tag${id}`],
-        isUnread: true,
-        isFavorite: false,
-        isArchive: false,
-        addedAt: new Date(),
-    });
-    /* tslint:enable:object-literal-sort-keys */
-
-    await articleRepository.insert(newArticle);
-
-    const pocketGateway = container.get<IPocketGateway>(TYPES.PocketGateway);
     try {
-        await pocketGateway.retrieve(accessToken);
+        await articleUpdateService.update(accessToken);
+        callback(undefined);
     }
     catch (error) {
         console.log(error);
     }
-
-    callback(undefined);
 });

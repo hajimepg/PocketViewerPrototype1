@@ -9,6 +9,7 @@ import IPocketGateway from "./interface/IPocketGateway";
 
 import PocketGateway from "./gateway/pocketGateway";
 import NeDbArticleRepository from "./repository/neDbArticleRepository";
+import ArticleUpdateService from "./service/articleUpdateService";
 
 export default async function initContainer(consumerKey: string): Promise<inversify.Container> {
     const container = new inversify.Container();
@@ -19,6 +20,8 @@ export default async function initContainer(consumerKey: string): Promise<invers
 
     const pocketGateway = new PocketGateway(consumerKey);
     container.bind<IPocketGateway>(TYPES.PocketGateway).toConstantValue(pocketGateway);
+
+    container.bind<ArticleUpdateService>(TYPES.ArticleUpdateService).to(ArticleUpdateService);
 
     return container;
 }
