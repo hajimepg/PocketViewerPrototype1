@@ -23,7 +23,7 @@ const test = contexualize(() => {
     articleRepository = td.object(articleRepository);
     container.bind<IArticleRepository>(TYPES.ArticleRepository).toConstantValue(articleRepository);
 
-    let pocketGateway = new PocketGateway();
+    let pocketGateway = new PocketGateway("consumer key");
     pocketGateway = td.object(pocketGateway);
     container.bind<IPocketGateway>(TYPES.PocketGateway).toConstantValue(pocketGateway);
 

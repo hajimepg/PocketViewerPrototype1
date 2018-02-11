@@ -7,6 +7,7 @@ import * as inversify from "inversify";
 
 import IPCPromiseReceiver from "../ipcPromise/ipcPromiseReceiver";
 import { IArticleRepository } from "./interface/IArticleRepository";
+import IPocketGateway from "./interface/IPocketGateway";
 import { Article } from "./model/article";
 import PocketAuth from "./pocketAuth";
 
@@ -36,7 +37,9 @@ function createWindow() {
 let container: inversify.Container;
 
 app.on("ready", async () => {
-    container = await initContainer();
+    const authCredentials = JSON.parse(fs.readFileSync(path.join(__dirname, "../../credentials.json"), "utf-8"));
+
+    container = await initContainer(authCredentials.pocket.consumer_key);
 
     BrowserWindow.addDevToolsExtension(path.join(__dirname, "../../node_modules/vue-devtools/vender"));
 
@@ -174,6 +177,14 @@ ipcPromiseReceiver.on("update-articles", async (payload, callback) => {
     /* tslint:enable:object-literal-sort-keys */
 
     await articleRepository.insert(newArticle);
+
+    const pocketGateway = container.get<IPocketGateway>(TYPES.PocketGateway);
+    try {
+        await pocketGateway.retrieve(accessToken);
+    }
+    catch (error) {
+        console.log(error);
+    }
 
     callback(undefined);
 });
