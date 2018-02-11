@@ -6,6 +6,8 @@ import { injectable } from "inversify";
 import IPocketGateway from "../interface/IPocketGateway";
 import { PocketArticle } from "../model/pocketArticle";
 
+import { sanitize } from "../pocketArticleSanitizer";
+
 @injectable()
 export default class PocketGateway implements IPocketGateway {
     public constructor(public consumerKey: string) {
@@ -23,7 +25,10 @@ export default class PocketGateway implements IPocketGateway {
                     }
                 )
                 .then((response) => {
-                    resolve(response.data.list);
+                    const rawArticles = Object.values(response.data.list);
+                    const saniziedArticles: PocketArticle[] = rawArticles.map(sanitize);
+
+                    resolve(saniziedArticles);
                 })
                 .catch((error) => {
                     reject(error);
