@@ -114,6 +114,7 @@ ipcPromiseReceiver.on("pocket-auth", async (payload, callback) => {
 const articleConverter = (article) => {
     /* tslint:disable:object-literal-sort-keys */
     return {
+        id: article.id,
         title: article.title,
         host: article.host,
         thumb: "images/dummy_image.png",

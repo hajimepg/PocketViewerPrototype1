@@ -26,6 +26,7 @@ const store = new Vuex.Store({
             },
         },
         articles: [],
+        activeArticleId: undefined as (number | undefined),
         searchArticle: "",
     },
     mutations: {
@@ -53,6 +54,9 @@ const store = new Vuex.Store({
         [mutations.UPDATE_SEARCH_ARTICLES](state, text) {
             state.searchArticle = text;
         },
+        [mutations.UPDATE_ACTIVE_ARTICLE](state, id) {
+            state.activeArticleId = id;
+        }
     },
     actions: {
         async pocketAuth(context) {
@@ -82,26 +86,34 @@ const store = new Vuex.Store({
             context.commit(mutations.UPDATE_ACTIVE_VIEW, { view: "home", index: undefined });
             const articles = await ipcPromise.send("get-home-articles", undefined);
             context.commit(mutations.UPDATE_ARTICLES, articles);
+            context.commit(mutations.UPDATE_ACTIVE_ARTICLE, undefined);
         },
         async selectFavoriteView(context) {
             context.commit(mutations.UPDATE_ACTIVE_VIEW, { view: "favorite", index: undefined });
             const articles = await ipcPromise.send("get-favorite-articles", undefined);
             context.commit(mutations.UPDATE_ARTICLES, articles);
+            context.commit(mutations.UPDATE_ACTIVE_ARTICLE, undefined);
         },
         async selectArchiveView(context) {
             context.commit(mutations.UPDATE_ACTIVE_VIEW, { view: "archive", index: undefined });
             const articles = await ipcPromise.send("get-archive-articles", undefined);
             context.commit(mutations.UPDATE_ARTICLES, articles);
+            context.commit(mutations.UPDATE_ACTIVE_ARTICLE, undefined);
         },
         async selectHostsView(context, index) {
             context.commit(mutations.UPDATE_ACTIVE_VIEW, { view: "hosts", index });
             const articles = await ipcPromise.send("get-host-articles", context.state.views.hosts[index].name);
             context.commit(mutations.UPDATE_ARTICLES, articles);
+            context.commit(mutations.UPDATE_ACTIVE_ARTICLE, undefined);
         },
         async selectTagsView(context, index) {
             context.commit(mutations.UPDATE_ACTIVE_VIEW, { view: "tags", index });
             const articles = await ipcPromise.send("get-tag-articles", context.state.views.tags[index].name);
             context.commit(mutations.UPDATE_ARTICLES, articles);
+            context.commit(mutations.UPDATE_ACTIVE_ARTICLE, undefined);
+        },
+        async selectArticle(context, id) {
+            context.commit(mutations.UPDATE_ACTIVE_ARTICLE, id);
         },
         async reloadViews(context) {
             console.log("reloadViews called.");
@@ -157,6 +169,9 @@ const app = new Vue({
         selectTagsView(index: number) {
             this.$store.dispatch("selectTagsView", index);
         },
+        selectArticle(id: number) {
+            this.$store.dispatch("selectArticle", id);
+        },
         updateSearchArticle(event) {
             this.$store.commit(mutations.UPDATE_SEARCH_ARTICLES, event.target.value);
         }
@@ -183,8 +198,8 @@ const app = new Vue({
         },
         articles() {
             // Note: VuexのTypeScriptの型定義ファイルが更新されるまでanyにキャストする
-            return (this as any).$store.state.articles.filter(
-                (article) => {
+            return (this as any).$store.state.articles
+                .filter((article) => {
                     if (article.title.indexOf(this.$store.state.searchArticle) !== -1) {
                         return true;
                     }
@@ -192,8 +207,16 @@ const app = new Vue({
                         return true;
                     }
                     return false;
-                }
-            );
+                })
+                .map((article) => {
+                    return {
+                        id: article.id,
+                        title: article.title,
+                        host: article.host,
+                        thumb: article.thumb,
+                        isActive: article.id === (this as any).$store.state.activeArticleId,
+                    };
+                });
         },
     }
 });
