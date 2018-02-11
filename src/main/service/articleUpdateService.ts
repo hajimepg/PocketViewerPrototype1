@@ -1,4 +1,5 @@
 import assert from "assert";
+import { URL } from "url";
 
 import { inject, injectable } from "inversify";
 
@@ -20,12 +21,13 @@ export default class ArticleUpdateService {
             const articles = await this.gateway.retrieve();
 
             for (const article of articles) {
+                const articleUrl = new URL(article.resolvedUrl);
                 // tslint:disable:object-literal-sort-keys
                 const newArticle = new Article({
                     id: article.itemId,
                     title: article.resolvedTitle,
                     url: article.resolvedUrl,
-                    host: "www.example.com",
+                    host: articleUrl.hostname,
                     tags: [], // TODO: implement
                     isFavorite: article.favorite,
                     isUnread: article.status === "normal",
