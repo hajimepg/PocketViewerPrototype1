@@ -141,7 +141,12 @@ export default class NeDbArticleRepository implements IArticleRepository {
                     return;
                 }
 
-                resolve(doc);
+                if (doc === null) {
+                    resolve(null);
+                }
+                else {
+                    resolve(articleFactory(doc));
+                }
             });
         });
     }
