@@ -25,7 +25,7 @@ export default class ArticleUpdateService {
                     id: article.itemId,
                     title: article.resolvedTitle,
                     url: article.resolvedUrl,
-                    host: "example.com",
+                    host: "www.example.com",
                     tags: [], // TODO: implement
                     isFavorite: article.favorite,
                     isUnread: article.status === "normal",

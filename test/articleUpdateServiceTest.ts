@@ -49,8 +49,8 @@ interface IArticleFactoryData {
 function ArticleFactory(data: IArticleFactoryData): Article {
     const id = data.id || 1;
     const title = data.title || "title";
-    const url = data.url || "http://example.com/";
-    const host = data.host || "example.com";
+    const url = data.url || "http://www.example.com/";
+    const host = data.host || "www.example.com";
     const tags = data.tags || [];
     const isUnread = data.isUnread || false;
     const isFavorite = data.isFavorite || false;
@@ -138,7 +138,7 @@ test("new Data", async (t) => {
                 return article.id === id
                     && article.title === resolvedTitle
                     && article.url === resolvedUrl
-                    && article.host === "example.com"
+                    && article.host === "www.example.com"
                     && article.tags.length === 0
                     && article.isFavorite === favorite
                     && article.isUnread === true
