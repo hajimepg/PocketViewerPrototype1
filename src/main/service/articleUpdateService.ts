@@ -22,6 +22,7 @@ export default class ArticleUpdateService {
 
             for (const article of articles) {
                 const articleUrl = new URL(article.resolvedUrl);
+
                 // tslint:disable:object-literal-sort-keys
                 const newArticle = new Article({
                     id: article.itemId,
