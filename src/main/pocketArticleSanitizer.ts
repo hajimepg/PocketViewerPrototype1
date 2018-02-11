@@ -23,6 +23,10 @@ function parseNullableDate(unixTimeStampString: string): Date | null {
 }
 
 function parseHasVideo(hasVideo): "none" | "has in" | "is" {
+    if (hasVideo === undefined) {
+        return "none";
+    }
+
     switch (hasVideo) {
         case "0":
             return "none";
@@ -36,6 +40,10 @@ function parseHasVideo(hasVideo): "none" | "has in" | "is" {
 }
 
 function parseHasImage(hasImage): "none" | "has in" | "is" {
+    if (hasImage === undefined) {
+        return "none";
+    }
+
     switch (hasImage) {
         case "0":
             return "none";
