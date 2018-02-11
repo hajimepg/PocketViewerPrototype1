@@ -59,7 +59,8 @@ export default class ArticleUpdateService {
                             case "different id":
                                 assert.fail(
                                     savedArticle.id, newArticle.id,
-                                    "try to update a different artcile"
+                                    // tslint:disable-next-line:max-line-length
+                                    `try to update a different article. (actual: ${savedArticle.id}, expected: ${newArticle.id})`
                                 );
                                 break;
                         }
