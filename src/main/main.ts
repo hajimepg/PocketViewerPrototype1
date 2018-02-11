@@ -7,6 +7,7 @@ import * as inversify from "inversify";
 
 import IPCPromiseReceiver from "../ipcPromise/ipcPromiseReceiver";
 import { IArticleRepository } from "./interface/IArticleRepository";
+import { Article } from "./model/article";
 import PocketAuth from "./pocketAuth";
 
 import initContainer from "./inversify.config";
@@ -159,7 +160,7 @@ ipcPromiseReceiver.on("update-articles", async (payload, callback) => {
     const id = (articles.length > 0) ? Math.max(...articles.map((article) => article.id)) + 1 : 1;
 
     /* tslint:disable:object-literal-sort-keys */
-    await articleRepository.insert({
+    const newArticle = new Article({
         id,
         title: `new record ${id}`,
         url: `http://example.com/${id}`,
@@ -171,6 +172,8 @@ ipcPromiseReceiver.on("update-articles", async (payload, callback) => {
         addedAt: new Date(),
     });
     /* tslint:enable:object-literal-sort-keys */
+
+    await articleRepository.insert(newArticle);
 
     callback(undefined);
 });
