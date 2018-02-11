@@ -112,8 +112,9 @@ const store = new Vuex.Store({
             context.commit(mutations.UPDATE_ARTICLES, articles);
             context.commit(mutations.UPDATE_ACTIVE_ARTICLE, undefined);
         },
-        async selectArticle(context, id) {
-            context.commit(mutations.UPDATE_ACTIVE_ARTICLE, id);
+        async selectArticle(context, article) {
+            context.commit(mutations.UPDATE_ACTIVE_ARTICLE, article.id);
+            await ipcPromise.send("load-in-browser-view", article.url);
         },
         async reloadViews(context) {
             console.log("reloadViews called.");
@@ -169,8 +170,8 @@ const app = new Vue({
         selectTagsView(index: number) {
             this.$store.dispatch("selectTagsView", index);
         },
-        selectArticle(id: number) {
-            this.$store.dispatch("selectArticle", id);
+        selectArticle(article: any) {
+            this.$store.dispatch("selectArticle", article);
         },
         updateSearchArticle(event) {
             this.$store.commit(mutations.UPDATE_SEARCH_ARTICLES, event.target.value);
@@ -212,6 +213,7 @@ const app = new Vue({
                     return {
                         id: article.id,
                         title: article.title,
+                        url: article.url,
                         host: article.host,
                         thumb: article.thumb,
                         isActive: article.id === (this as any).$store.state.activeArticleId,

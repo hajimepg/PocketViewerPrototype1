@@ -111,11 +111,20 @@ ipcPromiseReceiver.on("pocket-auth", async (payload, callback) => {
         });
 });
 
-const articleConverter = (article) => {
+ipcPromiseReceiver.on("load-in-browser-view", async (loadUrl, callback) => {
+    if (browserView !== null) {
+        browserView.webContents.loadURL(loadUrl);
+    }
+
+    callback(null);
+});
+
+const articleConverter = (article: Article) => {
     /* tslint:disable:object-literal-sort-keys */
     return {
         id: article.id,
         title: article.title,
+        url: article.url,
         host: article.host,
         thumb: "images/dummy_image.png",
     };
