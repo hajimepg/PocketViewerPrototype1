@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as url from "url";
 
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserView, BrowserWindow, ipcMain } from "electron";
 import * as inversify from "inversify";
 
 import IPCPromiseReceiver from "../ipcPromise/ipcPromiseReceiver";
@@ -20,7 +20,7 @@ const ipcPromiseReceiver = new IPCPromiseReceiver();
 let window: BrowserWindow | null;
 
 function createWindow() {
-    window = new BrowserWindow({ width: 800, height: 600 });
+    window = new BrowserWindow({ width: 1280, height: 800 });
 
     window.loadURL(url.format({
         pathname: path.join(__dirname, "../../static/index.html"),
@@ -33,6 +33,32 @@ function createWindow() {
     window.on("closed", () => {
         window = null;
     });
+}
+
+let browserView: BrowserView | null;
+
+function createBrowserView() {
+    if (window === null) {
+        return;
+    }
+
+    const browserWindowX = 580;
+    const browserWindowY = 50;
+    const windowContentsBounds = window.getContentBounds();
+    browserView = new BrowserView({
+        webPreferences: {
+            nodeIntegration: false,
+        },
+    });
+    window.setBrowserView(browserView);
+    browserView.setBounds({
+        height: windowContentsBounds.height - browserWindowY,
+        width: windowContentsBounds.width - browserWindowX,
+        x: browserWindowX,
+        y: browserWindowY,
+    });
+    browserView.setAutoResize({ height: true, width: true });
+    browserView.webContents.loadURL("https://www.google.co.jp/");
 }
 
 let container: inversify.Container;
@@ -76,6 +102,7 @@ ipcPromiseReceiver.on("pocket-auth", async (payload, callback) => {
 
             if (window !== null) {
                 window.show();
+                createBrowserView();
             }
             callback(null);
         })

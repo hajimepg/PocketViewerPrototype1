@@ -66,7 +66,6 @@
 #content {
     grid-row: 2 / 4;
     grid-column: 3;
-    background-color: khaki;
 }
 
 .viewGroup {
