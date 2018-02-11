@@ -47,7 +47,7 @@ export class PocketArticle {
         this.itemId = data.itemId;
         this.resolvedId = data.resolvedId;
         this.givenTitle = data.givenTitle;
-        this.givenUrl = data.resolvedUrl;
+        this.givenUrl = data.givenUrl;
         this.favorite = data.favorite;
         this.status = data.status;
         this.timeAdded = data.timeAdded;

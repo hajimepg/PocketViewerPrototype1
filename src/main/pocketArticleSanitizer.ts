@@ -60,7 +60,7 @@ export function sanitize(raw: RawPocketArticle): PocketArticle {
     // TODO: ちゃんとサニタイズを実装する
     const itemId = parseInt(raw.item_id as string, 10);
     const resolvedId = parseInt(raw.resolved_id as string, 10);
-    const givenUrl = raw.resolved_url as string;
+    const givenUrl = raw.given_url as string;
     const givenTitle = raw.given_title as string;
     const favorite = (raw.favorite === "1");
     const status = parseStatus(raw.status);
