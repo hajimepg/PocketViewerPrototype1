@@ -127,6 +127,7 @@ test("new Data", async (t) => {
                 resolvedUrl,
                 status: "normal",
                 timeAdded,
+                timeRead: null,
             }),
         ]);
 
@@ -143,6 +144,33 @@ test("new Data", async (t) => {
                     && article.isFavorite === favorite
                     && article.isUnread === true
                     && article.addedAt === timeAdded;
+            })
+        ));
+    });
+});
+
+test("new Data(Already read)", async (t) => {
+    const id = 1;
+
+    td.when(t.context.articleRepository.findById(id))
+        .thenResolve(null);
+
+    td.when(t.context.pocketGateway.retrieve())
+        .thenResolve([
+            PocketArticleFactory({
+                itemId: id,
+                status: "normal",
+                timeRead: new Date(),
+            }),
+        ]);
+
+    await t.context.service.update();
+
+    t.notThrows(() => {
+        td.verify(t.context.articleRepository.insert(
+            td.matchers.argThat((article: Article) => {
+                return article.id === id
+                    && article.isUnread === false;
             })
         ));
     });

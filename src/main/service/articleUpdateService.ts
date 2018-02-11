@@ -30,7 +30,7 @@ export default class ArticleUpdateService {
                     host: articleUrl.hostname,
                     tags: [], // TODO: implement
                     isFavorite: article.favorite,
-                    isUnread: article.status === "normal",
+                    isUnread: article.timeRead === null,
                     isArchive: article.status === "archived",
                     addedAt: article.timeAdded,
                 });
