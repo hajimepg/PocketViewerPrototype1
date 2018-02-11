@@ -21,13 +21,13 @@ export default class ArticleUpdateService {
             const articles = await this.gateway.retrieve(accessToken);
 
             for (const article of articles) {
-                const articleUrl = new URL(article.resolvedUrl);
+                const articleUrl = new URL(article.preferredUrl);
 
                 // tslint:disable:object-literal-sort-keys
                 const newArticle = new Article({
                     id: article.itemId,
-                    title: article.resolvedTitle,
-                    url: article.resolvedUrl,
+                    title: article.preferredTitle,
+                    url: article.preferredUrl,
                     host: articleUrl.hostname,
                     tags: [], // TODO: implement
                     isFavorite: article.favorite,

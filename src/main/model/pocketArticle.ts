@@ -43,6 +43,14 @@ export class PocketArticle {
     public readonly wordCount: number;
     public readonly rawData: any;
 
+    public get preferredUrl(): string {
+        return this.resolvedUrl || this.givenUrl;
+    }
+
+    public get preferredTitle(): string {
+        return this.resolvedTitle || this.givenTitle;
+    }
+
     public constructor(data: IPocketArticleConstractorData) {
         this.itemId = data.itemId;
         this.resolvedId = data.resolvedId;
