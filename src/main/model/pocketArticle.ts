@@ -18,6 +18,7 @@ export interface IPocketArticleConstractorData {
     hasVideo: "none" | "has in" | "is";
     hasImage: "none" | "has in" | "is";
     wordCount: number;
+    rawData: any;
 }
 
 export class PocketArticle {
@@ -40,6 +41,7 @@ export class PocketArticle {
     public readonly hasVideo: "none" | "has in" | "is";
     public readonly hasImage: "none" | "has in" | "is";
     public readonly wordCount: number;
+    public readonly rawData: any;
 
     public constructor(data: IPocketArticleConstractorData) {
         this.itemId = data.itemId;
@@ -61,5 +63,6 @@ export class PocketArticle {
         this.hasVideo = data.hasVideo;
         this.hasImage = data.hasImage;
         this.wordCount = data.wordCount;
+        this.rawData = data.rawData;
     }
 }

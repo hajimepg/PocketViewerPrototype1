@@ -77,6 +77,7 @@ export function sanitize(raw: RawPocketArticle): PocketArticle {
     const hasVideo = parseHasVideo(raw.has_video);
     const hasImage = parseHasImage(raw.has_image);
     const wordCount = parseInt(raw.word_count as string, 10);
+    const rawData = raw;
 
     // tslint:disable:object-literal-sort-keys
     return new PocketArticle({
@@ -99,6 +100,7 @@ export function sanitize(raw: RawPocketArticle): PocketArticle {
         hasVideo,
         hasImage,
         wordCount,
+        rawData,
     });
     // tslint:enable:object-literal-sort-keys
 }
