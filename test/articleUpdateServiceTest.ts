@@ -104,6 +104,7 @@ function PocketArticleFactory(data: IPocketArticleFactoryData): PocketArticle {
         hasVideo: data.hasVideo || "none",
         hasImage: data.hasImage || "none",
         wordCount: data.wordCount || 0,
+        rawData: "",
     });
     // tslint:enabled:object-literal-sort-keys
 }
