@@ -10,13 +10,7 @@
     <body>
         <div id="app">
             <div id="auth" v-if="authenticate.isAuthenticate === false">
-                <div id="authInner">
-                    <p>Pocketにログインする</p>
-                    <button v-on:click="pocketAuth">Pocketにログイン</button>
-                    <p v-if="authenticate.errorMessage !== ''">
-                        Error: {{ authenticate.errorMessage }}
-                    </p>
-                </div>
+                <pocket-login></pocket-login>
             </div>
             <div v-else id="container">
                 <div id="views">

@@ -5,6 +5,8 @@ import Vuex, { mapActions, mapState } from "vuex";
 import * as ipcPromise from "../ipcPromise/ipcPromise";
 import mutations from "./mutations";
 
+import PocketLogin from "./components/pocketLogin.vue";
+
 Vue.use(Vuex);
 
 /* tslint:disable:object-literal-sort-keys */
@@ -158,7 +160,6 @@ const app = new Vue({
     store,
     methods: {
         ...mapActions([
-            "pocketAuth",
             "selectHomeView",
             "selectFavoriteView",
             "selectArchiveView",
@@ -220,6 +221,9 @@ const app = new Vue({
                     };
                 });
         },
+    },
+    components: {
+        "pocket-login": PocketLogin,
     }
 });
 /* tslint:enable:object-literal-sort-keys */
