@@ -9,9 +9,7 @@
 
     <body>
         <div id="app">
-            <div id="auth" v-if="authenticate.isAuthenticate === false">
-                <pocket-login></pocket-login>
-            </div>
+            <pocket-login v-if="authenticate.isAuthenticate === false"></pocket-login>
             <div v-else id="container">
                 <div id="views">
                     <div class="viewGroup" v-bind:class="{ active: views.home.isActive }" v-on:click="selectHomeView">

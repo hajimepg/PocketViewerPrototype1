@@ -1,10 +1,12 @@
 <template>
-    <div id="authInner">
-        <p>Pocketにログインする</p>
-        <button v-on:click="pocketAuth">Pocketにログイン</button>
-        <p v-if="authenticate.errorMessage !== ''">
-            Error: {{ authenticate.errorMessage }}
-        </p>
+    <div id="auth">
+        <div id="authInner">
+            <p>Pocketにログインする</p>
+            <button v-on:click="pocketAuth">Pocketにログイン</button>
+            <p v-if="authenticate.errorMessage !== ''">
+                Error: {{ authenticate.errorMessage }}
+            </p>
+        </div>
     </div>
 </template>
 
