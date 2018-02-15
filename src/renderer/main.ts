@@ -7,6 +7,7 @@ import mutations from "./mutations";
 
 import ArticlesList from "./components/articlesList.vue";
 import PocketLogin from "./components/pocketLogin.vue";
+import SearchArticles from "./components/searchArticles.vue";
 import ViewsList from "./components/viewsList.vue";
 
 Vue.use(Vuex);
@@ -164,19 +165,16 @@ const app = new Vue({
         ...mapActions([
             "reloadViews",
         ]),
-        updateSearchArticle(event) {
-            this.$store.commit(mutations.UPDATE_SEARCH_ARTICLES, event.target.value);
-        }
     },
     computed: {
         ...mapState({
             authenticate: "authenticate",
-            searchArticle: "searchArticle",
         }),
     },
     components: {
         "articles-list": ArticlesList,
         "pocket-login": PocketLogin,
+        "search-artciles": SearchArticles,
         "views-list": ViewsList,
     }
 });
