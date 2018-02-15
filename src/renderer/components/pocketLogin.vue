@@ -11,14 +11,17 @@
 </template>
 
 <script lang="ts">
+    import Vue from "vue";
     import { mapActions, mapState } from "vuex";
+    import Component from "vue-class-component";
 
-    export default {
+    @Component({
         computed: mapState([
             "authenticate",
         ]),
         methods: mapActions([
             "pocketAuth",
         ]),
-    };
+    })
+    export default class PocketLogin extends Vue {};
 </script>
