@@ -13,14 +13,14 @@
         <div class="viewGroup">
             <div class="viewName"><i class="fas fa-cloud"></i>Host</div>
         </div>
-        <div v-for="(host, index) in views.hosts" v-bind:class="{ active: host.isActive }" v-on:click="selectHostsView(index)" class="viewSubGroup">
+        <div v-for="(host, index) in views.hosts" v-bind:class="{ active: host.isActive }" v-bind:key="host.name" v-on:click="selectHostsView(index)" class="viewSubGroup">
             <div class="unreadCount">{{ host.count }}</div>
             <div class="viewName">{{ host.name }}</div>
         </div>
         <div class="viewGroup">
             <div class="viewName"><i class="fas fa-tag"></i>Tag</div>
         </div>
-        <div v-for="(tag, index) in views.tags" v-bind:class="{ active: tag.isActive }" v-on:click="selectTagsView(index)" class="viewSubGroup">
+        <div v-for="(tag, index) in views.tags" v-bind:class="{ active: tag.isActive }" v-bind:key="tag.name" v-on:click="selectTagsView(index)" class="viewSubGroup">
             <div class="unreadCount">{{ tag.count }}</div>
             <div class="viewName">{{ tag.name }}</div>
         </div>

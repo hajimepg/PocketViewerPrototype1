@@ -1,6 +1,6 @@
 <template>
     <div id="articles">
-        <div v-for="article in articles" class="article" v-bind:class="{ active: article.isActive }" v-on:click="selectArticle(article)">
+        <div v-for="article in articles" class="article" v-bind:class="{ active: article.isActive }" v-bind:key="article.id" v-on:click="selectArticle(article)">
             <div class="thumb">
                 <img v-bind:src="article.thumb">
             </div>
