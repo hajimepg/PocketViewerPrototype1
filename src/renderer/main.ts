@@ -6,6 +6,7 @@ import * as ipcPromise from "../ipcPromise/ipcPromise";
 import mutations from "./mutations";
 
 import ArticlesList from "./components/articlesList.vue";
+import ContentsToolbar from "./components/contentsToolbar.vue";
 import PocketLogin from "./components/pocketLogin.vue";
 import SearchArticles from "./components/searchArticles.vue";
 import ViewsList from "./components/viewsList.vue";
@@ -161,11 +162,6 @@ const store = new Vuex.Store({
 const app = new Vue({
     el: "#app",
     store,
-    methods: {
-        ...mapActions([
-            "reloadViews",
-        ]),
-    },
     computed: {
         ...mapState({
             authenticate: "authenticate",
@@ -173,6 +169,7 @@ const app = new Vue({
     },
     components: {
         "articles-list": ArticlesList,
+        "contents-toolbar": ContentsToolbar,
         "pocket-login": PocketLogin,
         "search-artciles": SearchArticles,
         "views-list": ViewsList,
