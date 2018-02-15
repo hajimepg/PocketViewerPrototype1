@@ -12,17 +12,7 @@
             <pocket-login v-if="authenticate.isAuthenticate === false"></pocket-login>
             <div v-else id="container">
                 <views-list></views-list>
-                <div id="articles">
-                    <div v-for="article in articles" class="article" v-bind:class="{ active: article.isActive }" v-on:click="selectArticle(article)">
-                        <div class="thumb">
-                            <img v-bind:src="article.thumb">
-                        </div>
-                        <div class="info">
-                            <div class="title">{{ article.title }}</div>
-                            <div class="host">{{ article.host }}</div>
-                        </div>
-                    </div>
-                </div>
+                <articles-list></articles-list>
                 <div id="search">
                     <input type="text" placeholder="Search" v-bind:value="searchArticle" v-on:input="updateSearchArticle">
                     <i class="fas fa-search"></i>

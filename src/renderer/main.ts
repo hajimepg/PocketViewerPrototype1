@@ -5,6 +5,7 @@ import Vuex, { mapActions, mapState } from "vuex";
 import * as ipcPromise from "../ipcPromise/ipcPromise";
 import mutations from "./mutations";
 
+import ArticlesList from "./components/articlesList.vue";
 import PocketLogin from "./components/pocketLogin.vue";
 import ViewsList from "./components/viewsList.vue";
 
@@ -163,9 +164,6 @@ const app = new Vue({
         ...mapActions([
             "reloadViews",
         ]),
-        selectArticle(article: any) {
-            this.$store.dispatch("selectArticle", article);
-        },
         updateSearchArticle(event) {
             this.$store.commit(mutations.UPDATE_SEARCH_ARTICLES, event.target.value);
         }
@@ -175,31 +173,9 @@ const app = new Vue({
             authenticate: "authenticate",
             searchArticle: "searchArticle",
         }),
-        articles() {
-            // Note: VuexのTypeScriptの型定義ファイルが更新されるまでanyにキャストする
-            return (this as any).$store.state.articles
-                .filter((article) => {
-                    if (article.title.indexOf(this.$store.state.searchArticle) !== -1) {
-                        return true;
-                    }
-                    if (article.host.indexOf(this.$store.state.searchArticle) !== -1) {
-                        return true;
-                    }
-                    return false;
-                })
-                .map((article) => {
-                    return {
-                        id: article.id,
-                        title: article.title,
-                        url: article.url,
-                        host: article.host,
-                        thumb: article.thumb,
-                        isActive: article.id === (this as any).$store.state.activeArticleId,
-                    };
-                });
-        },
     },
     components: {
+        "articles-list": ArticlesList,
         "pocket-login": PocketLogin,
         "views-list": ViewsList,
     }
