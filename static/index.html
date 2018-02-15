@@ -9,14 +9,14 @@
 
     <body>
         <div id="app">
-            <pocket-login v-if="authenticate.isAuthenticate === false"></pocket-login>
-            <div v-else id="container">
+            <div id="container" v-if="authenticate.isAuthenticate">
                 <views-list></views-list>
                 <articles-list></articles-list>
                 <search-artciles></search-artciles>
                 <contents-toolbar></contents-toolbar>
                 <div id="content"></div>
             </div>
+            <pocket-login v-else></pocket-login>
         </div>
         <script src="../dist/renderer/bundle.js"></script>
     </body>
