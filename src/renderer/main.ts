@@ -6,6 +6,7 @@ import * as ipcPromise from "../ipcPromise/ipcPromise";
 import mutations from "./mutations";
 
 import PocketLogin from "./components/pocketLogin.vue";
+import ViewsList from "./components/viewsList.vue";
 
 Vue.use(Vuex);
 
@@ -160,17 +161,8 @@ const app = new Vue({
     store,
     methods: {
         ...mapActions([
-            "selectHomeView",
-            "selectFavoriteView",
-            "selectArchiveView",
             "reloadViews",
         ]),
-        selectHostsView(index: number) {
-            this.$store.dispatch("selectHostsView", index);
-        },
-        selectTagsView(index: number) {
-            this.$store.dispatch("selectTagsView", index);
-        },
         selectArticle(article: any) {
             this.$store.dispatch("selectArticle", article);
         },
@@ -183,21 +175,6 @@ const app = new Vue({
             authenticate: "authenticate",
             searchArticle: "searchArticle",
         }),
-        views() {
-            const views = (this as any).$store.state.views;
-            const active = views.active;
-            return {
-                home: { count: views.home.count, isActive: active.view === "home" },
-                favorite: { isActive: active.view === "favorite" },
-                archive: { isActive: active.view === "archive" },
-                hosts: views.hosts.map(({ name, count }, index) =>
-                    ({ name, count, isActive: active.view === "hosts" && active.index === index })
-                ),
-                tags: views.tags.map(({ name, count }, index) =>
-                    ({ name, count, isActive: active.view === "tags" && active.index === index })
-                ),
-            };
-        },
         articles() {
             // Note: VuexのTypeScriptの型定義ファイルが更新されるまでanyにキャストする
             return (this as any).$store.state.articles
@@ -224,6 +201,7 @@ const app = new Vue({
     },
     components: {
         "pocket-login": PocketLogin,
+        "views-list": ViewsList,
     }
 });
 /* tslint:enable:object-literal-sort-keys */
